@@ -9,7 +9,7 @@ body {
     background-color: rgb(26, 25, 27);
     min-height: 100vh;
     color: rgb(220, 226, 229);
-    background-image: url('../media/fondo_formulario.jpg');
+    background-image: url('../imagenes/fondo.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

@@ -15,7 +15,7 @@
     left: -20px;
     right: -20px;
     bottom: -20px;
-    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../imagenes/fondo-login.png');
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('../imagenes/fondo.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
