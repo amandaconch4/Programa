@@ -7,6 +7,9 @@ from .views import accion
 from .views import carreras
 from .views import deportes
 from .views import rol
+from .views import registro
+from .views import admin
+
 
 urlpatterns = [
     path('sevengamer', sevengamer, name="sevengamer"),
@@ -17,5 +20,7 @@ urlpatterns = [
     path('sevengamer/carreras', carreras, name="carreras"),
     path('sevengamer/deportes', deportes, name="deportes"),
     path('sevengamer/rol', rol, name="rol"),
+    path('sevengamer/registro', registro, name="registro"),
+    path('sevengamer/admin', admin, name="admin"),
 
 ]

@@ -25,3 +25,9 @@ def deportes(request):
 
 def rol(request):
     return render(request, 'rol.html')
+
+def registro(request):
+    return render(request, 'registro.html')
+
+def admin(request):
+    return render(request, 'admin.html')
