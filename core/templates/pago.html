@@ -1,3 +1,6 @@
+<!--Para cargar los archivos estáticos-->
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,12 +8,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pago - SEVENGAMER</title>
-    <link rel="icon" href="media/control4.png" type="png">
+    <link rel="icon" href="{% static 'imagenes/control4.png' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="css/pago.css">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/pago.css' %}">
 </head>
 
 <!-- ENCABEZADO -->
@@ -18,7 +21,7 @@
     <header>
         <div class="container">
             <div class="logo-container">
-                <a href="index.html" style="text-decoration: none;">
+                <a href="{% url 'sevengamer' %}" style="text-decoration: none;">
                     <p class="logo">SEVENGAMER</p>
                 </a>
                 <p class="slogan">Juegos de un verdadero gamer</p>
@@ -85,7 +88,7 @@
     <div id="successModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <img src="media/check.png" alt="Éxito" class="success-icon">
+                <img src="{% static 'imagenes/check.png' %}" alt="Éxito" class="success-icon">
                 <h2>¡Pago Exitoso!</h2>
             </div>
             <p>Tu pago ha sido procesado correctamente.</p>
@@ -93,6 +96,6 @@
         </div>
     </div>
 
-    <script src="js/pago.js"></script>
+    <script src="{% static 'js/pago.js' %}"></script>
 </body>
 </html>

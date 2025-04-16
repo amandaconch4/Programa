@@ -179,7 +179,7 @@ function eliminarDelCarrito(id) {
 
 // Proceder al pago
 function procederPago() {
-    window.location.href = 'pago.html';
+    window.location.href = pagoUrl;
 }
 
 // Inicializar el contador del carrito cuando se carga la página

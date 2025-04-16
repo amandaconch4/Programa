@@ -226,7 +226,7 @@ h1 {
 /* Header styles */
 header {
     background-color: rgba(26, 26, 26, 0.7);
-    background-image: url('../media/gamer.webp');
+    background-image: url('../imagenes/gamer.webp');
     background-size: cover;
     background-position: center;
     background-blend-mode: overlay;
