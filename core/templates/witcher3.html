@@ -1,14 +1,17 @@
+<!--Para cargar los archivos estáticos-->
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>The Witcher 3: Wild Hunt - SEVENGAMER</title>
-    <link rel="icon" href="../media/control4.png" type="png">
+    <link rel="icon" href="{% static 'imagenes/control4.png' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/index.css">
-    <link rel="stylesheet" href="../css/detalles.css">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/detalles.css' %}">
 </head>
 
 <!-- ENCABEZADO -->
@@ -16,15 +19,15 @@
     <header>
         <div class="container">
             <div class="logo-container">
-                <a href="../index.html" class="logo-link">
+                <a href="{% url 'sevengamer' %}" class="logo-link">
                     <p class="logo">SEVENGAMER</p>
                 </a>
                 <p class="slogan">Juegos de un verdadero gamer</p>
             </div>
             <nav>
-                <a href="../login.html" class="tu-clase-de-estilo">Iniciar Sesión</a>
+                <a href="{% url 'login' %}" class="tu-clase-de-estilo">Iniciar Sesión</a>
                 <a href="#" class="carrito-icon" id="carritoBtn">
-                    <img src="../media/carrito-compras.png" alt="Carrito de compras" class="carrito-img">
+                    <img src="{% static 'imagenes/carrito-compras.png' %}" alt="Carrito de compras" class="carrito-img">
                     <span id="contador-carrito">0</span>
                 </a>
             </nav>
@@ -36,20 +39,20 @@
         <aside class="sidebar">
             <h2>Categorías</h2>
             <ul class="categoria-lista">
-                <li><a href="../index.html"><span>Todos</span></a></li>
-                <li><a href="../categorias/terror.html"><span>Terror</span></a></li>
-                <li><a href="../categorias/mundo-abierto.html" class="active"><span>Mundo abierto</span></a></li>
-                <li><a href="../categorias/accion.html"><span>Acción</span></a></li>
-                <li><a href="../categorias/carreras.html"><span>Carreras</span></a></li>
-                <li><a href="../categorias/deportes.html"><span>Deportes</span></a></li>
-                <li><a href="../categorias/rol.html"><span>Rol</span></a></li>
+                <li><a href="{% url 'sevengamer' %}"><span>Todos</span></a></li>
+                <li><a href="{% url 'terror' %}"><span>Terror</span></a></li>
+                <li><a href="{% url 'mundoabierto' %}" class="active"><span>Mundo abierto</span></a></li>
+                <li><a href="{% url 'accion' %}"><span>Acción</span></a></li>
+                <li><a href="{% url 'carreras' %}"><span>Carreras</span></a></li>
+                <li><a href="{% url 'deportes' %}"><span>Deportes</span></a></li>
+                <li><a href="{% url 'rol' %}"><span>Rol</span></a></li>
             </ul>
         </aside>
 
         <!-- CONTENIDO PRINCIPAL DEL JUEGO -->
         <main class="main-content">
             <div class="detalle-juego">
-                <img src="../media/witcher3.jpg" alt="The Witcher 3: Wild Hunt" class="imagen-principal">
+                <img src="{% static 'imagenes/witcher3.jpg' %}" alt="The Witcher 3: Wild Hunt" class="imagen-principal">
                 <div class="info-juego">
                     <h1 class="titulo-juego">The Witcher 3: Wild Hunt</h1>
                     <p class="descripcion">
@@ -57,7 +60,7 @@
                     </p>
                     <div class="precio-container">
                         <span class="precio">CLP$ 45.000</span>
-                        <button class="btn-carrito" onclick="agregarAlCarrito('witcher3', 'The Witcher 3: Wild Hunt', 45000, '../media/witcher3.jpg')">Añadir al Carrito</button>
+                        <button class="btn-carrito" onclick="agregarAlCarrito('witcher3', 'The Witcher 3: Wild Hunt', 45000, '{% static 'imagenes/witcher3.jpg' %}')">Añadir al Carrito</button>
                     </div>
                 </div>
             </div>
@@ -90,6 +93,6 @@
         </div>
     </div>
 
-    <script src="../js/carrito.js"></script>
+    <script src="{% static 'js/carrito.js' %}"></script>
 </body>
 </html> 
