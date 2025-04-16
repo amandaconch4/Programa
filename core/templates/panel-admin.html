@@ -1,3 +1,6 @@
+<!--Para cargar los archivos estáticos-->
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,12 +8,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración - SEVENGAMER</title>
-    <link rel="icon" href="media/control4.png" type="png">
+    <link rel="icon" href="{% static 'imagenes/control4.png' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <style>
         :root {
             --admin-primary: #ff0000;
@@ -1053,7 +1056,7 @@
         // Función de logout
         function logout() {
             if (confirm('¿Está seguro que desea cerrar sesión?')) {
-                window.location.href = 'admin.html';
+                window.location.href = "{% url 'admin' %}";
             }
         }
 

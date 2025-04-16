@@ -26,8 +26,23 @@ def deportes(request):
 def rol(request):
     return render(request, 'rol.html')
 
+def residentevil(request):
+    return render(request, 'resident-evil-village.html')
+
+def outlast(request):
+    return render(request, 'outlast.html')
+
+def deadspace(request):
+    return render(request, 'dead-space.html')
+
 def registro(request):
     return render(request, 'registro.html')
 
 def admin(request):
     return render(request, 'admin.html')
+
+def panel_admin(request):
+    return render(request, 'panel-admin.html')
+
+def panel_usuario(request):
+    return render(request, 'panel-usuario.html')

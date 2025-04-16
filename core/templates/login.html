@@ -173,7 +173,7 @@
             if (esValido) {
                 // Verificar si es administrador
                 if (username === 'admin' && password === 'admin123') {
-                    window.location.href = 'admin.html';
+                    window.location.href = "{% url 'admin' %}";
                 } else {
                     // Verificar si el usuario existe en localStorage
                     const usuarios = JSON.parse(localStorage.getItem('usuarios')) || [];
@@ -200,7 +200,7 @@
                         }
 
                         // Redirigir al panel de usuario
-                        window.location.href = 'panel-usuario.html';
+                        window.location.href = "{% url 'panel_usuario' %}";
                     } else {
                         // Mostrar error de credenciales inválidas
                         passwordError.textContent = 'Usuario o contraseña incorrectos';
