@@ -58,6 +58,10 @@
             </div>
             <button class="checkout-btn" onclick="procederPago()">Proceder al Pago</button>
         </div>
+        <!-- Define la URL de pago -->
+        <script>
+            const pagoUrl = "{% url 'pago' %}";
+        </script>
     </div>
 
     <div class="content-container">
