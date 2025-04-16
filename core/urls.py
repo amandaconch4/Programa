@@ -29,7 +29,7 @@ from .views import admin
 from .views import panel_admin
 from .views import panel_usuario
 from .views import pago
-
+from . import views
 
 urlpatterns = [
     path('sevengamer', sevengamer, name="sevengamer"),
@@ -62,4 +62,5 @@ urlpatterns = [
     path('sevengamer/panel-admin', panel_admin, name="panel_admin"),
     path('sevengamer/panel-usuario', panel_usuario, name="panel_usuario"),
     path('sevengamer/pago', pago, name="pago"),
+    path('sevengamer/registro/', registro, name="registro"), 
 ]
