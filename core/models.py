@@ -63,7 +63,7 @@ class Ventas (models.Model):
 class Cliente (models.Model):
     id_cliente = models.CharField(max_length=200, unique=True)
     nombre_cliente = models.CharField(max_length=200)
-    email = models.ForeignKey(max_length=200, unique=True)
+    email = models.EmailField(max_length=200, unique=True)
     telefono = models.CharField(max_length=20)
 
     def __str__(self):
