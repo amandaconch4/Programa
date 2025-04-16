@@ -88,3 +88,6 @@ def panel_admin(request):
 
 def panel_usuario(request):
     return render(request, 'panel-usuario.html')
+
+def pago(request):
+    return render(request, 'pago.html')
