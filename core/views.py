@@ -35,6 +35,48 @@ def outlast(request):
 def deadspace(request):
     return render(request, 'dead-space.html')
 
+def witcher3(request):
+    return render(request, 'witcher3.html')
+
+def gta5(request):
+    return render(request, 'gta5.html')
+
+def zelda(request):
+    return render(request, 'zelda.html')
+
+def assassinscreed(request):
+    return render(request, 'assassins-creed.html')
+
+def payday3(request):
+    return render(request, 'payday3.html')
+
+def forzahorizon5(request):
+    return render(request, 'forza-horizon5.html')
+
+def needforspeed(request):
+    return render(request, 'nfs-heat.html')
+
+def granturismo7(request):
+    return render(request, 'gran-turismo7.html')
+
+def fifa24(request):
+    return render(request, 'fifa24.html')
+
+def nba2k24(request):
+    return render(request, 'nba2k24.html')
+
+def efootball(request):
+    return render(request, 'efootball2024.html')
+
+def finalfantasy(request):
+    return render(request, 'final-fantasy.html')
+
+def baldursgate3(request):
+    return render(request, 'baldurs-gate3.html')
+
+def persona5(request):
+    return render(request, 'persona5.html')
+
 def registro(request):
     return render(request, 'registro.html')
 
