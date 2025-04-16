@@ -83,37 +83,37 @@
 
             <div class="juegos-lista">
                 <div class="juego-card">
-                    <img src="../media/gta-5.jpg" alt="GTA V">
+                    <img src="{% static 'imagenes/gta-5.jpg' %}" alt="GTA V">
                     <div class="juego-info">
                         <h3>GTA V</h3>
                         <p class="precio">CLP$ 35.000</p>
                         <div class="detalles-container">
                             <a href="{% url 'gta5' %}" class="ver-detalles">Ver Detalles</a>
-                            <button class="agregar-carrito" onclick="agregarAlCarrito('gta5', 'GTA V', 35000, '../media/gta-5.jpg')">Agregar al carrito</button>
+                            <button class="agregar-carrito" onclick="agregarAlCarrito('gta5', 'GTA V', 35000, '{% static 'imagenes/gta-5.jpg' %}')">Agregar al carrito</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="juego-card">
-                    <img src="../media/assassinsmirage.jpg" alt="Assassin's Creed">
+                    <img src="{% static 'imagenes/assassinsmirage.jpg' %}" alt="Assassin's Creed">
                     <div class="juego-info">
                         <h3>Assassins Creed</h3>
                         <p class="precio">CLP$ 45.000</p>
                         <div class="detalles-container">
                             <a href="{% url 'assassinscreed' %}" class="ver-detalles">Ver Detalles</a>
-                            <button class="agregar-carrito" onclick="agregarAlCarrito('acmirage', 'Assassins Creed', 45000, '../media/assassinsmirage.jpg')">Agregar al carrito</button>
+                            <button class="agregar-carrito" onclick="agregarAlCarrito('acmirage', 'Assassins Creed', 45000, '{% static 'imagenes/assassinsmirage.jpg' %}')">Agregar al carrito</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="juego-card">
-                    <img src="../media/payday.jpg" alt="PayDay">
+                    <img src="{% static 'imagenes/payday.jpg' %}" alt="PayDay">
                     <div class="juego-info">
                         <h3>PayDay 3</h3>
                         <p class="precio">CLP$ 44.000</p>
                         <div class="detalles-container">
                             <a href="{% url 'payday3' %}" class="ver-detalles">Ver Detalles</a>
-                            <button class="agregar-carrito" onclick="agregarAlCarrito('payday3', 'PayDay 3', 44000, '../media/payday.jpg')">Agregar al carrito</button>
+                            <button class="agregar-carrito" onclick="agregarAlCarrito('payday3', 'PayDay 3', 44000, '{% static 'imagenes/payday.jpg' %}')">Agregar al carrito</button>
                         </div>
                     </div>
                 </div>
