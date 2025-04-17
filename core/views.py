@@ -2,6 +2,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .models import Usuario, PerfilUsuario
+from django.contrib.auth.hashers import make_password #encriptar las contraseñas 
 
 # Create your views here.
 
@@ -95,6 +97,8 @@ def panel_usuario(request):
 def pago(request):
     return render(request, 'pago.html')
 
+
+
 def registro(request):
     if request.method == 'POST':
         nombre_completo_usuario = request.POST.get('nombre_completo_usuario')
@@ -104,10 +108,13 @@ def registro(request):
         confirmarPassword = request.POST.get('confirmarPassword')
         fecha_nacimiento = request.POST.get('fecha_nacimiento')
         direccion = request.POST.get('direccion', '') 
+        rol = request.POST.get('rol')  # Se obtiene el rol que el usuario selecciona (admin o usuario)
 
         if password != confirmarPassword:
             messages.error(request, "Las contraseñas no coinciden.")
             return redirect('registro') 
+        
+        contraseña_encriptada = make_password(password)
               
         try:
             user = User.objects.create_user( username=username,email=email,
