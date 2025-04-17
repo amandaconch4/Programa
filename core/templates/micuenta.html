@@ -1,0 +1,68 @@
+<!--Para cargar los archivos estáticos-->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi cuenta - SEVENGAMER</title>
+    <link rel="icon" href="{% static 'imagenes/control4.png' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/registro.css' %}">
+</head>
+
+<!-- ENCABEZADO -->
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <a href="{% url 'sevengamer' %}" class="logo-link">
+                    <p class="logo">SEVENGAMER</p>
+                </a>
+                <p class="slogan">Juegos de un verdadero gamer</p>
+            </div>
+            <nav>
+                <a href="{% url 'login' %}" class="tu-clase-de-estilo">Iniciar Sesión</a>
+                <a href="#" class="carrito-icon" id="carritoBtn">
+                    <img src="{% static 'imagenes/carrito-compras.png' %}" alt="Carrito de compras" class="carrito-img">
+                    <span id="contador-carrito">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Modal del Carrito -->
+    <div class="carrito-modal" id="carritoModal">
+        <div class="carrito-header">
+            <h2>Carrito de Compras</h2>
+            <button class="cerrar-carrito" onclick="cerrarCarrito()">&times;</button>
+        </div>
+        <div class="carrito-items" id="carritoItems">
+            <!-- Los items del carrito se agregarán aquí dinámicamente -->
+        </div>
+        <div class="carrito-total">
+            <div class="total-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">CLP$ 0</span>
+            </div>
+            <div class="total-row">
+                <span>IVA (19%):</span>
+                <span id="iva">CLP$ 0</span>
+            </div>
+            <div class="total-row final">
+                <span>Total:</span>
+                <span id="total">CLP$ 0</span>
+            </div>
+            <button class="checkout-btn" onclick="procederPago()">Proceder al Pago</button>
+        </div>
+        <!-- Define la URL de pago -->
+        <script>
+            const pagoUrl = "{% url 'pago' %}";
+        </script>
+    </div>
