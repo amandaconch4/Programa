@@ -110,9 +110,10 @@ def registro(request):
             return redirect('registro') 
               
         try:
-            user = User.objects.create_user(nombre_completo_usuario= nombre_completo_usuario,username=username,
-                                             email=email, password=password, confirmarPassword = confirmarPassword,
-                                             fecha_nacimiento = fecha_nacimiento, direccion = direccion)
+            user = User.objects.create_user( username=username,email=email,
+                                             password=password)
+            user.first_name = nombre_completo_usuario
+            user.save()
            
             
             messages.success(request, "¡Registro exitoso! Ya puedes iniciar sesión.")
