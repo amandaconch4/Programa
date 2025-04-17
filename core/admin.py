@@ -1,5 +1,4 @@
 from django.contrib import admin
-from .models import GestionUsuario
 from .models import Usuario, PerfilUsuario, Juego, Categoria, Venta, DetalleVenta
 
 
