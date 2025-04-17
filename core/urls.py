@@ -62,4 +62,5 @@ urlpatterns = [
     path('sevengamer/panel-admin', panel_admin, name="panel_admin"),
     path('sevengamer/panel-usuario', panel_usuario, name="panel_usuario"),
     path('sevengamer/pago', pago, name="pago"),
+    path('', sevengamer, name="home"),
 ]
