@@ -25,7 +25,7 @@
                 <p class="slogan">Juegos de un verdadero gamer</p>
             </div>
             <nav>
-                <a href="../login.html" class="tu-clase-de-estilo">Iniciar Sesión</a>
+                <a href="{% url 'login' %}" class="tu-clase-de-estilo">Iniciar Sesión</a>
                 <a href="#" class="carrito-icon" id="carritoBtn">
                     <img src="{% static 'imagenes/carrito-compras.png' %}" alt="Carrito de compras" class="carrito-img">
                     <span id="contador-carrito">0</span>
@@ -60,7 +60,9 @@
                     </p>
                     <div class="precio-container">
                         <span class="precio">CLP$ 42.000</span>
-                        <button class="btn-carrito" onclick="agregarAlCarrito('re8', 'Resident Evil Village', 42000, '{% static 'imagenes/resident-evil-village.jpg' %}')">Añadir al Carrito</button>
+                        <div class="imagenes-container">
+                        <img src="{% static 'imagenes/resident-evil-village-1.jpg' %}" alt="Imagen 1 de Resident Evil Village">
+                        <button class="btn-carrito" onclick="agregarAlCarrito('re8', 'Resident Evil Village', 42000, 'Añadir al Carrito')">Añadir al Carrito</button>
                     </div>
                 </div>
             </div>

@@ -4,12 +4,14 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import UsuarioForm, PerfilUsuarioForm
 from django.contrib.auth.hashers import make_password #encriptar las contraseñas 
-from django.contrib.auth import authenticate, login as auth_login
 
 # Create your views here.
 
 def sevengamer(request):
     return render(request, 'index.html')
+
+def login(request):
+    return render(request, 'login.html')
 
 def terror(request):
     return render(request, 'terror.html')
@@ -80,6 +82,9 @@ def baldursgate3(request):
 def persona5(request):
     return render(request, 'persona5.html')
 
+def registro(request):
+    return render(request, 'registro.html')
+
 def admin(request):
     return render(request, 'admin.html')
 
@@ -91,6 +96,9 @@ def panel_usuario(request):
 
 def pago(request):
     return render(request, 'pago.html')
+
+def recuperar_password(request):
+    return render(request, 'recuperar_password.html')
 
 
 
@@ -121,25 +129,4 @@ def registro(request):
         perfil_form = PerfilUsuarioForm()
 
 
-        return render(request, 'registro.html', {'usuario_form': usuario_form, 'perfil_form': perfil_form})
-
-def login(request):
-    if request.method == 'POST':
-        # Capturamos los datos del formulario
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-
-        # Verificamos si las credenciales son correctas
-        user = authenticate(request, username=username, password=password)
-
-        if user is not None:
-            # Si las credenciales son correctas, autenticamos al usuario
-            auth_login(request, user)
-            messages.success(request, "¡Bienvenido de nuevo!")
-            return redirect('home')  # Redirige a la página de inicio o a donde quieras
-
-        else:
-            # Si las credenciales son incorrectas, mostramos un mensaje de error
-            messages.error(request, "Credenciales incorrectas. Intenta nuevamente.")
-    
-    return render(request, 'login.html')
+    return render(request, 'registro.html')

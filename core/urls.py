@@ -28,6 +28,7 @@ from .views import admin
 from .views import panel_admin
 from .views import panel_usuario
 from .views import pago
+from .views import recuperar_password
 from . import views
 
 urlpatterns = [
@@ -55,11 +56,12 @@ urlpatterns = [
     path('sevengamer/finalfantasy', finalfantasy, name="finalfantasy"),
     path('sevengamer/baldursgate3', baldursgate3, name="baldursgate3"),
     path('sevengamer/persona5', persona5, name="persona5"),
-    path('sevengamer/registro', registro, name="registro"),
     path('sevengamer/admin', admin, name="admin"),
     path('sevengamer/panel-admin', panel_admin, name="panel_admin"),
     path('sevengamer/panel-usuario', panel_usuario, name="panel_usuario"),
     path('sevengamer/pago', pago, name="pago"),
     path('', sevengamer, name="home"),
+    path('sevengamer/recuperar-password', recuperar_password, name='recuperar_password'),
+    path('registro/', views.registro, name='registro'),
     path('login/', views.login, name='login'),
 ]

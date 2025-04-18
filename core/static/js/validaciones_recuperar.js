@@ -65,7 +65,7 @@ form.addEventListener('submit', function(e) {
         <h2>¡Correo enviado!</h2>
         <p>Se ha enviado un enlace de recuperación a tu correo electrónico.</p>
         <p>Por favor, revisa tu bandeja de entrada.</p>
-        <button onclick="window.location.href='login.html'" class="submit-btn">Volver al login</button>
+        <button onclick="window.location.href='{% url 'login' %}'" class="submit-btn">Volver al login</button>
     </div>
 `;
 document.querySelector('.form-box').innerHTML = datosHTML;

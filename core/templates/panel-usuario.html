@@ -325,7 +325,7 @@
         function verificarAutenticacion() {
             const usuario = JSON.parse(localStorage.getItem('usuarioActual'));
             if (!usuario) {
-                window.location.href = 'login.html';
+                window.location.href = "{% url 'login' %}";
                 return;
             }
             actualizarInformacionUsuario(usuario);
@@ -390,7 +390,7 @@
         // Función para cerrar sesión
         function cerrarSesion() {
             localStorage.removeItem('usuarioActual');
-            window.location.href = 'login.html';
+            window.location.href = "{% url 'login' %}";
         }
 
         // Función para ver detalles del pedido
