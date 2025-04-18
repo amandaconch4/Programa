@@ -71,12 +71,13 @@
     <div class="content-container">
         <div class="form-box">
             <h2>Registro</h2>
-                <form id="registroForm" method="post" action="{% url 'registro' %}">
+                <form id="registroForm" method="post" action="{% url 'registro' %}" novalidate>
                     {% csrf_token %}
 
                     <div class="form-group">
                         {{ usuario_form.nombre_completo.label_tag }}
                         {{ usuario_form.nombre_completo }}
+                        <span class="error-message" id="nombre_completo-error"></span>
                         {% for error in usuario_form.nombre_completo.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
@@ -85,6 +86,7 @@
                     <div class="form-group">
                         {{ usuario_form.nombre_usuario.label_tag }}
                         {{ usuario_form.nombre_usuario }}
+                        <span class="error-message" id="nombre_usuario-error"></span>
                         {% for error in usuario_form.nombre_usuario.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
@@ -93,6 +95,14 @@
                     <div class="form-group">
                         {{ usuario_form.correo.label_tag }}
                         {{ usuario_form.correo }}
+                        <span class="error-message" id="correo-error"></span>
+                        <div class="email-requisitos" id="email-requisitos">
+                            <ul>
+                                <li id="req-email-formato">Debe tener formato usuario@dominio.com</li>
+                                <li id="req-email-sin-espacios">No debe contener espacios</li>
+                                <li id="req-email-dominio">Debe tener un dominio válido</li>
+                            </ul>
+                        </div>
                         {% for error in usuario_form.correo.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
@@ -101,6 +111,15 @@
                     <div class="form-group">
                         {{ usuario_form.contraseña.label_tag }}
                         {{ usuario_form.contraseña }}
+                        <span class="error-message" id="contraseña-error"></span>
+                        <div class="password-requisitos" id="password-requirements">
+                            <ul>
+                                <li id="req-length">Debe contener entre 6 y 18 caracteres</li>
+                                <li id="req-mayus">Debe contener al menos 1 mayúscula</li>
+                                <li id="req-number">Debe contener al menos 1 número</li>
+                                <li id="req-special">Debe contener al menos 1 carácter especial (. , ! @ # $ % ^ & *)</li>
+                            </ul>
+                        </div>
                         {% for error in usuario_form.contraseña.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
@@ -109,6 +128,7 @@
                     <div class="form-group">
                         {{ usuario_form.fecha_nacimiento.label_tag }}
                         {{ usuario_form.fecha_nacimiento }}
+                        <span class="error-message" id="fecha_nacimiento-error"></span>
                         {% for error in usuario_form.fecha_nacimiento.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
@@ -117,6 +137,7 @@
                     <div class="form-group">
                         {{ usuario_form.direccion.label_tag }}
                         {{ usuario_form.direccion }}
+                        <span class="error-message" id="direccion-error"></span>
                         {% for error in usuario_form.direccion.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
