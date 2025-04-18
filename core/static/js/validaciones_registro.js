@@ -273,7 +273,7 @@ function mostrarDatos(e) {
             <p><strong>Dirección:</strong> ${direccion}</p>
             <p><strong>Contraseña:</strong> [Protegida]</p>
             <div class="button-container">
-                <a href="login.html" class="submit-btn">Iniciar Sesión</a>
+                <a href="/login/" class="submit-btn">Iniciar Sesión</a>
             </div>
         </div>
     `;

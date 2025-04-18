@@ -21,7 +21,7 @@ class Usuario(models.Model):
     fecha_nacimiento = models.DateField()
     direccion = models.CharField(max_length=300)
 
-    perfil = models.ForeignKey(PerfilUsuario, on_delete=models.CASCADE)
+    perfil = models.ForeignKey(PerfilUsuario, on_delete=models.CASCADE, related_name='usuarios')
 
     def __str__(self):
         return f"{self.nombre_usuario} ({self.perfil.rol})"
