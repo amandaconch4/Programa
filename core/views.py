@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import UsuarioForm, PerfilUsuarioForm
+from .models import PerfilUsuario
 from django.contrib.auth.hashers import make_password #encriptar las contraseñas 
 
 # Create your views here.
@@ -82,9 +83,6 @@ def baldursgate3(request):
 def persona5(request):
     return render(request, 'persona5.html')
 
-def registro(request):
-    return render(request, 'registro.html')
-
 def admin(request):
     return render(request, 'admin.html')
 
@@ -101,32 +99,23 @@ def recuperar_password(request):
     return render(request, 'recuperar_password.html')
 
 
-
 def registro(request):
     if request.method == 'POST':
         usuario_form = UsuarioForm(request.POST)
-        perfil_form = PerfilUsuarioForm(request.POST)
-
-        if usuario_form.is_valid() and perfil_form.is_valid():
-            # Guardar el usuario
+        if usuario_form.is_valid():
             usuario = usuario_form.save(commit=False)
-            # Encriptar la contraseña antes de guardar
             usuario.contraseña = make_password(usuario.contraseña)
+
+            # Asignar automáticamente el perfil "usuario"
+            perfil_usuario, created = PerfilUsuario.objects.get_or_create(rol='usuario')
+            usuario.perfil = perfil_usuario
             usuario.save()
-
-             # Crear el perfil de usuario
-            perfil = perfil_form.save(commit=False)
-            perfil.usuario = usuario
-            perfil.save()
-
             messages.success(request, "¡Registro exitoso! Ya puedes iniciar sesión.")
-            return redirect('login')  # Después del registro, redirige a la página de login
+            return redirect('login')
         else:
             messages.error(request, "Error en el formulario. Por favor, revisa los datos.")
-            
     else:
         usuario_form = UsuarioForm()
-        perfil_form = PerfilUsuarioForm()
-
-
-    return render(request, 'registro.html')
+    return render(request, 'registro.html', {
+        'usuario_form': usuario_form
+    })

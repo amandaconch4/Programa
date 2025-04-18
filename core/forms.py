@@ -6,7 +6,10 @@ from django.contrib.auth.hashers import make_password
 class UsuarioForm(forms.ModelForm):
     class Meta:
         model = Usuario
-        fields = ['nombre_completo', 'nombre_usuario', 'correo', 'contraseña', 'fecha_nacimiento', 'direccion', 'perfil']
+        fields = ['nombre_completo', 'nombre_usuario', 'correo', 'contraseña', 'fecha_nacimiento', 'direccion']
+        widgets = {
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+        }
 
     # Método para encriptar la contraseña
     def save(self, commit=True):

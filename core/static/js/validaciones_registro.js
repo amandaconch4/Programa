@@ -216,36 +216,39 @@ fechaNacimiento.addEventListener('change', validarFecha);
 
 
 form.addEventListener('submit', function(e) {
-    e.preventDefault();
+    let valido = true;
+
     if (!nombreInput.validity.valid) {
         nombreError.textContent = 'Por favor, ingrese su nombre completo';
         nombreError.style.display = 'block';
-        return;
+        valido = false;
     }
 
     if (!usernameInput.validity.valid) {
         usernameError.textContent = 'Por favor, ingrese un nombre de usuario';
         usernameError.style.display = 'block';
-        return;
+        valido = false;
     }
-    
-    if (!validarEmail(emailInput.value))  {
+
+    if (!validarEmail(emailInput.value)) {
         emailError.textContent = 'Por favor, ingrese un correo electrónico válido';
         emailError.style.display = 'block';
-        return;
+        valido = false;
     }
 
     if (!validarContraseñas()) {
-        return;
+        valido = false;
     }
 
-    // Validar fecha de nacimiento
     if (!validarFecha()) {
-        return;
+        valido = false;
     }
 
-    // Mostrar los datos en la página
-    mostrarDatos(e);
+    // Solo prevenimos el submit si hay algún error
+    if (!valido) {
+        e.preventDefault();
+    }
+    // Si todo es válido, el formulario se enviará normalmente a Django y se guardará en la base de datos
 });
 
 function mostrarDatos(event) {
