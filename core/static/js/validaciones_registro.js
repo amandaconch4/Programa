@@ -263,7 +263,7 @@ function mostrarDatos(event) {
     .then(response => {
         if (response.ok) {
             // Redirigir a la página de login
-            window.location.href = '/sevengamer/login';
+            window.location.href = '/login/';
         } else {
             throw new Error('Error en el registro');
         }
