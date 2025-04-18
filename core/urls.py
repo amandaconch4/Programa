@@ -33,7 +33,6 @@ from . import views
 
 urlpatterns = [
     path('sevengamer', sevengamer, name="sevengamer"),
-    path('sevengamer/login', login, name="login"),
     path('sevengamer/terror', terror, name="terror"),
     path('sevengamer/mundoabierto', mundoabierto, name="mundoabierto"),
     path('sevengamer/accion', accion, name="accion"),
