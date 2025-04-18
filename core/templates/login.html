@@ -72,6 +72,7 @@
             <h2>Iniciar Sesión</h2>
             <form method="post" action="{% url 'login' %}">
                 {% csrf_token %}
+                <div class="form-group">
                     <label for="username">Nombre de usuario:</label>
                     <input type="text" id="username" name="username">
                     <span class="error-message" id="username-error"></span>
