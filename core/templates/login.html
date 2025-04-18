@@ -70,8 +70,8 @@
     <div class="content-container">
         <div class="form-box">
             <h2>Iniciar Sesión</h2>
-            <form id="loginForm" onsubmit="validarFormulario(event)" novalidate>
-                <div class="form-group">
+            <form method="post" action="{% url 'login' %}">
+                {% csrf_token %}
                     <label for="username">Nombre de usuario:</label>
                     <input type="text" id="username" name="username">
                     <span class="error-message" id="username-error"></span>
