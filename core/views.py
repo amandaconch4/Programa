@@ -2,6 +2,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
+from .forms import UsuarioForm, PerfilUsuarioForm
+from django.contrib.auth.hashers import make_password #encriptar las contraseñas 
 
 # Create your views here.
 
@@ -95,31 +97,33 @@ def panel_usuario(request):
 def pago(request):
     return render(request, 'pago.html')
 
+
+
 def registro(request):
     if request.method == 'POST':
-        nombre_completo_usuario = request.POST.get('nombre_completo_usuario')
-        username = request.POST.get('username')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        confirmarPassword = request.POST.get('confirmarPassword')
-        fecha_nacimiento = request.POST.get('fecha_nacimiento')
-        direccion = request.POST.get('direccion', '') 
+        usuario_form = UsuarioForm(request.POST)
+        perfil_form = PerfilUsuarioForm(request.POST)
 
-        if password != confirmarPassword:
-            messages.error(request, "Las contraseñas no coinciden.")
-            return redirect('registro') 
-              
-        try:
-            user = User.objects.create_user( username=username,email=email,
-                                             password=password)
-            user.first_name = nombre_completo_usuario
-            user.save()
-           
-            
+        if usuario_form.is_valid() and perfil_form.is_valid():
+            # Guardar el usuario
+            usuario = usuario_form.save(commit=False)
+            # Encriptar la contraseña antes de guardar
+            usuario.contraseña = make_password(usuario.contraseña)
+            usuario.save()
+
+             # Crear el perfil de usuario
+            perfil = perfil_form.save(commit=False)
+            perfil.usuario = usuario
+            perfil.save()
+
             messages.success(request, "¡Registro exitoso! Ya puedes iniciar sesión.")
             return redirect('login')  # Después del registro, redirige a la página de login
-        except Exception as e:
-            messages.error(request, f"Error al crear el usuario: {e}")
-            return redirect('registro')  # Si existee un error, redirige al formulario
+        else:
+            messages.error(request, "Error en el formulario. Por favor, revisa los datos.")
+            
+    else:
+        usuario_form = UsuarioForm()
+        perfil_form = PerfilUsuarioForm()
+
 
     return render(request, 'registro.html')

@@ -1,16 +1,11 @@
 from django.contrib import admin
-from .models import GestionUsuario
-from .models import Usuario
-from .models import Admin
-from .models import Producto
-from .models import Inventario
-from .models import Ventas
-from .models import Cliente
+from .models import Usuario, PerfilUsuario, Juego, Categoria, Venta, DetalleVenta
 
-admin.site.register(GestionUsuario)
+
 admin.site.register(Usuario)
-admin.site.register(Admin)
-admin.site.register(Producto)
-admin.site.register(Inventario)
-admin.site.register(Ventas)
-admin.site.register(Cliente)
+admin.site.register(PerfilUsuario)
+admin.site.register(Juego)
+admin.site.register(Categoria)
+admin.site.register(Venta)
+admin.site.register(DetalleVenta)
+
