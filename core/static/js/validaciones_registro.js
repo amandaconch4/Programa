@@ -229,21 +229,17 @@ form.addEventListener('submit', function(e) {
         return;
     }
     
-    if (!emailInput.validity.valid) {
+    if (!validarEmail(emailInput.value))  {
         emailError.textContent = 'Por favor, ingrese un correo electrónico válido';
         emailError.style.display = 'block';
         return;
     }
 
-    if (!validarContraseña(password.value)) {
+    if (!validarContraseñas()) {
         return;
     }
 
-    if (password.value !== confirmarPassword.value) {
-        confirmarPassword.setCustomValidity('Las contraseñas no coinciden');
-        return;
-    }
-
+    // Validar fecha de nacimiento
     if (!validarFecha()) {
         return;
     }
@@ -252,32 +248,28 @@ form.addEventListener('submit', function(e) {
     mostrarDatos(e);
 });
 
-function mostrarDatos(e) {
-    e.preventDefault();
+function mostrarDatos(event) {
+    event.preventDefault();
+    const form = document.getElementById('registroForm');
     
-    // Obtener los valores del formulario
-    const nombre = document.getElementById('nombre').value;
-    const username = document.getElementById('username').value;
-    const email = document.getElementById('email').value;
-    const fechaNacimiento = document.getElementById('fechaNacimiento').value;
-    const direccion = document.getElementById('direccion').value;
-
-    // Crear el HTML para mostrar los datos
-    const datosHTML = `
-        <div class="datos-mostrados">
-            <h2>Datos registrados:</h2>
-            <p><strong>Nombre:</strong> ${nombre}</p>
-            <p><strong>Usuario:</strong> ${username}</p>
-            <p><strong>Email:</strong> ${email}</p>
-            <p><strong>Fecha de nacimiento:</strong> ${fechaNacimiento}</p>
-            <p><strong>Dirección:</strong> ${direccion}</p>
-            <p><strong>Contraseña:</strong> [Protegida]</p>
-            <div class="button-container">
-                <a href="login.html" class="submit-btn">Iniciar Sesión</a>
-            </div>
-        </div>
-    `;
-
-    // Ocultar el formulario y mostrar los datos
-    document.querySelector('.form-box').innerHTML = datosHTML;
+    // Enviar el formulario usando Fetch API
+    fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            // Redirigir a la página de login
+            window.location.href = '/sevengamer/login';
+        } else {
+            throw new Error('Error en el registro');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Hubo un error en el registro. Por favor, intenta nuevamente.');
+    });
 }

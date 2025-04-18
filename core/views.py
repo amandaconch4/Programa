@@ -97,6 +97,9 @@ def panel_usuario(request):
 def pago(request):
     return render(request, 'pago.html')
 
+def recuperar_password(request):
+    return render(request, 'recuperar_password.html')
+
 
 
 def registro(request):

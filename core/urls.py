@@ -29,6 +29,7 @@ from .views import admin
 from .views import panel_admin
 from .views import panel_usuario
 from .views import pago
+from .views import recuperar_password
 from . import views
 
 urlpatterns = [
@@ -63,4 +64,5 @@ urlpatterns = [
     path('sevengamer/panel-usuario', panel_usuario, name="panel_usuario"),
     path('sevengamer/pago', pago, name="pago"),
     path('', sevengamer, name="home"),
+    path('sevengamer/recuperar-password', recuperar_password, name='recuperar_password'),
 ]
