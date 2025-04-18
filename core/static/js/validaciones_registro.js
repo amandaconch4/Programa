@@ -13,7 +13,7 @@ const fechaError = document.getElementById('fecha_nacimiento-error');
 const direccionInput = document.getElementById('id_direccion');
 const direccionError = document.getElementById('direccion-error');
 
-// -------- VALIDACIÓN VISUAL DE CONTRASEÑA --------
+// VALIDACIÓN VISUAL DE CONTRASEÑA
 function validarContraseña(contraseña) {
     const tieneNumero = /[0-9]/.test(contraseña);
     const tieneMayuscula = /[A-Z]/.test(contraseña);
@@ -33,7 +33,7 @@ function validarContraseña(contraseña) {
     return longitudCorrecta && tieneNumero && tieneMayuscula && tieneCaracterEspecial;
 }
 
-// -------- VALIDACIÓN VISUAL DE EMAIL --------
+// VALIDACIÓN VISUAL DE EMAIL 
 function validarEmailVisual(email) {
     const formatoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const sinEspacios = !/\s/.test(email);
@@ -50,7 +50,7 @@ function validarEmailVisual(email) {
     return formatoValido && sinEspacios && dominioValido;
 }
 
-// -------- VALIDACIÓN DE FECHA DE NACIMIENTO --------
+// VALIDACIÓN DE FECHA DE NACIMIENTO 
 function validarFechaNacimiento(valor) {
     const hoy = new Date();
     const fecha = new Date(valor);
@@ -63,7 +63,7 @@ function validarFechaNacimiento(valor) {
     return edad >= 13;
 }
 
-// -------- EVENTOS EN TIEMPO REAL --------
+// EVENTOS EN TIEMPO REAL
 if (password) {
     password.addEventListener('input', function() {
         validarContraseña(password.value);
@@ -93,7 +93,7 @@ if (emailInput) {
     }
 });
 
-// -------- VALIDACIÓN AL ENVIAR EL FORMULARIO --------
+// VALIDACIÓN AL ENVIAR EL FORMULARIO 
 form.addEventListener('submit', function(e) {
     let valido = true;
 
@@ -144,11 +144,10 @@ form.addEventListener('submit', function(e) {
         valido = false;
     }
 
-    // Dirección (si la quieres obligatoria)
-    if (direccionInput && !direccionInput.value.trim()) {
-        direccionError.textContent = 'Por favor, ingrese su dirección';
-        direccionError.style.display = 'block';
-        valido = false;
+    // Dirección: opcional
+    if (direccionInput) {
+        direccionError.textContent = '';
+        direccionError.style.display = 'none';
     }
 
     if (!valido) {

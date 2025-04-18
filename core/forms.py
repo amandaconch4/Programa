@@ -19,6 +19,10 @@ class UsuarioForm(forms.ModelForm):
         if commit:
             usuario.save()
         return usuario
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['direccion'].required = False
 
 # Formulario para crear un perfil de usuario (rol)
 class PerfilUsuarioForm(forms.ModelForm):

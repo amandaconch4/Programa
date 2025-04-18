@@ -19,7 +19,7 @@ class Usuario(models.Model):
     correo = models.EmailField(unique=True)
     contraseña = models.CharField(max_length=200)
     fecha_nacimiento = models.DateField()
-    direccion = models.CharField(max_length=300)
+    direccion = models.CharField(max_length=300, blank=True)
 
     perfil = models.ForeignKey(PerfilUsuario, on_delete=models.CASCADE, related_name='usuarios')
 
