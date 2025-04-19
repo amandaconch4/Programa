@@ -61,7 +61,7 @@ urlpatterns = [
     path('sevengamer/panel-usuario', panel_usuario, name="panel_usuario"),
     path('sevengamer/pago', pago, name="pago"),
     path('', sevengamer, name="home"),
-    path('sevengamer/recuperar-password', recuperar_password, name='recuperar_password'),
     path('registro/', views.registro, name='registro'),
     path('login/', views.login, name='login'),
+    path('recuperar-password/', views.recuperar_password, name='recuperar_password'),
 ]

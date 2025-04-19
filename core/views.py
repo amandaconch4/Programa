@@ -6,6 +6,10 @@ from .forms import UsuarioForm, PerfilUsuarioForm
 from .models import PerfilUsuario, Usuario
 from django.contrib.auth.hashers import make_password #encriptar las contraseñas 
 from django.contrib.auth.hashers import check_password #verificar las contraseñas
+from django.core.mail import send_mail  # Para enviar correos electrónicos
+from django.conf import settings  # Configuración del correo
+from django.contrib.auth.models import User  # Modelo de usuario predeterminado de Django
+
 
 # Create your views here.
 
@@ -135,3 +139,18 @@ def login(request):
         except Usuario.DoesNotExist:
             messages.error(request, 'Usuario o contraseña incorrectos')
     return render(request, 'login.html')
+
+def recuperar_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')  # Obtén el correo ingresado
+        try:
+            # Verifica si el correo pertenece a un usuario registrado
+            usuario = User.objects.get(email=email)
+            
+            # Si el correo existe, muestra un mensaje de éxito
+            messages.success(request, 'Se ha enviado un enlace de recuperación a tu correo electrónico.')
+        except User.DoesNotExist:
+            # Si el correo no está registrado, muestra un mensaje de error
+            messages.error(request, 'El correo ingresado no está registrado.')
+    
+    return render(request, 'recuperar-password.html')
