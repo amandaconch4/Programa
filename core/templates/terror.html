@@ -94,9 +94,8 @@
                         <h3>Resident Evil Village</h3>
                         <p class="precio">CLP$ 42.000</p>
                         <div class="detalles-container">
-                            <a href="{% url 'residentevil' %}" class="ver-detalles">Ver Detalles</a> 
-                                <img src="{% static  imagenes/resident-evil-village.jpg' %}" alt="Imagen 1 de Resident Evil Village">
-                                <button class="btn-carrito" onclick="agregarAlCarrito('re8', 'Resident Evil Village', 42000, 'Añadir al Carrito')">Añadir al Carrito</button>
+                            <a href="{% url 'residentevil' %}" class="ver-detalles">Ver Detalles</a>
+                            <button class="agregar-carrito" onclick="agregarAlCarrito('re8', 'Resident Evil Village', 42000, '{% static 'imagenes/resident-evil-village.jpg' %}')">Agregar al carrito</button>
                         </div>
                     </div>
                 </div>
@@ -108,8 +107,7 @@
                         <p class="precio">CLP$ 32.000</p>
                         <div class="detalles-container">
                             <a href="{% url 'outlast' %}" class="ver-detalles">Ver Detalles</a>
-                            <button class="agregar-carrito" onclick="agregarAlCarrito('outlast', 'Outlast', 32000,)">Agregar al carrito</button>
-                            <img src="{% static 'imagenes/outlast.jpg' %}" alt="Imagen outlast">
+                            <button class="agregar-carrito" onclick="agregarAlCarrito('outlast', 'Outlast', 32000, '{% static 'imagenes/outlast.jpg' %}')">Agregar al carrito</button>
                         </div>
                     </div>
                 </div>
@@ -121,8 +119,7 @@
                         <p class="precio">CLP$ 48.000</p>
                         <div class="detalles-container">
                             <a href="{% url 'deadspace' %}" class="ver-detalles">Ver Detalles</a>
-                            <img src="{% static 'imagenes/deadspace.avif' %}" alt="Imagen deadspace">
-                            <button class="agregar-carrito" onclick="agregarAlCarrito('deadspace', 'Dead Space Remake', 48000, 'Agregar al carrito')">Agregar al carrito</button>
+                            <button class="agregar-carrito" onclick="agregarAlCarrito('deadspace', 'Dead Space Remake', 48000, '{% static 'imagenes/deadspace.avif' %}')">Agregar al carrito</button>
                         </div>
                     </div>
                 </div>
