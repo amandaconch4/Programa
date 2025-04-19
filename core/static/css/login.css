@@ -90,6 +90,47 @@
     font-size: 1.2em;
 }
 
+.password-requisitos {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.password-requisitos p {
+    margin-bottom: 5px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.password-requisitos ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 5px;
+}
+
+.password-requisitos li {
+    color: rgba(255, 255, 255, 0.8);
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 1em;
+    margin: 3px 0;
+    padding-left: 25px;
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.password-requisitos li::before {
+    font-family: "Font Awesome 5 Free";
+    content: '\f057'; /* ícono de círculo con X */
+    position: absolute;
+    left: 0;
+    color: #dc3545;
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.password-requisitos li.valid::before {
+    content: '\f058'; /* ícono de círculo con check */
+    color: #28a745;
+}
+
 .password-toggle:hover {
     color: #00ff88;
 }

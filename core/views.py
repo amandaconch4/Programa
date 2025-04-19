@@ -3,8 +3,9 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 from .forms import UsuarioForm, PerfilUsuarioForm
-from .models import PerfilUsuario
+from .models import PerfilUsuario, Usuario
 from django.contrib.auth.hashers import make_password #encriptar las contraseñas 
+from django.contrib.auth.hashers import check_password #verificar las contraseñas
 
 # Create your views here.
 
@@ -104,8 +105,7 @@ def registro(request):
         usuario_form = UsuarioForm(request.POST)
         if usuario_form.is_valid():
             usuario = usuario_form.save(commit=False)
-            usuario.contraseña = make_password(usuario.contraseña)
-
+            
             # Asignar automáticamente el perfil "usuario"
             perfil_usuario, created = PerfilUsuario.objects.get_or_create(rol='usuario')
             usuario.perfil = perfil_usuario
@@ -119,3 +119,19 @@ def registro(request):
     return render(request, 'registro.html', {
         'usuario_form': usuario_form
     })
+
+def login(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        try:
+            usuario = Usuario.objects.get(nombre_usuario=username)
+            if check_password(password, usuario.contraseña):
+                request.session['usuario_id'] = usuario.id
+                request.session['usuario_nombre'] = usuario.nombre_usuario
+                return redirect('home') 
+            else:
+                messages.error(request, 'Usuario o contraseña incorrectos')
+        except Usuario.DoesNotExist:
+            messages.error(request, 'Usuario o contraseña incorrectos')
+    return render(request, 'login.html')
