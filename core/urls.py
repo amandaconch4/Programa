@@ -28,8 +28,11 @@ from .views import admin
 from .views import panel_admin
 from .views import panel_usuario
 from .views import pago
-from .views import recuperar_password
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+from django.contrib.auth.views import LoginView, LogoutView
 
 urlpatterns = [
     path('sevengamer', sevengamer, name="sevengamer"),
@@ -64,4 +67,11 @@ urlpatterns = [
     path('registro/', views.registro, name='registro'),
     path('login/', views.login, name='login'),
     path('recuperar-password/', views.recuperar_password, name='recuperar_password'),
+
+    path('recuperar-password/', auth_views.PasswordResetView.as_view(template_name='recuperar.html'), name='password_reset'),
+    path('recuperar-password/enviado/', auth_views.PasswordResetDoneView.as_view(template_name='recuperar_enviado.html'), name='password_reset_done'),
+    path('recuperar-password/confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='reestablecer_confirmar.html'), name='password_reset_confirm'),
+    path('recuperar-password/completado/', auth_views.PasswordResetCompleteView.as_view(template_name='reestablecer_completado.html'), name='password_reset_complete'),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

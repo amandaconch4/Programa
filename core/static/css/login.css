@@ -442,4 +442,44 @@
     color: rgba(255, 255, 255, 0.8);
     font-size: 1.1em;
     margin-top: 0.5rem;
-} 
+}
+
+.mensaje-error,
+.mensaje-success,
+.mensaje-info,
+.mensaje-warning {
+    padding: 12px;
+    border-radius: 5px;
+    margin: 10px 0;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+}
+
+.mensaje-error {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #ff4444;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.mensaje-success {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #00ff88;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.mensaje-info {
+    background-color: rgba(23, 162, 184, 0.2);
+    color: #17a2b8;
+    border: 1px solid rgba(23, 162, 184, 0.3);
+}
+
+.mensaje-warning {
+    background-color: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+    border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.messages {
+    width: 100%;
+    margin-bottom: 15px;
+}

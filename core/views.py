@@ -144,8 +144,9 @@ def recuperar_password(request):
     if request.method == 'POST':
         email = request.POST.get('email')  # Obtén el correo ingresado
         try:
-            # Verifica si el correo pertenece a un usuario registrado
-            usuario = User.objects.get(email=email)
+           # Verifica si el correo pertenece a un usuario registrado
+            email = email.strip()
+            usuario = User.objects.get(email__iexact=email)
             
             # Si el correo existe, muestra un mensaje de éxito
             messages.success(request, 'Se ha enviado un enlace de recuperación a tu correo electrónico.')
