@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from .models import PerfilUsuario, Usuario
 from django.contrib.auth.hashers import check_password #verificar las contraseñas
@@ -10,6 +10,7 @@ from django.contrib.auth.models import User  # Modelo de usuario predeterminado 
 from core.models import Usuario
 from .forms import UsuarioForm, PerfilUsuarioForm
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -124,6 +125,9 @@ def registro(request):
     })
 
 def login(request):
+    if request.user.is_authenticated:
+        return redirect('sevengamer')
+        
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -166,6 +170,11 @@ def recuperar_password(request):
             messages.error(request, 'El correo ingresado no está registrado.')
     
     return render(request, 'recuperar-password.html')
+
+@login_required(login_url='login')
+def logout(request):
+    auth_logout(request)
+    return redirect('sevengamer')
 
 def mi_cuenta(request):
     if not request.user.is_authenticated:
