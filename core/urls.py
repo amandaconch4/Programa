@@ -38,7 +38,7 @@ urlpatterns = [
     # Auth URLs
     path('', sevengamer, name="home"),
     path('login/', views.login, name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='sevengamer'), name='logout'),
+    path('logout/', views.logout, name='logout'),
     path('registro/', views.registro, name='registro'),
     path('recuperar-password/', auth_views.PasswordResetView.as_view(template_name='recuperar_password.html',), name='password_reset'),
     path('recuperar-password/enviado/', auth_views.PasswordResetDoneView.as_view(template_name='recuperar_enviado.html'), name='password_reset_done'),
