@@ -16,6 +16,35 @@ class UsuarioForm(UserCreationForm):  # Usamos UserCreationForm para manejar con
         widgets = {
             'fecha_nacimiento': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),  # Para el campo de fecha
         }
+        # Validación para el correo electrónico
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        if " " in email:
+            raise forms.ValidationError("El correo electrónico no puede contener espacios.")
+        if not email.endswith('@dominio.com'):
+            raise forms.ValidationError("El correo electrónico debe tener un dominio válido.")
+        return email
+
+    # Validación para la contraseña
+    def clean_password1(self):
+        password1 = self.cleaned_data.get('password1')
+        if len(password1) < 6 or len(password1) > 18:
+            raise forms.ValidationError("La contraseña debe tener entre 6 y 18 caracteres.")
+        if not any(char.isupper() for char in password1):
+            raise forms.ValidationError("La contraseña debe contener al menos una mayúscula.")
+        if not any(char.isdigit() for char in password1):
+            raise forms.ValidationError("La contraseña debe contener al menos un número.")
+        if not any(char in "!@#$%^&*(),." for char in password1):
+            raise forms.ValidationError("La contraseña debe contener al menos un carácter especial.")
+        return password1
+
+    # Validación para la confirmación de la contraseña
+    def clean_password2(self):
+        password2 = self.cleaned_data.get('password2')
+        password1 = self.cleaned_data.get('password1')
+        if password2 != password1:
+            raise forms.ValidationError("Las contraseñas no coinciden.")
+        return password2
 
     
 # Formulario para crear un perfil de usuario (rol)

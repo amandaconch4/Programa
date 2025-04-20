@@ -1,0 +1,130 @@
+/* Estilos generales */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Estilos para las tarjetas */
+.card {
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
+    border: 1px solid #333;
+}
+
+.card-header {
+    background: #2a2a2a;
+    color: #fff;
+    padding: 15px 20px;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid #333;
+}
+
+.card-header h3 {
+    margin: 0;
+    font-family: 'Orbitron', sans-serif;
+    color: #00ff88;
+}
+
+.card-body {
+    padding: 20px;
+    color: #fff;
+}
+
+/* Estilos para formularios */
+.form-label {
+    color: #00ff88;
+    font-weight: 500;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.form-control {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    background: #2a2a2a;
+    border: 1px solid #333;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #00ff88;
+    box-shadow: 0 0 5px rgba(0, 255, 136, 0.3);
+}
+
+/* Estilos para botones */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #00ff88;
+    color: #1a1a1a;
+}
+
+.btn-primary:hover {
+    background: #00cc6a;
+}
+
+/* Estilos para la foto de perfil */
+.profile-photo {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto 20px;
+    display: block;
+    border: 3px solid #00ff88;
+}
+
+/* Estilos para la tabla de historial */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    color: #fff;
+}
+
+.table th,
+.table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #333;
+}
+
+.table th {
+    background: #2a2a2a;
+    color: #00ff88;
+    font-weight: 500;
+}
+
+.table tr:hover {
+    background: #2a2a2a;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .profile-photo {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .table {
+        display: block;
+        overflow-x: auto;
+    }
+}

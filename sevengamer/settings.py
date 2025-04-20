@@ -63,6 +63,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -143,4 +144,9 @@ MEDIA_URL = '/imagenes/'
 MEDIA_ROOT = os.path.join(BASE_DIR,'imagenes')
 
 AUTH_USER_MODEL = 'core.Usuario'
+
+# Login settings
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = 'sevengamer'
+LOGOUT_REDIRECT_URL = 'sevengamer'
 

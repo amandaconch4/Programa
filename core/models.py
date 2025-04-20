@@ -18,13 +18,20 @@ class PerfilUsuario(models.Model):
 class Usuario(AbstractUser):
     email = models.EmailField(unique=True)
     nombre_completo = models.CharField(max_length=200)
-    fecha_nacimiento = models.DateField()
+    fecha_nacimiento = models.DateField(null=True)
     direccion = models.CharField(max_length=300, blank=True)
-    perfil = models.ForeignKey('PerfilUsuario', on_delete=models.CASCADE, related_name='usuarios')
-    # Ya tienes 'email', 'username' y 'password' incluidos en AbstractUser
-
+    perfil = models.ForeignKey('PerfilUsuario', on_delete=models.CASCADE, related_name='usuarios', null=True)
+    profile_photo = models.ImageField(upload_to='profile_photos/', null=True, blank=True)
+    
+    USERNAME_FIELD = 'username'
+    EMAIL_FIELD = 'email'
+    REQUIRED_FIELDS = ['email', 'nombre_completo']
+    
     def __str__(self):
-        return f"{self.username} ({self.perfil.rol})"
+        return f"{self.username} ({self.get_rol_display() if self.perfil else 'No role'})"
+    
+    def get_rol_display(self):
+        return self.perfil.get_rol_display() if self.perfil else 'No role'
     
 
 class Juego (models.Model):

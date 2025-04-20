@@ -594,3 +594,14 @@ input[type="date"]:valid {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
 }
+.valid {
+    color: green;
+    font-weight: bold;
+}
+
+.invalid {
+    color: red;
+}
+.password-wrapper {
+    position: relative;
+}

@@ -32,10 +32,23 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.views import LoginView, LogoutView
 from .forms import CustomPasswordResetForm
 
 urlpatterns = [
+    # Auth URLs
+    path('', sevengamer, name="home"),
+    path('login/', views.login, name='login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='sevengamer'), name='logout'),
+    path('registro/', views.registro, name='registro'),
+    path('recuperar-password/', auth_views.PasswordResetView.as_view(template_name='recuperar_password.html',), name='password_reset'),
+    path('recuperar-password/enviado/', auth_views.PasswordResetDoneView.as_view(template_name='recuperar_enviado.html'), name='password_reset_done'),
+    path('recuperar-password/confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='reestablecer_confirmar.html'), name='password_reset_confirm'),
+    path('recuperar-password/completado/', auth_views.PasswordResetCompleteView.as_view(template_name='reestablecer_completado.html'), name='password_reset_complete'),
+    path('mi-cuenta/', views.mi_cuenta, name='mi_cuenta'),
+    path('mi-cuenta/actualizar-perfil/', views.actualizar_perfil, name='actualizar_perfil'),
+    path('mi-cuenta/actualizar-foto/', views.actualizar_foto, name='actualizar_foto'),
+
+    # Game URLs
     path('sevengamer', sevengamer, name="sevengamer"),
     path('sevengamer/terror', terror, name="terror"),
     path('sevengamer/mundoabierto', mundoabierto, name="mundoabierto"),
@@ -64,15 +77,7 @@ urlpatterns = [
     path('sevengamer/panel-admin', panel_admin, name="panel_admin"),
     path('sevengamer/panel-usuario', panel_usuario, name="panel_usuario"),
     path('sevengamer/pago', pago, name="pago"),
-    path('', sevengamer, name="home"),
-    path('registro/', views.registro, name='registro'),
-    path('login/', views.login, name='login'),
-    path('recuperar-password/', views.recuperar_password, name='recuperar_password'),
 
-    path('recuperar-password/', auth_views.PasswordResetView.as_view(template_name='recuperar_password.html',), name='password_reset'),
-    path('recuperar-password/enviado/', auth_views.PasswordResetDoneView.as_view(template_name='recuperar_enviado.html'), name='password_reset_done'),
-    path('recuperar-password/confirm/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(template_name='reestablecer_confirmar.html'), name='password_reset_confirm'),
-    path('recuperar-password/completado/', auth_views.PasswordResetCompleteView.as_view(template_name='reestablecer_completado.html'), name='password_reset_complete'),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,86 +1,191 @@
 // Selección de elementos
+
 const form = document.getElementById('registroForm');
+
 const nombreInput = document.getElementById('id_nombre_completo');
-const nombreError = document.getElementById('nombre_completo-error');
-const usernameInput = document.getElementById('id_nombre_usuario');
-const usernameError = document.getElementById('nombre_usuario-error');
-const emailInput = document.getElementById('id_correo');
-const emailError = document.getElementById('correo-error');
-const password = document.getElementById('id_contraseña');
-const passwordError = document.getElementById('contraseña-error');
+const usernameInput = document.getElementById('id_username');
+const emailInput = document.getElementById('id_email');
+const password1 = document.getElementById('id_password1');
 const fechaNacimiento = document.getElementById('id_fecha_nacimiento');
-const fechaError = document.getElementById('fecha_nacimiento-error');
 const direccionInput = document.getElementById('id_direccion');
+
+// Errores
+
+const nombreError = document.getElementById('nombre_completo-error');
+const usernameError = document.getElementById('username-error');
+const emailError = document.getElementById('email-error');
+const password1Error = document.getElementById('password1-error');
+const fechaError = document.getElementById('fecha_nacimiento-error');
 const direccionError = document.getElementById('direccion-error');
+
+// Requisitos visuales
+
+const reqLength = document.getElementById('req-length');
+const reqNumber = document.getElementById('req-number');
+const reqSpecial = document.getElementById('req-special');
+const reqFormato = document.getElementById('req-email-formato');
+const reqSinEspacios = document.getElementById('req-email-sin-espacios');
+const reqDominio = document.getElementById('req-email-dominio');
+const reqUpper = document.getElementById('req-uppercase');
+
+
 
 // VALIDACIÓN VISUAL DE CONTRASEÑA
 function validarContraseña(contraseña) {
-    const tieneNumero = /[0-9]/.test(contraseña);
-    const tieneMayuscula = /[A-Z]/.test(contraseña);
-    const longitudCorrecta = contraseña.length >= 6 && contraseña.length <= 18;
-    const tieneCaracterEspecial = /[.,!@#$%^&*]/.test(contraseña);
+    const longitud = contraseña.length >= 6 && contraseña.length <= 18;
+    const mayuscula = /[A-Z]/.test(contraseña);
+    const numero = /\d/.test(contraseña);
+    const especial = /[.,!@#$%^&*]/.test(contraseña);
 
-    const reqLength = document.getElementById('req-length');
-    const reqNumber = document.getElementById('req-number');
-    const reqMayus = document.getElementById('req-mayus');
-    const reqSpecial = document.getElementById('req-special');
+    reqLength.className = longitud ? 'valid' : 'invalid';
+    reqUpper.className = mayuscula ? 'valid' : 'invalid';
+    reqNumber.className = numero ? 'valid' : 'invalid';
+    reqSpecial.className = especial ? 'valid' : 'invalid';
 
-    if (reqLength) reqLength.classList.toggle('valido', longitudCorrecta);
-    if (reqNumber) reqNumber.classList.toggle('valido', tieneNumero);
-    if (reqMayus) reqMayus.classList.toggle('valido', tieneMayuscula);
-    if (reqSpecial) reqSpecial.classList.toggle('valido', tieneCaracterEspecial);
-
-    return longitudCorrecta && tieneNumero && tieneMayuscula && tieneCaracterEspecial;
+    return longitud && mayuscula && numero && especial;
 }
+
 
 // VALIDACIÓN VISUAL DE EMAIL 
 function validarEmailVisual(email) {
     const formatoValido = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     const sinEspacios = !/\s/.test(email);
-    const dominioValido = email.includes('@') && /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.split('@')[1] || '');
+    const dominioValido = email.endsWith('@') && /^[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email.split('@')[1] || '');
 
-    const reqFormato = document.getElementById('req-email-formato');
-    const reqSinEspacios = document.getElementById('req-email-sin-espacios');
-    const reqDominio = document.getElementById('req-email-dominio');
-
-    if (reqFormato) reqFormato.classList.toggle('valido', formatoValido);
-    if (reqSinEspacios) reqSinEspacios.classList.toggle('valido', sinEspacios);
-    if (reqDominio) reqDominio.classList.toggle('valido', dominioValido);
+    reqFormato.className = formatoValido ? 'valid' : 'invalid';
+    reqSinEspacios.className = sinEspacios ? 'valid' : 'invalid';
+    reqDominio.className = dominioValido ? 'valid' : 'invalid';
 
     return formatoValido && sinEspacios && dominioValido;
 }
 
-// VALIDACIÓN DE FECHA DE NACIMIENTO 
-function validarFechaNacimiento(valor) {
+function validarEdad(fecha) {
     const hoy = new Date();
-    const fecha = new Date(valor);
-    let edad = hoy.getFullYear() - fecha.getFullYear();
-    const m = hoy.getMonth() - fecha.getMonth();
-    if (m < 0 || (m === 0 && hoy.getDate() < fecha.getDate())) {
-        edad--;
-    }
-    if (fecha > hoy) return false;
+    const cumple = new Date(fecha);
+    let edad = hoy.getFullYear() - cumple.getFullYear();
+    const m = hoy.getMonth() - cumple.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < cumple.getDate())) edad--;
     return edad >= 13;
 }
 
-// EVENTOS EN TIEMPO REAL
-if (password) {
-    password.addEventListener('input', function() {
-        validarContraseña(password.value);
-        passwordError.textContent = '';
-        passwordError.style.display = 'none';
+passwordInput.addEventListener('input', () => {
+    validarContraseña(passwordInput.value);
+    passwordError.textContent = '';
+});
+
+emailInput.addEventListener('input', () => {
+    validarEmail(emailInput.value);
+    emailError.textContent = '';
+});
+
+[nombreInput, usernameInput, fechaNacimiento, direccionInput, confirmarPassword].forEach(input => {
+    input?.addEventListener('input', () => {
+        const span = document.getElementById(input.id.replace('id_', '') + '-error');
+        if (span) span.style.display = 'none';
     });
+});
+
+form.addEventListener('submit', (e) => {
+    let valido = true;
+
+    if (!nombreInput.value.trim()) {
+        nombreError.textContent = 'Ingrese su nombre completo';
+        nombreError.style.display = 'block';
+        valido = false;
+    }
+
+    if (!usernameInput.value.trim()) {
+        usernameError.textContent = 'Ingrese un nombre de usuario';
+        usernameError.style.display = 'block';
+        valido = false;
+    }
+
+    if (!emailInput.value.trim() || !validarEmail(emailInput.value)) {
+        emailError.textContent = 'Revise los requisitos del correo electrónico';
+        emailError.style.display = 'block';
+        valido = false;
+    }
+
+    if (!passwordInput.value.trim() || !validarContraseña(passwordInput.value)) {
+        passwordError.textContent = 'Revise los requisitos de la contraseña';
+        passwordError.style.display = 'block';
+        valido = false;
+    }
+
+    if (confirmarPassword.value !== passwordInput.value) {
+        confirmarPasswordError.textContent = 'Las contraseñas no coinciden';
+        confirmarPasswordError.style.display = 'block';
+        valido = false;
+    }
+
+    if (!fechaNacimiento.value || !validarEdad(fechaNacimiento.value)) {
+        fechaError.textContent = 'Debe tener al menos 13 años';
+        fechaError.style.display = 'block';
+        valido = false;
+    }
+
+    if (!valido) e.preventDefault();
+});
+
+
+// Toggle del ojito
+function togglePassword(inputId) {
+const input = document.getElementById(inputId);
+const icon = document.getElementById(`toggleIcon-${inputId}`);
+if (input.type === 'password') {
+    input.type = 'text';
+    icon.classList.remove('fa-eye');
+    icon.classList.add('fa-eye-slash');
+} else {
+    input.type = 'password';
+    icon.classList.remove('fa-eye-slash');
+    icon.classList.add('fa-eye');
+}
 }
 
-if (emailInput) {
-    emailInput.addEventListener('input', function() {
-        validarEmailVisual(emailInput.value);
-        emailError.textContent = '';
-        emailError.style.display = 'none';
-    });
+/*  // EVENTOS EN TIEMPO REAL
+
+// Mostrar/ocultar contraseña con ícono FontAwesome
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const icon = document.getElementById(`toggleIcon-${inputId}`);
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
 }
 
-// Limpieza de errores en tiempo real para los demás campos
+// Validación en tiempo real
+const password = document.getElementById('id_password1');
+const passwordError = document.getElementById('password1-error');
+
+
+password.addEventListener('input', function () {
+    const value = password.value;
+
+
+    reqLength.classList.toggle('valid', value.length >= 6 && value.length <= 18);
+    reqLength.classList.toggle('invalid', !(value.length >= 6 && value.length <= 18));
+
+    reqUpper.classList.toggle('valid', /[A-Z]/.test(value));
+    reqUpper.classList.toggle('invalid', !/[A-Z]/.test(value));
+
+    reqNumber.classList.toggle('valid', /\d/.test(value));
+    reqNumber.classList.toggle('invalid', !/\d/.test(value));
+
+    reqSpecial.classList.toggle('valid', /[.,!@#$%^&*]/.test(value));
+    reqSpecial.classList.toggle('invalid', !/[.,!@#$%^&*]/.test(value));
+
+    passwordError.textContent = '';
+    passwordError.style.display = 'none';
+});
+
+ // Limpieza de errores en tiempo real para los demás campos
 [nombreInput, usernameInput, fechaNacimiento, direccionInput].forEach(input => {
     if (input) {
         input.addEventListener('input', function() {
@@ -94,7 +199,7 @@ if (emailInput) {
 });
 
 // VALIDACIÓN AL ENVIAR EL FORMULARIO 
-form.addEventListener('submit', function(e) {
+-form.addEventListener('submit', function(e) {
     let valido = true;
 
     // Nombre completo
@@ -153,4 +258,4 @@ form.addEventListener('submit', function(e) {
     if (!valido) {
         e.preventDefault();
     }
-});
+});*/
