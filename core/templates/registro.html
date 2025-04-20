@@ -73,7 +73,7 @@
             <h2>Registro</h2>
                 <form id="registroForm" method="post" action="{% url 'registro' %}" novalidate>
                     {% csrf_token %}
-
+                     
                     <div class="form-group">
                         {{ usuario_form.nombre_completo.label_tag }}
                         {{ usuario_form.nombre_completo }}
@@ -84,17 +84,17 @@
                     </div>
 
                     <div class="form-group">
-                        {{ usuario_form.nombre_usuario.label_tag }}
-                        {{ usuario_form.nombre_usuario }}
+                        {{ usuario_form.username.label_tag }}
+                        {{ usuario_form.username }}
                         <span class="error-message" id="nombre_usuario-error"></span>
-                        {% for error in usuario_form.nombre_usuario.errors %}
+                        {% for error in usuario_form.username.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
                     </div>
 
                     <div class="form-group">
-                        {{ usuario_form.correo.label_tag }}
-                        {{ usuario_form.correo }}
+                        {{ usuario_form.email.label_tag }}
+                        {{ usuario_form.email }}
                         <span class="error-message" id="correo-error"></span>
                         <div class="email-requisitos" id="email-requisitos">
                             <ul>
@@ -103,14 +103,14 @@
                                 <li id="req-email-dominio">Debe tener un dominio válido</li>
                             </ul>
                         </div>
-                        {% for error in usuario_form.correo.errors %}
+                        {% for error in usuario_form.email.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
                     </div>
 
                     <div class="form-group">
-                        {{ usuario_form.contraseña.label_tag }}
-                        {{ usuario_form.contraseña }}
+                        {{ usuario_form.password1.label_tag }}
+                        {{ usuario_form.password1 }}
                         <span class="error-message" id="contraseña-error"></span>
                         <div class="password-requisitos" id="password-requirements">
                             <ul>
@@ -120,10 +120,19 @@
                                 <li id="req-special">Debe contener al menos 1 carácter especial (. , ! @ # $ % ^ & *)</li>
                             </ul>
                         </div>
-                        {% for error in usuario_form.contraseña.errors %}
+                        {% for error in usuario_form.password1.errors %}
                             <span class="error-message">{{ error }}</span>
                         {% endfor %}
                     </div>
+                    <div class="form-group">
+                        {{ usuario_form.password2.label_tag }}  <!-- Cambié 'contraseña' por 'password2' -->
+                        {{ usuario_form.password2 }}  <!-- Cambié 'contraseña' por 'password2' -->
+                        <span class="error-message" id="confirmar-contraseña-error"></span>
+                        {% for error in usuario_form.password2.errors %}
+                            <span class="error-message">{{ error }}</span>
+                        {% endfor %}
+                     </div>
+
 
                     <div class="form-group">
                         {{ usuario_form.fecha_nacimiento.label_tag }}

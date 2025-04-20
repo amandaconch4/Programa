@@ -1,15 +1,15 @@
 
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from .forms import UsuarioForm, PerfilUsuarioForm
 from .models import PerfilUsuario, Usuario
-from django.contrib.auth.hashers import make_password #encriptar las contraseñas 
 from django.contrib.auth.hashers import check_password #verificar las contraseñas
 from django.core.mail import send_mail  # Para enviar correos electrónicos
 from django.conf import settings  # Configuración del correo
 from django.contrib.auth.models import User  # Modelo de usuario predeterminado de Django
-
+from core.models import Usuario
+from .models import PerfilUsuario
 
 # Create your views here.
 
@@ -146,6 +146,7 @@ def recuperar_password(request):
         try:
            # Verifica si el correo pertenece a un usuario registrado
             email = email.strip()
+            User = get_user_model()
             usuario = User.objects.get(email__iexact=email)
             
             # Si el correo existe, muestra un mensaje de éxito

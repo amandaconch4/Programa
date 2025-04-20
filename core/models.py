@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+
 
 # Create your models here.
 
@@ -13,18 +15,16 @@ class PerfilUsuario(models.Model):
     def __str__(self):
         return self.rol
     
-class Usuario(models.Model):
-    nombre_completo = models.CharField(max_length=200, unique=True)
-    nombre_usuario = models.CharField(max_length=200, unique=True)
-    correo = models.EmailField(unique=True)
-    contraseña = models.CharField(max_length=200)
+class Usuario(AbstractUser):
+    email = models.EmailField(unique=True)
+    nombre_completo = models.CharField(max_length=200)
     fecha_nacimiento = models.DateField()
     direccion = models.CharField(max_length=300, blank=True)
-
-    perfil = models.ForeignKey(PerfilUsuario, on_delete=models.CASCADE, related_name='usuarios')
+    perfil = models.ForeignKey('PerfilUsuario', on_delete=models.CASCADE, related_name='usuarios')
+    # Ya tienes 'email', 'username' y 'password' incluidos en AbstractUser
 
     def __str__(self):
-        return f"{self.nombre_usuario} ({self.perfil.rol})"
+        return f"{self.username} ({self.perfil.rol})"
     
 
 class Juego (models.Model):

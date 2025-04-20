@@ -1,29 +1,23 @@
 from django import forms
-from .models import Usuario, PerfilUsuario, Juego, Venta, DetalleVenta
+from .models import Usuario, PerfilUsuario, Venta, DetalleVenta
 from django.contrib.auth.hashers import make_password
+from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
+
 
 # Formulario para crear un Usuario
-class UsuarioForm(forms.ModelForm):
+Usuario = get_user_model()
+
+class UsuarioForm(UserCreationForm):  # Usamos UserCreationForm para manejar contraseñas
     class Meta:
         model = Usuario
-        fields = ['nombre_completo', 'nombre_usuario', 'correo', 'contraseña', 'fecha_nacimiento', 'direccion']
+        fields = ['username', 'email', 'nombre_completo', 'password1', 'password2', 'fecha_nacimiento', 'direccion']
         widgets = {
-            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),  # Para el campo de fecha
         }
 
-    # Método para encriptar la contraseña
-    def save(self, commit=True):
-        usuario = super().save(commit=False)
-        if usuario.contraseña:
-            usuario.contraseña = make_password(usuario.contraseña)
-        if commit:
-            usuario.save()
-        return usuario
     
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['direccion'].required = False
-
 # Formulario para crear un perfil de usuario (rol)
 class PerfilUsuarioForm(forms.ModelForm):
     class Meta:
@@ -48,3 +42,15 @@ class DetalleVentaForm(forms.ModelForm):
         detalle_venta.subtotal = detalle_venta.juego.precio * detalle_venta.cantidad
         detalle_venta.save()
         return detalle_venta
+    
+UserModel = get_user_model()
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def get_users(self, email):
+        active_users = UserModel._default_manager.filter(
+            correo__iexact=email, is_active=True
+        )
+        return (u for u in active_users if u.has_usable_password())
+    
+
+
