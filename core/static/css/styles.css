@@ -1,32 +1,32 @@
-.button-container {
+.button-wrapper {
     display: flex;
-    gap: 10px;
     justify-content: center;
-    margin-top: 20px;
+    margin: 15px 0; /* espacio entre botones */
 }
 
-.submit-btn {
-    flex: 1;
-    padding: 0.75rem;
-    background-color: #4a90e2;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
+.submit-btn,
 .reset-btn {
-    flex: 1;
+    width: 220px;                   /* MISMO ancho fijo */
     padding: 0.75rem;
-    background-color: #dc3545;
+    background-color: #4a90e2;      /* color de submit (se sobrescribe abajo para reset) */
     color: white;
     border: none;
     border-radius: 4px;
     font-size: 16px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.1s;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Colores específicos */
+.submit-btn {
+    background-color: #4a90e2;
+}
+
+/* Color específico del botón reset */
+.reset-btn {
+    background-color: #dc3545;
 }
 
 .submit-btn:hover {
@@ -37,6 +37,18 @@
     background-color: #c82333;
 }
 
-.submit-btn:active, .reset-btn:active {
+
+/* Active state (clic) */
+.submit-btn:active,
+.reset-btn:active {
     transform: scale(0.98);
-} 
+}
+
+/* Evita movimiento de los botones si aparece mensaje */
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+    margin-top: 0.25rem;
+    text-align: center;
+}

@@ -29,7 +29,12 @@
                 <p class="slogan">Juegos de un verdadero gamer</p>
             </div>
             <nav>
-                <a href="{% url 'login' %}" class="tu-clase-de-estilo">Iniciar Sesión</a>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'mi_cuenta' %}" class="nav-link">Mi Cuenta</a>
+                    <a href="{% url 'logout' %}" class="nav-link">Cerrar Sesión</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Iniciar Sesión</a>
+                {% endif %}
                 <a href="#" class="carrito-icon" id="carritoBtn">
                     <img src="{% static 'imagenes/carrito-compras.png' %}" alt="Carrito de compras" class="carrito-img">
                     <span id="contador-carrito">0</span>

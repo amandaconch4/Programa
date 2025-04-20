@@ -1,23 +1,22 @@
-
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 from django.contrib import messages
-from .forms import UsuarioForm, PerfilUsuarioForm
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.decorators import login_required
 from .models import PerfilUsuario, Usuario
-from django.contrib.auth.hashers import make_password #encriptar las contraseñas 
 from django.contrib.auth.hashers import check_password #verificar las contraseñas
 from django.core.mail import send_mail  # Para enviar correos electrónicos
 from django.conf import settings  # Configuración del correo
 from django.contrib.auth.models import User  # Modelo de usuario predeterminado de Django
-
+from core.models import Usuario
+from .forms import UsuarioForm, PerfilUsuarioForm
+from django.contrib.auth import get_user_model
 
 # Create your views here.
 
 def sevengamer(request):
     return render(request, 'index.html')
 
-def login(request):
-    return render(request, 'login.html')
+# Removed duplicate login function
 
 def terror(request):
     return render(request, 'terror.html')
@@ -128,24 +127,37 @@ def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        try:
-            usuario = Usuario.objects.get(nombre_usuario=username)
-            if check_password(password, usuario.contraseña):
-                request.session['usuario_id'] = usuario.id
-                request.session['usuario_nombre'] = usuario.nombre_usuario
-                return redirect('home') 
+        
+        # Use Django's authentication system
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            # User is authenticated, log them in
+            auth_login(request, user)
+            
+            # Set remember me
+            if request.POST.get('remember-me'):
+                request.session.set_expiry(1209600)  # 2 weeks
             else:
-                messages.error(request, 'Usuario o contraseña incorrectos')
-        except Usuario.DoesNotExist:
+                request.session.set_expiry(0)  # Until browser closes
+            
+            # Redirect to sevengamer page
+            return redirect('sevengamer')
+        else:
             messages.error(request, 'Usuario o contraseña incorrectos')
+            # Log the error for debugging
+            print(f'Login attempt failed for username: {username}')
+    
     return render(request, 'login.html')
 
 def recuperar_password(request):
     if request.method == 'POST':
         email = request.POST.get('email')  # Obtén el correo ingresado
         try:
-            # Verifica si el correo pertenece a un usuario registrado
-            usuario = User.objects.get(email=email)
+           # Verifica si el correo pertenece a un usuario registrado
+            email = email.strip()
+            User = get_user_model()
+            usuario = User.objects.get(email__iexact=email)
             
             # Si el correo existe, muestra un mensaje de éxito
             messages.success(request, 'Se ha enviado un enlace de recuperación a tu correo electrónico.')
@@ -154,3 +166,37 @@ def recuperar_password(request):
             messages.error(request, 'El correo ingresado no está registrado.')
     
     return render(request, 'recuperar-password.html')
+
+def mi_cuenta(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    return render(request, 'mi_cuenta.html')
+
+def actualizar_perfil(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    if request.method == 'POST':
+        user = request.user
+        user.username = request.POST.get('username')
+        user.email = request.POST.get('email')
+        user.nombre_completo = request.POST.get('nombre_completo')
+        user.fecha_nacimiento = request.POST.get('fecha_nacimiento')
+        user.direccion = request.POST.get('direccion')
+        user.save()
+        messages.success(request, 'Perfil actualizado correctamente')
+        return redirect('mi_cuenta')
+    
+    return redirect('mi_cuenta')
+
+def actualizar_foto(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    if request.method == 'POST' and request.FILES.get('profile_photo'):
+        user = request.user
+        user.profile_photo = request.FILES['profile_photo']
+        user.save()
+        messages.success(request, 'Foto de perfil actualizada correctamente')
+    
+    return redirect('mi_cuenta')
