@@ -73,10 +73,12 @@ urlpatterns = [
     path('sevengamer/finalfantasy', finalfantasy, name="finalfantasy"),
     path('sevengamer/baldursgate3', baldursgate3, name="baldursgate3"),
     path('sevengamer/persona5', persona5, name="persona5"),
-    path('sevengamer/admin', admin, name="admin"),
     path('sevengamer/panel-admin', panel_admin, name="panel_admin"),
     path('sevengamer/panel-usuario', panel_usuario, name="panel_usuario"),
     path('sevengamer/pago', pago, name="pago"),
+    path('sevengamer/panel-admin/agregar-admin/', views.agregar_admin, name='agregar_admin'),
+    path('sevengamer/admin', views.admin_login, name="admin"),
+    path('sevengamer/panel-admin/eliminar-admin/<int:user_id>/', views.eliminar_admin, name='eliminar_admin'),
 
 ]
 

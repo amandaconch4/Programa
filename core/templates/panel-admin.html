@@ -29,14 +29,14 @@
                 <li><a href="#" data-section="inventario"><i class="fas fa-warehouse"></i> Inventario</a></li>
                 <li><a href="#" data-section="ventas"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
                 <li><a href="#" data-section="clientes"><i class="fas fa-users"></i> Clientes</a></li>
-                <li><a href="#" data-section="usuarios"><i class="fas fa-user-shield"></i> Usuarios</a></li>
+                <li><a href="#" data-section="usuarios"><i class="fas fa-user-shield"></i> Usuarios admin</a></li>
             </ul>
         </div>
 
         <div class="main-panel">
             <div class="content-header">
                 <h1 class="content-title">Dashboard</h1>
-                <button class="logout-btn" onclick="logout()">Cerrar Sesión</button>
+                <button class="logout-btn" onclick="logout()">Cerrar panel administrador</button>
             </div>
 
             <div class="main-content">
@@ -521,31 +521,49 @@
                     </table>
                 </div>
 
-                <!-- Sección Usuarios -->
+                <!-- Sección Usuarios Administradores -->
                 <div class="content-section" id="usuarios-section" style="display: none;">
-                    <h2>Gestión de Usuarios</h2>
-                    <button class="action-btn" onclick="showModal('usuarioModal')">Agregar Usuario</button>
+                    <h2>Gestión de Administradores</h2>
+                    <button class="action-btn" onclick="window.location.href='{% url 'agregar_admin' %}'">Agregar Administrador</button>
                     <table class="data-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Usuario</th>
-                                <th>Rol</th>
-                                <th>Estado</th>
+                                <th>Nombre</th>
+                                <th>Email</th>
+                                <th>Teléfono</th>
+                                <th>Tipo</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
+                            {% for usuario in usuarios %}
                             <tr>
-                                <td>1</td>
-                                <td>admin</td>
-                                <td>Administrador</td>
-                                <td>Activo</td>
+                                <td>{{ usuario.id }}</td>
+                                <td>{{ usuario.nombre_completo }}</td>
+                                <td>{{ usuario.email }}</td>
+                                <td>{{ usuario.telefono|default:'-' }}</td>
                                 <td>
-                                    <button class="action-btn">Editar</button>
-                                    <button class="action-btn">Eliminar</button>
+                                    {% if usuario.is_superuser %}
+                                        <span class="badge badge-danger">Superusuario</span>
+                                    {% elif usuario.perfil.rol == 'admin' %}
+                                        <span class="badge badge-primary">Administrador</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <button class="action-btn" onclick="window.location.href='editar-cliente.html?id=1'">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <button class="action-btn" onclick="window.location.href='{% url 'eliminar_admin' usuario.id %}'" onclick="return confirm('¿Está seguro de eliminar este administrador?')">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
                                 </td>
                             </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6">No hay administradores registrados</td>
+                            </tr>
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>

@@ -11,6 +11,7 @@ from core.models import Usuario
 from .forms import UsuarioForm, PerfilUsuarioForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q 
 
 # Create your views here.
 
@@ -225,3 +226,91 @@ def actualizar_foto(request):
         messages.success(request, 'Foto de perfil actualizada correctamente')
     
     return redirect('mi_cuenta')
+
+def admin_login(request):
+    if request.method == 'POST':
+        username = request.POST.get('admin-username')
+        password = request.POST.get('admin-password')
+        
+        # Autenticar usando Django's authentication
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None and user.is_staff and user.is_superuser:
+            # Si es un administrador válido, iniciar sesión
+            auth_login(request, user)
+            return redirect('panel_admin')
+        else:
+            # Si las credenciales son inválidas
+            messages.error(request, 'Credenciales de administrador incorrectas')
+    
+    return render(request, 'admin.html')
+
+@login_required
+def panel_admin(request):
+    # Verificar si el usuario es un administrador
+    if not request.user.is_staff or not request.user.is_superuser:
+        messages.error(request, 'No tienes permiso para acceder al panel de administración.')
+        return redirect('admin')  # Redirigir al login de admin
+    
+    # Obtener usuarios con perfil de administrador (perfil_id = 2) O superusuarios
+    usuarios = Usuario.objects.filter(
+        Q(perfil__rol='admin') | Q(is_superuser=True)
+    ).distinct()
+    
+    return render(request, 'panel-admin.html', {
+        'usuarios': usuarios
+    })
+
+@login_required
+def agregar_admin(request):
+    # Verificar si el usuario es un administrador
+    if not request.user.is_staff or not request.user.is_superuser:
+        messages.error(request, 'No tienes permiso para agregar administradores.')
+        return redirect('admin')  # Redirigir al login de admin
+    
+    if request.method == 'POST':
+        usuario_form = UsuarioForm(request.POST)
+        if usuario_form.is_valid():
+            usuario = usuario_form.save(commit=False)
+            
+            # Obtener o crear el perfil de administrador (perfil_id = 2)
+            perfil_admin, created = PerfilUsuario.objects.get_or_create(
+                rol='admin', 
+                defaults={'rol': 'admin'}
+            )
+            usuario.perfil = perfil_admin
+            
+            # Establecer como staff y superusuario
+            usuario.is_staff = True
+            usuario.is_superuser = True
+            
+            usuario.save()
+            messages.success(request, f"Administrador {usuario.username} creado exitosamente.")
+            return redirect('panel_admin')
+        else:
+            messages.error(request, "Error en el formulario. Por favor, revisa los datos.")
+    else:
+        usuario_form = UsuarioForm()
+    
+    return render(request, 'agregar_admin.html', {
+        'usuario_form': usuario_form
+    })
+
+@login_required
+def eliminar_admin(request, user_id):
+    if not request.user.is_superuser:
+        messages.error(request, 'No tienes permiso para eliminar administradores.')
+        return redirect('panel_admin')
+    
+    try:
+        usuario = Usuario.objects.get(id=user_id)
+        # Opcional: Verificar si el usuario es un administrador antes de eliminar
+        if usuario.perfil.rol == 'admin':
+            usuario.delete()
+            messages.success(request, f'Administrador {usuario.username} eliminado exitosamente.')
+        else:
+            messages.error(request, 'Solo puedes eliminar administradores.')
+    except Usuario.DoesNotExist:
+        messages.error(request, 'El administrador no existe.')
+    
+    return redirect('panel_admin')

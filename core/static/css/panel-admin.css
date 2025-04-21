@@ -432,3 +432,95 @@ body {
     padding: 8px 15px;
     font-size: 1em;
 }
+
+.admin-form {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.admin-form .form-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.admin-form .form-row .form-group {
+    width: 48%; /* Slight gap between form groups */
+}
+
+.admin-form .form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.admin-form .form-group label {
+    margin-bottom: 5px;
+    color: #fff;
+}
+
+.admin-form .form-group input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #4a4a4a;
+    background-color: #2c2c2c;
+    color: white;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.admin-form .password-input-container {
+    position: relative;
+    width: 100%;
+}
+
+.admin-form .password-input-container input {
+    width: 100%;
+    padding-right: 40px; /* Make space for the toggle button */
+}
+
+.admin-form .password-input-container .password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #888;
+    cursor: pointer;
+    z-index: 10;
+    font-size: 20px;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.admin-form .password-input-container .password-toggle i {
+    font-size: 18px;
+}
+
+.admin-form .form-group input[type="date"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url('data:image/svg+xml;utf8,<svg fill="%23888" height="24" viewBox="0 0 24 24" width="24" xmlns="[http://www.w3.org/2000/svg"><path](http://www.w3.org/2000/svg"><path) d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>') no-repeat right 10px center;
+    background-color: #2c2c2c;
+    color: white;
+}
+
+.admin-form .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.admin-form .error-message {
+    color: #ff4d4d;
+    font-size: 0.8em;
+    margin-top: 5px;
+}
+

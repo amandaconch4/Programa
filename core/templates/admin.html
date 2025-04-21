@@ -38,7 +38,8 @@
             <div class="admin-header">
                 <h2>Acceso Administrador</h2>
             </div>
-            <form id="adminLoginForm" onsubmit="return validarFormulario(event)">
+            <form id="adminLoginForm" method="POST" action="{% url 'admin' %}">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="admin-username">Usuario Administrador:</label>
                     <input type="text" id="admin-username" name="admin-username">
@@ -53,6 +54,16 @@
                     </button>
                     <span class="error-message" id="admin-password-error"></span>
                 </div>
+
+                {% if messages %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
                 <div class="form-group">
                     <label class="checkbox-container">
@@ -71,6 +82,7 @@
     </div>
 
     <script src="{% static 'js/validaciones_login.js' %}"></script>
+
     <script>
         // Función para mostrar/ocultar contraseña
         function togglePassword(inputId) {
@@ -90,16 +102,14 @@
             }
         }
 
-        // Validar el formulario de login
-        function validarFormulario(event) {
-            event.preventDefault();  // Evitar el envío del formulario si hay un error
-
-            let esValido = true;
-
+        // Validación del formulario antes del envío
+        document.getElementById('adminLoginForm').addEventListener('submit', function(event) {
             const username = document.getElementById('admin-username');
             const usernameError = document.getElementById('admin-username-error');
             const password = document.getElementById('admin-password');
             const passwordError = document.getElementById('admin-password-error');
+
+            let esValido = true;
 
             // Validación del nombre de usuario
             if (username.value.trim() === '') {
@@ -119,40 +129,9 @@
                 passwordError.style.display = 'none';
             }
 
-            // Si los campos son válidos, redirigimos
-            if (esValido) {
-                const usernameValue = username.value;
-                const passwordValue = password.value;
-
-                // Aquí va la validación de las credenciales del administrador
-                if (usernameValue === 'admin' && passwordValue === 'admin123') {
-                    window.location.href = "{% url 'panel_admin' %}";
-                } else {
-                    alert('Credenciales incorrectas. Por favor, intente nuevamente.');
-                }
-            }
-
-            return esValido;
-        }
-
-        // Event Listeners para manejar validaciones en tiempo real
-        document.getElementById('admin-username').addEventListener('input', function() {
-            const usernameError = document.getElementById('admin-username-error');
-            if (this.value.trim() === '') {
-                usernameError.textContent = 'Por favor, ingrese su nombre de usuario';
-                usernameError.style.display = 'block';
-            } else {
-                usernameError.style.display = 'none';
-            }
-        });
-
-        document.getElementById('admin-password').addEventListener('input', function() {
-            const passwordError = document.getElementById('admin-password-error');
-            if (this.value.trim() === '') {
-                passwordError.textContent = 'Por favor, ingrese su contraseña';
-                passwordError.style.display = 'block';
-            } else {
-                passwordError.style.display = 'none';
+            // Prevenir el envío si no es válido
+            if (!esValido) {
+                event.preventDefault();
             }
         });
     </script>

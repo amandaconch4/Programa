@@ -1,0 +1,136 @@
+.password-requisitos li, .email-requisitos li {
+    margin: 3px 0;
+    padding-left: 25px;
+    position: relative;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.password-requisitos li::before, .email-requisitos li::before {
+    font-family: "Font Awesome 5 Free";
+    content: '\f057'; /* ícono de círculo con X */
+    position: absolute;
+    left: 0;
+    color: #dc3545;
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.password-requisitos li.valido::before, .email-requisitos li.valido::before {
+    content: '\f058'; /* ícono de círculo con check */
+    color: #28a745;
+}
+
+.password-requisitos li.valido, .email-requisitos li.valido {
+    color: #28a745;
+}
+
+.password-requisitos li.invalid, .email-requisitos li.invalid {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    flex-grow: 1;
+    padding-right: 40px; /* Espacio para el botón del ojo */
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+}
+
+.password-toggle:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.password-toggle:active {
+    transform: scale(0.95);
+}
+
+.admin-form .button-container .submit-btn,
+.admin-form .button-container .reset-btn {
+    background-color: var(--admin-primary);
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: all 0.3s ease;
+    font-size: 1em;
+}
+
+.admin-form .button-container .submit-btn:hover,
+.admin-form .button-container .reset-btn:hover {
+    background-color: var(--admin-accent);
+    transform: translateY(-2px);
+}
+
+.admin-form .button-container .submit-btn:active,
+.admin-form .button-container .reset-btn:active {
+    transform: scale(0.98);
+}
+
+.admin-form .form-group .password-requisitos,
+.admin-form .form-group .email-requisitos {
+    margin-top: 5px;
+    margin-left: 0;
+    padding-left: 0;
+    font-size: 14px;
+}
+
+.admin-form .form-group .password-requisitos ul,
+.admin-form .form-group .email-requisitos ul {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0;
+}
+
+.admin-form .form-group .password-requisitos li,
+.admin-form .form-group .email-requisitos li {
+    margin: 3px 0;
+    padding-left: 25px;
+    position: relative;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.admin-form .form-group .password-requisitos li::before,
+.admin-form .form-group .email-requisitos li::before {
+    font-family: "Font Awesome 5 Free";
+    content: '\f057'; /* ícono de círculo con X */
+    position: absolute;
+    left: 0;
+    color: #dc3545;
+    font-weight: 900;
+    font-size: 16px;
+}
+
+.admin-form .form-group .password-requisitos li.valido::before,
+.admin-form .form-group .email-requisitos li.valido::before {
+    content: '\f058'; /* ícono de círculo con check */
+    color: #28a745;
+}
+
+.admin-form .form-group .password-requisitos li.valido,
+.admin-form .form-group .email-requisitos li.valido {
+    color: #28a745;
+}
+
+.admin-form .form-group .password-requisitos li.invalid,
+.admin-form .form-group .email-requisitos li.invalid {
+    color: rgba(255, 255, 255, 0.8);
+}
