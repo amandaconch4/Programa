@@ -1,0 +1,146 @@
+/* Contenido principal */
+.content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 120px);
+    padding: 20px;
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.form-box {
+    background: #1a1a1a;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 255, 136, 0.15);
+    padding: 30px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+.form-box h2 {
+    color: #00ff88;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-box p {
+    color: #ffffff;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+/* Botones */
+.btn-primary {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #00ff88;
+    color: #1a1a1a;
+    border-radius: 5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: none;
+    font-size: 14px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background: #00cc6a;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 255, 136, 0.2);
+}
+
+.btn-secondary {
+    background: #2a2a2a;
+    color: #ffffff;
+}
+
+.btn-secondary:hover {
+    background: #3a3a3a;
+}
+
+.btn-danger {
+    background: #ff3366;
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background: #ff1a1a;
+}
+
+/* Formulario */
+.confirmation-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .form-box {
+        padding: 20px;
+        margin: 10px;
+    }
+
+    .form-box h2 {
+        font-size: 20px;
+    }
+
+    .form-box p {
+        font-size: 14px;
+    }
+
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .form-box {
+        padding: 15px;
+    }
+
+    .form-box h2 {
+        font-size: 18px;
+    }
+
+    .btn-primary {
+        padding: 8px 16px;
+        width: 100%;
+        margin: 5px 0;
+    }
+}
+body {
+    margin: 0;
+    padding-top: 80px; /* Este valor debe ser al menos la altura del header */
+    font-family: 'Rajdhani', sans-serif;
+    background-color: #121212;
+}
+header {
+    background-color: #2a2a2a;
+    color: white;
+    padding: 20px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+/* Contenedor del contenido principal */
+main.content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 80px); /* Resta la altura del header */
+    padding: 20px;
+    box-sizing: border-box;
+}

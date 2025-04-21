@@ -38,6 +38,7 @@ from django.urls import reverse_lazy
 urlpatterns = [
     # Auth URLs
     path('', sevengamer, name="home"),
+    path('', views.sevengamer, name='sevengamer'),
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('registro/', views.registro, name='registro'),
@@ -51,7 +52,8 @@ urlpatterns = [
     path('mi-cuenta/cambiar-password/',auth_views.PasswordChangeView.as_view(template_name='cambiar_password.html', success_url='/mi-cuenta/password-cambiada/'),name='cambiar_password'),
     path('mi-cuenta/password-cambiada/',auth_views.PasswordChangeDoneView.as_view(template_name='password_cambiada.html'), name='password_change_done'),
     path('mi-cuenta/', views.mi_cuenta, name='mi_cuenta'),
-
+    path('confirmar-eliminacion/', views.confirmar_eliminacion, name='confirmar_eliminacion_cta_usuario'),
+    path('eliminar-cuenta/', views.eliminar_cuenta, name='eliminar_cuenta'),
 
     # Game URLs
     path('sevengamer', sevengamer, name="sevengamer"),
