@@ -47,6 +47,8 @@ urlpatterns = [
     path('mi-cuenta/', views.mi_cuenta, name='mi_cuenta'),
     path('mi-cuenta/actualizar-perfil/', views.actualizar_perfil, name='actualizar_perfil'),
     path('mi-cuenta/actualizar-foto/', views.actualizar_foto, name='actualizar_foto'),
+    path('cambiar-contraseña/', auth_views.PasswordChangeView.as_view(template_name='cambiar_contraseña.html',success_url='/cambiar-contraseña/hecho/'), name='password_change'),
+    path('cambiar-contraseña/hecho/', auth_views.PasswordChangeDoneView.as_view(template_name='cambiar_contraseña_hecho.html'), name='password_change_done'),
 
     # Game URLs
     path('sevengamer', sevengamer, name="sevengamer"),
