@@ -18,3 +18,22 @@
 .admin-submit-btn:hover {
     background-color: #cc0000;
 }
+
+.alert-error,
+.alert-danger,
+.alert[role="alert"].error,
+.alert[role="alert"].danger {
+    background-color: #ff0000 !important;
+    color: #f3edee !important;
+    font-weight: bold;
+    text-align: center;
+    border-radius: 5px;
+    padding: 15px;
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.error-message:empty {
+    display: none !important;
+}

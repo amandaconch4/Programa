@@ -6,10 +6,6 @@ const passwordError = document.getElementById('password-error');
 
 // Limpiar mensajes de error globales
 function limpiarMensajesError() {
-    const errorMessages = document.querySelectorAll('.error-message');
-    errorMessages.forEach(message => message.remove());
-    
-    // Limpiar errores de campo
     if (usernameError) {
         usernameError.textContent = '';
         usernameError.style.display = 'none';
@@ -21,15 +17,16 @@ function limpiarMensajesError() {
 }
 
 username.addEventListener('input', function() {
-    limpiarMensajesError();
     if (username.value.trim() !== '') {
-        usernameError.style.display = 'none';
+        usernameError.textContent = '';
+        usernameError.classList.remove('mostrar');
     }
 });
 
 password.addEventListener('input', function() {
     if (password.value.trim() !== '') {
-        passwordError.style.display = 'none';
+        passwordError.textContent = '';
+        passwordError.classList.remove('mostrar');
     }
 });
 
@@ -79,32 +76,34 @@ password.addEventListener('input', function() {
 // Validación al enviar el formulario
 form.addEventListener('submit', function(e) {
     let esValido = true;
+
     if (username.value.trim() === '') {
         usernameError.textContent = 'Por favor, ingrese su nombre de usuario';
-        usernameError.style.display = 'block';
+        usernameError.classList.add('mostrar');
         esValido = false;
     } else {
-        usernameError.style.display = 'none';
+        usernameError.textContent = '';
+        usernameError.classList.remove('mostrar');
     }
 
     if (password.value.trim() === '') {
         passwordError.textContent = 'Por favor, ingrese su contraseña';
-        passwordError.style.display = 'block';
+        passwordError.classList.add('mostrar');
         esValido = false;
     } else {
-        passwordError.style.display = 'none';
-    }
+        passwordError.textContent = '';
+        passwordError.classList.remove('mostrar');
 
-    // Validación de requisitos de contraseña
-    if (
-        !(password.value.length >= 6 && password.value.length <= 18) ||
-        !(/[A-Z]/.test(password.value)) ||
-        !(/\d/.test(password.value)) ||
-        !(/[.,!@#$%^&*]/.test(password.value))
-    ) {
-        passwordError.textContent = 'La contraseña no cumple con los requisitos';
-        passwordError.style.display = 'block';
-        esValido = false;
+        if (
+            !(password.value.length >= 6 && password.value.length <= 18) ||
+            !(/[A-Z]/.test(password.value)) ||
+            !(/\d/.test(password.value)) ||
+            !(/[.,!@#$%^&*]/.test(password.value))
+        ) {
+            passwordError.textContent = 'La contraseña no cumple con los requisitos';
+            passwordError.classList.add('mostrar');
+            esValido = false;
+        }
     }
 
     if (!esValido) {
