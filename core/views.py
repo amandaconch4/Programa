@@ -12,6 +12,7 @@ from .forms import UsuarioForm, PerfilUsuarioForm
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
+from django.contrib.auth import logout
 
 # Create your views here.
 
@@ -354,3 +355,19 @@ def editar_admin(request, user_id):
     else:
         form = UsuarioForm(instance=usuario)
     return render(request, 'editar_admin.html', {'form': form, 'usuario': usuario})
+
+@login_required
+def confirmar_eliminacion(request):
+    return render(request, 'confirmar_eliminacion_cta_usuario.html')
+
+@login_required
+def eliminar_cuenta(request):
+    if request.method == 'POST':
+        user = request.user
+        logout(request)
+        user.delete()
+
+        
+        return render(request, 'eliminar_cuenta.html')
+
+    return redirect('mi_cuenta')
