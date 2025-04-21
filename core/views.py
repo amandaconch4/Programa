@@ -185,7 +185,7 @@ def recuperar_password(request):
             # Si el correo no está registrado, muestra un mensaje de error
             messages.error(request, 'El correo ingresado no está registrado.')
     
-    return render(request, 'recuperar-password.html')
+    return render(request, 'recuperar_password.html')
 
 @login_required(login_url='login')
 def logout(request):
