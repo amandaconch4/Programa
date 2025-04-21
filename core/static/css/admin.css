@@ -1,0 +1,20 @@
+.admin-header {
+    background-color: #1a1a1a;
+    color: #ff0000;
+    padding: 10px;
+    text-align: center;
+    border-bottom: 2px solid #ff0000;
+}
+.admin-form-box {
+    border: 2px solid #ff0000;
+    background-color: rgba(26, 26, 26, 0.9);
+}
+.admin-form-box h2 {
+    color: #ff0000;
+}
+.admin-submit-btn {
+    background-color: #ff0000;
+}
+.admin-submit-btn:hover {
+    background-color: #cc0000;
+}
