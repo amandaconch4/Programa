@@ -525,13 +525,14 @@
                 <div class="content-section" id="usuarios-section" style="display: none;">
                     <h2>Gestión de Administradores</h2>
                     <button class="action-btn" onclick="window.location.href='{% url 'agregar_admin' %}'">Agregar Administrador</button>
-                    <table class="data-table">
+                     <table class="data-table">
                         <thead>
                             <tr>
                                 <th>ID</th>
-                                <th>Nombre</th>
+                                <th>Username</th>
+                                <th>Nombre Completo</th>
                                 <th>Email</th>
-                                <th>Teléfono</th>
+                                <th>Dirección</th>
                                 <th>Tipo</th>
                                 <th>Acciones</th>
                             </tr>
@@ -540,9 +541,10 @@
                             {% for usuario in usuarios %}
                             <tr>
                                 <td>{{ usuario.id }}</td>
+                                <td>{{ usuario.username }}</td>
                                 <td>{{ usuario.nombre_completo }}</td>
                                 <td>{{ usuario.email }}</td>
-                                <td>{{ usuario.telefono|default:'-' }}</td>
+                                <td>{{ usuario.direccion }}</td>
                                 <td>
                                     {% if usuario.is_superuser %}
                                         <span class="badge badge-danger">Superusuario</span>
