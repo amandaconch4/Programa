@@ -224,22 +224,6 @@ body {
     background-color: #444;
 }
 
-.action-btn {
-    background-color: var(--admin-primary);
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-right: 5px;
-    transition: all 0.3s ease;
-}
-
-.action-btn:hover {
-    background-color: var(--admin-accent);
-    transform: translateY(-2px);
-}
-
 .form-group {
     margin-bottom: 20px;
 }
@@ -373,11 +357,6 @@ body {
     background-color: #444;
 }
 
-#inventario-section .action-btn {
-    padding: 8px 15px;
-    font-size: 1em;
-}
-
 #productos-section,
 #ventas-section,
 #clientes-section,
@@ -423,14 +402,6 @@ body {
 #clientes-section .data-table tr:hover,
 #usuarios-section .data-table tr:hover {
     background-color: #444;
-}
-
-#productos-section .action-btn,
-#ventas-section .action-btn,
-#clientes-section .action-btn,
-#usuarios-section .action-btn {
-    padding: 8px 15px;
-    font-size: 1em;
 }
 
 .admin-form {
@@ -529,15 +500,11 @@ body {
     white-space: nowrap;
 }
 
-.action-btn i {
-    margin-right: 6px;
-    vertical-align: middle;
-}
-
-#usuarios-section {
-    width: 1100px;
-    min-width: 900px;
-    max-width: 98vw;
+#usuarios-section,
+#clientes-section {
+    width: 98vw;
+    min-width: 320px;
+    max-width: 1100px;
     margin: 15px auto;
     border-radius: 8px;
     background-color: rgba(42, 42, 42, 0.5);
@@ -548,8 +515,63 @@ body {
     height: auto;
     overflow-x: auto;
 }
-#usuarios-section .data-table {
+#usuarios-section .data-table,
+#clientes-section .data-table {
     width: 100%;
-    min-width: 1000px;
+    min-width: 600px;   /* antes 1000px */
     table-layout: auto;
 }
+
+#usuarios-section .data-table td,
+#clientes-section .data-table td {
+    white-space: nowrap;
+}
+
+#usuarios-section .data-table th,
+#usuarios-section .data-table td,
+#clientes-section .data-table th,
+#clientes-section .data-table td {
+    padding: 10px 8px;
+}
+
+.action-btn {
+    background-color: var(--admin-primary);
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    font-size: 1em;
+    min-width: 120px;
+    border-radius: 4px;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    margin-right: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    text-decoration: none;
+    transition: background 0.2s;
+    height: 42px;
+    line-height: 1;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.action-btn:last-child {
+    margin-right: 0;
+}
+
+.action-btn:hover {
+    background-color: var(--admin-accent);
+}
+
+.action-btn i {
+    margin-right: 6px;
+    vertical-align: middle;
+}
+
+.btn-group {
+    display: flex;
+    gap: 8px;
+  }
+
