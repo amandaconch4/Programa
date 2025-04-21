@@ -1,16 +1,20 @@
+<!--Para cargar los archivos estáticos-->
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Editar Administrador - SEVENGAMER</title>
     <link rel="icon" href="{% static 'imagenes/control4.png' %}">
-    <link rel="stylesheet" href="[https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap">](https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap">)
-    <link rel="stylesheet" href="[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">)
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/panel-admin.css' %}">
     <link rel="stylesheet" href="{% static 'css/agregar-admin.css' %}">
 </head>
+
 <body>
     <div class="admin-container">
         <div class="sidebar">
@@ -27,6 +31,7 @@
             </ul>
         </div>
 
+        <!-- Main Panel -->
         <div class="main-panel">
             <div class="content-header">
                 <h1 class="content-title">Editar Administrador: {{ usuario.username }}</h1>

@@ -286,14 +286,18 @@ def panel_admin(request):
     if not request.user.is_staff or not request.user.is_superuser:
         messages.error(request, 'No tienes permiso para acceder al panel de administración.')
         return redirect('admin')  # Redirigir al login de admin
-    
-    # Obtener usuarios con perfil de administrador (perfil_id = 2) O superusuarios
+
+    # Usuarios admin y superusuarios (como ya tienes)
     usuarios = Usuario.objects.filter(
         Q(perfil__rol='admin') | Q(is_superuser=True)
     ).distinct()
-    
+
+    # SOLO clientes (perfil_id = 1)
+    clientes = Usuario.objects.filter(perfil_id=1)
+
     return render(request, 'panel-admin.html', {
-        'usuarios': usuarios
+        'usuarios': usuarios,
+        'clientes': clientes,
     })
 
 @login_required
@@ -355,19 +359,3 @@ def editar_admin(request, user_id):
     else:
         form = UsuarioForm(instance=usuario)
     return render(request, 'editar_admin.html', {'form': form, 'usuario': usuario})
-
-@login_required
-def confirmar_eliminacion(request):
-    return render(request, 'confirmar_eliminacion_cta_usuario.html')
-
-@login_required
-def eliminar_cuenta(request):
-    if request.method == 'POST':
-        user = request.user
-        logout(request)
-        user.delete()
-
-        
-        return render(request, 'eliminar_cuenta.html')
-
-    return redirect('mi_cuenta')

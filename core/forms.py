@@ -22,7 +22,7 @@ class UsuarioForm(UserCreationForm):
         super().__init__(*args, **kwargs)
         # Hace los campos obligatorios excepto dirección
         campos_obligatorios = ['username', 'email', 'nombre_completo', 'fecha_nacimiento']
-        # Si es edición, la contraseña NO es obligatoria
+        # Si es para editar, la contraseña NO es obligatoria
         if self.instance and self.instance.pk:
             self.fields['password1'].required = False
         else:
@@ -67,7 +67,7 @@ class UsuarioForm(UserCreationForm):
 
     def clean_password1(self):
         password1 = self.cleaned_data.get('password1')
-        # Si es edición y no se ingresó nueva contraseña, permite dejarlo vacío
+        # Si se quiere editar y no se ingresa una nueva contraseña, permite dejarlo vacío
         if self.instance and self.instance.pk and not password1:
             return None
         if not password1:
