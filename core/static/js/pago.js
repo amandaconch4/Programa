@@ -213,5 +213,5 @@ function configurarFormularioPago() {
 
 // Función para volver al inicio
 function volverAlInicio() {
-    window.location.href = 'index.html';
+    window.location.href = indexUrl;
 }
