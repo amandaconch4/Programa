@@ -553,7 +553,7 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    <button class="action-btn" onclick="window.location.href='editar-cliente.html?id=1'">
+                                    <button class="action-btn" onclick="window.location.href='{% url 'editar_admin' usuario.id %}'">
                                         <i class="fas fa-edit"></i> Editar
                                     </button>
                                     <button class="action-btn" onclick="window.location.href='{% url 'eliminar_admin' usuario.id %}'" onclick="return confirm('¿Está seguro de eliminar este administrador?')">

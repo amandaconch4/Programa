@@ -50,7 +50,7 @@ function validarUsername(username) {
     username = username.trim();
     
     // Validaciones individuales
-    const longitud = username.length >= 5 && username.length <= 15;
+    const longitud = username.length >= 5 && username.length <= 18;
     const sinEspacios = username.indexOf(' ') === -1;
 
     // Actualizar clases visuales

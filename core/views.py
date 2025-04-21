@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -201,9 +201,8 @@ def registro(request):
         usuario_form = UsuarioForm(request.POST)
         if usuario_form.is_valid():
             usuario = usuario_form.save(commit=False)
-            
-            # Asignar automáticamente el perfil "usuario"
-            perfil_usuario, created = PerfilUsuario.objects.get_or_create(rol='usuario')
+            # Asigna el perfil de usuario normal (rol='usuario')
+            perfil_usuario = PerfilUsuario.objects.get(rol='usuario')
             usuario.perfil = perfil_usuario
             usuario.save()
             messages.success(request, "¡Registro exitoso! Ya puedes iniciar sesión.")
@@ -301,24 +300,17 @@ def agregar_admin(request):
     # Verificar si el usuario es un administrador
     if not request.user.is_staff or not request.user.is_superuser:
         messages.error(request, 'No tienes permiso para agregar administradores.')
-        return redirect('admin')  # Redirigir al login de admin
+        return redirect('admin')
     
     if request.method == 'POST':
         usuario_form = UsuarioForm(request.POST)
         if usuario_form.is_valid():
             usuario = usuario_form.save(commit=False)
-            
-            # Obtener o crear el perfil de administrador (perfil_id = 2)
-            perfil_admin, created = PerfilUsuario.objects.get_or_create(
-                rol='admin', 
-                defaults={'rol': 'admin'}
-            )
+            # Asigna el perfil de admin (rol='admin')
+            perfil_admin = PerfilUsuario.objects.get(rol='admin')
             usuario.perfil = perfil_admin
-            
-            # Establecer como staff y superusuario
             usuario.is_staff = True
             usuario.is_superuser = True
-            
             usuario.save()
             messages.success(request, f"Administrador {usuario.username} creado exitosamente.")
             return redirect('panel_admin')
@@ -349,3 +341,16 @@ def eliminar_admin(request, user_id):
         messages.error(request, 'El administrador no existe.')
     
     return redirect('panel_admin')
+
+@login_required
+def editar_admin(request, user_id):
+    usuario = get_object_or_404(Usuario, id=user_id, perfil__rol='admin')
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST, instance=usuario)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Administrador actualizado correctamente.')
+            return redirect('panel_admin')
+    else:
+        form = UsuarioForm(instance=usuario)
+    return render(request, 'editar_admin.html', {'form': form, 'usuario': usuario})
