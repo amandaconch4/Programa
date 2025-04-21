@@ -4,8 +4,24 @@ const password = document.getElementById('password');
 const usernameError = document.getElementById('username-error');
 const passwordError = document.getElementById('password-error');
 
+// Limpiar mensajes de error globales
+function limpiarMensajesError() {
+    const errorMessages = document.querySelectorAll('.error-message');
+    errorMessages.forEach(message => message.remove());
+    
+    // Limpiar errores de campo
+    if (usernameError) {
+        usernameError.textContent = '';
+        usernameError.style.display = 'none';
+    }
+    if (passwordError) {
+        passwordError.textContent = '';
+        passwordError.style.display = 'none';
+    }
+}
 
 username.addEventListener('input', function() {
+    limpiarMensajesError();
     if (username.value.trim() !== '') {
         usernameError.style.display = 'none';
     }

@@ -908,6 +908,54 @@ body:not(.categorias-page) .categoria-lista li a[href="{% url 'rol' %}"] {
     animation: slideIn 0.3s ease-out;
 }
 
+/* Estilos para mensajes */
+.messages {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    z-index: 1100;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.messages div {
+    background-color: rgba(40, 167, 69, 0.9);
+    color: white;
+    padding: 15px 30px;
+    border-radius: 10px;
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    max-width: 600px;
+    animation: fadeInDown 0.5s, fadeOutUp 0.5s 4s forwards;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutUp {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
 @keyframes slideIn {
     from {
         transform: translateX(100%);

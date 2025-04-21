@@ -242,6 +242,7 @@ input::placeholder {
     margin: 3px 0;
     padding-left: 25px;
     position: relative;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .password-requisitos li::before, .email-requisitos li::before {
@@ -259,36 +260,50 @@ input::placeholder {
     color: #28a745;
 }
 
-.valido {
+.password-requisitos li.valido, .email-requisitos li.valido {
     color: #28a745;
 }
 
-.invalido {
+.password-requisitos li.invalid, .email-requisitos li.invalid {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.valid {
+    color: #28a745;
+}
+
+.invalid {
     color: #dc3545;
+}
+
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper input {
+    flex-grow: 1;
+    padding-right: 40px; /* Espacio para el botón del ojo */
 }
 
 .password-toggle {
     position: absolute;
     right: 10px;
-    top: 35px;
-    cursor: pointer;
-    background: none;
+    background: transparent;
     border: none;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 1.2em;
-    padding: 5px;
+    color: rgba(255, 255, 255, 0.5);
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
     width: 30px;
     height: 30px;
-    border-radius: 50%;
 }
+  
 
 .password-toggle:hover {
     color: #007bff;
-    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .password-toggle:active {
@@ -594,14 +609,4 @@ input[type="date"]:valid {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 5px;
 }
-.valid {
-    color: green;
-    font-weight: bold;
-}
 
-.invalid {
-    color: red;
-}
-.password-wrapper {
-    position: relative;
-}

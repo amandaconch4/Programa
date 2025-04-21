@@ -15,9 +15,9 @@ from django.contrib.auth.decorators import login_required
 # Create your views here.
 
 def sevengamer(request):
+    if request.user.is_authenticated:
+        messages.success(request, f'¡Bienvenid@ {request.user.username}!')
     return render(request, 'index.html')
-
-# Removed duplicate login function
 
 def terror(request):
     return render(request, 'terror.html')
@@ -117,6 +117,9 @@ def registro(request):
             messages.success(request, "¡Registro exitoso! Ya puedes iniciar sesión.")
             return redirect('login')
         else:
+            # Limpiar mensajes previos y añadir solo el mensaje de error
+            storage = messages.get_messages(request)
+            storage.used = True
             messages.error(request, "Error en el formulario. Por favor, revisa los datos.")
     else:
         usuario_form = UsuarioForm()
@@ -131,6 +134,13 @@ def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        
+        # Verificar si el usuario existe
+        try:
+            user_obj = Usuario.objects.get(username=username)
+        except Usuario.DoesNotExist:
+            messages.error(request, 'El usuario no existe')
+            return render(request, 'login.html')
         
         # Use Django's authentication system
         user = authenticate(request, username=username, password=password)
@@ -148,9 +158,15 @@ def login(request):
             # Redirect to sevengamer page
             return redirect('sevengamer')
         else:
-            messages.error(request, 'Usuario o contraseña incorrectos')
-            # Log the error for debugging
-            print(f'Login attempt failed for username: {username}')
+            # Verificar si la contraseña es incorrecta
+            from django.contrib.auth.hashers import check_password
+            try:
+                if check_password(password, user_obj.password):
+                    messages.error(request, 'Error de autenticación. Contacte al administrador.')
+                else:
+                    messages.error(request, 'Contraseña incorrecta')
+            except Exception as e:
+                messages.error(request, 'Error al verificar contraseña')
     
     return render(request, 'login.html')
 
