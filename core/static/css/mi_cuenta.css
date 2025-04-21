@@ -68,12 +68,12 @@
 }
 
 .btn-primary {
-    background: #00ff88;
+    background: #7ace67;
     color: #1a1a1a;
 }
 
 .btn-primary:hover {
-    background: #00cc6a;
+    background: #2da71d;
 }
 
 /* Estilos para la foto de perfil */
@@ -104,7 +104,7 @@
 
 .table th {
     background: #2a2a2a;
-    color: #00ff88;
+    color: #41a857;
     font-weight: 500;
 }
 
@@ -128,3 +128,54 @@
         overflow-x: auto;
     }
 }
+.card img {
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+@media (min-width: 992px) {
+    .card-body img {
+        max-width: 150px;
+    }
+}
+main {
+    margin-top: 100px; /* espacio debajo del header */
+}
+.contenido-principal {
+    margin-top: 180px;
+    padding: 0 40px;
+}
+
+.contenedor-flex {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.izquierda {
+    flex: 1;
+    max-width: 45%;
+}
+
+.derecha {
+    flex: 1;
+    max-width: 55%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+.btn-warning {
+    background-color: #6f4e8b;
+    color: #1a1a1a;
+    border: none;
+}
+
+.btn-warning:hover {
+    background-color: #691286;
+}
+
+.mt-4 {
+    margin-top: 1.5rem !important;
+}
+

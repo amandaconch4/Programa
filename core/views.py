@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .models import PerfilUsuario, Usuario
+from .models import PerfilUsuario, Usuario, Venta, Juego, DetalleVenta
 from django.contrib.auth.hashers import check_password #verificar las contraseñas
 from django.core.mail import send_mail  # Para enviar correos electrónicos
 from django.conf import settings  # Configuración del correo
@@ -98,12 +98,103 @@ def panel_admin(request):
 def panel_usuario(request):
     return render(request, 'panel-usuario.html')
 
+@login_required
 def pago(request):
+    if request.method == 'POST':
+        juego_id = request.POST.get('juego_id')
+        cantidad = int(request.POST.get('cantidad', 1))
+        
+        try:
+            juego = Juego.objects.get(id=juego_id)
+            
+            # Crear la venta
+            venta = Venta.objects.create(
+                cliente=request.user,
+                total=juego.precio * cantidad
+            )
+            
+            # Crear el detalle de venta
+            DetalleVenta.objects.create(
+                venta=venta,
+                juego=juego,
+                cantidad=cantidad,
+                subtotal=juego.precio * cantidad
+            )
+            
+            messages.success(request, '¡Pago realizado con éxito!')
+            return redirect('historial_pagos')
+            
+        except Juego.DoesNotExist:
+            messages.error(request, 'El juego seleccionado no existe')
+            return redirect('sevengamer')
+            
     return render(request, 'pago.html')
 
 def recuperar_password(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')  # Obtén el correo ingresado
+        try:
+           # Verifica si el correo pertenece a un usuario registrado
+            email = email.strip()
+            User = get_user_model()
+            usuario = User.objects.get(email__iexact=email)
+            
+            # Si el correo existe, muestra un mensaje de éxito
+            messages.success(request, 'Se ha enviado un enlace de recuperación a tu correo electrónico.')
+        except User.DoesNotExist:
+            # Si el correo no está registrado, muestra un mensaje de error
+            messages.error(request, 'El correo ingresado no está registrado.')
+    
     return render(request, 'recuperar_password.html')
 
+@login_required
+def historial_pagos(request):
+    try:
+        ventas = Venta.objects.filter(cliente=request.user).order_by('-fecha')
+        return render(request, 'historial_pagos.html', {'ventas': ventas})
+    except Exception as e:
+        messages.error(request, 'Error al cargar el historial de pagos')
+        return redirect('sevengamer')
+
+@login_required(login_url='login')
+def logout(request):
+    auth_logout(request)
+    return redirect('sevengamer')
+
+@login_required
+def mi_cuenta(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    return render(request, 'mi_cuenta.html')
+
+def actualizar_perfil(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    if request.method == 'POST':
+        user = request.user
+        user.username = request.POST.get('username')
+        user.email = request.POST.get('email')
+        user.nombre_completo = request.POST.get('nombre_completo')
+        user.fecha_nacimiento = request.POST.get('fecha_nacimiento')
+        user.direccion = request.POST.get('direccion')
+        user.save()
+        messages.success(request, 'Perfil actualizado correctamente')
+        return redirect('mi_cuenta')
+    
+    return redirect('mi_cuenta')
+
+def actualizar_foto(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    
+    if request.method == 'POST' and request.FILES.get('profile_photo'):
+        user = request.user
+        user.profile_photo = request.FILES['profile_photo']
+        user.save()
+        messages.success(request, 'Foto de perfil actualizada correctamente')
+    
+    return redirect('mi_cuenta')
 
 def registro(request):
     if request.method == 'POST':
@@ -170,62 +261,6 @@ def login(request):
                 messages.error(request, 'Error al verificar contraseña')
     
     return render(request, 'login.html')
-
-def recuperar_password(request):
-    if request.method == 'POST':
-        email = request.POST.get('email')  # Obtén el correo ingresado
-        try:
-           # Verifica si el correo pertenece a un usuario registrado
-            email = email.strip()
-            User = get_user_model()
-            usuario = User.objects.get(email__iexact=email)
-            
-            # Si el correo existe, muestra un mensaje de éxito
-            messages.success(request, 'Se ha enviado un enlace de recuperación a tu correo electrónico.')
-        except User.DoesNotExist:
-            # Si el correo no está registrado, muestra un mensaje de error
-            messages.error(request, 'El correo ingresado no está registrado.')
-    
-    return render(request, 'recuperar_password.html')
-
-@login_required(login_url='login')
-def logout(request):
-    auth_logout(request)
-    return redirect('sevengamer')
-
-def mi_cuenta(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    return render(request, 'mi_cuenta.html')
-
-def actualizar_perfil(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    
-    if request.method == 'POST':
-        user = request.user
-        user.username = request.POST.get('username')
-        user.email = request.POST.get('email')
-        user.nombre_completo = request.POST.get('nombre_completo')
-        user.fecha_nacimiento = request.POST.get('fecha_nacimiento')
-        user.direccion = request.POST.get('direccion')
-        user.save()
-        messages.success(request, 'Perfil actualizado correctamente')
-        return redirect('mi_cuenta')
-    
-    return redirect('mi_cuenta')
-
-def actualizar_foto(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
-    
-    if request.method == 'POST' and request.FILES.get('profile_photo'):
-        user = request.user
-        user.profile_photo = request.FILES['profile_photo']
-        user.save()
-        messages.success(request, 'Foto de perfil actualizada correctamente')
-    
-    return redirect('mi_cuenta')
 
 def admin_login(request):
     if request.method == 'POST':

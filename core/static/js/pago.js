@@ -16,9 +16,14 @@ function cargarResumenCarrito() {
 
     cartSummaryElement.innerHTML = '';
 
-    carrito.forEach(item => {
+    if (carrito.length > 0) {
+        const item = carrito[0]; // Tomamos el primer item del carrito
         const subtotal = item.precio * item.cantidad;
         total += subtotal;
+
+        // Establecer el juego_id y cantidad en el formulario
+        document.getElementById('juego_id').value = item.id;
+        document.getElementById('cantidad').value = item.cantidad;
 
         const itemElement = document.createElement('div');
         itemElement.className = 'cart-item';
@@ -33,7 +38,7 @@ function cargarResumenCarrito() {
         `;
 
         cartSummaryElement.appendChild(itemElement);
-    });
+    }
 
     totalAmountElement.textContent = `Total a pagar: $${formatearPrecio(total)}`;
 }
@@ -201,12 +206,8 @@ function configurarFormularioPago() {
         }
 
         if (!hasErrors) {
-            // Limpiar el carrito
-            localStorage.setItem('carrito', JSON.stringify([]));
-            
-            // Mostrar el modal de éxito
-            const modal = document.getElementById('successModal');
-            modal.classList.add('show');
+            // Enviar el formulario
+            form.submit();
         }
     });
 }
