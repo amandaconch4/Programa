@@ -327,18 +327,19 @@ def eliminar_admin(request, user_id):
     if not request.user.is_superuser:
         messages.error(request, 'No tienes permiso para eliminar administradores.')
         return redirect('panel_admin')
-    
+
     try:
         usuario = Usuario.objects.get(id=user_id)
 
-        if usuario.perfil.rol == 'admin':
+        # Verifica que el usuario tenga perfil y que sea admin
+        if usuario.perfil and usuario.perfil.rol == 'admin':
             usuario.delete()
             messages.success(request, f'Administrador {usuario.username} eliminado exitosamente.')
         else:
-            messages.error(request, 'Solo puedes eliminar administradores.')
+            messages.error(request, 'Solo puedes eliminar administradores con perfil asignado.')
     except Usuario.DoesNotExist:
         messages.error(request, 'El administrador no existe.')
-    
+
     return redirect('panel_admin')
 
 @login_required
