@@ -179,3 +179,11 @@ main {
     margin-top: 1.5rem !important;
 }
 
+.centrar-eliminar {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem; /* o usa margin-top: 24px; */
+}
+.form-eliminar {
+    margin-left: 1000px; /* ajustá este valor como quieras */
+}

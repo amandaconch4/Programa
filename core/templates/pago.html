@@ -44,10 +44,7 @@
             </div>
 
             <div class="payment-section">
-                <form class="payment-form" id="paymentForm" method="POST" action="{% url 'pago' %}" novalidate>
-                    {% csrf_token %}
-                    <input type="hidden" name="juego_id" id="juego_id">
-                    <input type="hidden" name="cantidad" id="cantidad" value="1">
+                <form class="payment-form" id="paymentForm" novalidate>
                     <div class="form-group">
                         <label for="cardType">Tipo de tarjeta</label>
                         <select id="cardType" required>
@@ -95,7 +92,7 @@
                 <h2>¡Pago Exitoso!</h2>
             </div>
             <p>Tu pago ha sido procesado correctamente.</p>
-            <a href="{% url 'historial_pagos' %}" class="confirm-btn">Ver historial de pagos</a>
+             <button class="confirm-btn" onclick="volverAlInicio()">Volver al inicio</button>
         </div>
                 <!-- Define la URL de index -->
         <script>

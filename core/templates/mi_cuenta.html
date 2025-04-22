@@ -32,9 +32,9 @@
 
     <!-- Contenido principal -->
 <main class="contenido-principal">
-        <div class="contenedor-flex">
+    <div class="contenedor-flex">
             <!-- Columna izquierda: Mis datos -->
-            <div class="izquierda">
+        <div class="izquierda">
                 <div class="card">
                     <div class="card-header bg-primary text-white">
                         <h3 class="mb-0">Mis datos</h3>
@@ -75,62 +75,30 @@
             <div class="derecha">
             <!-- Foto de perfil -->
                 <div class="card text-center">
-                     <div class="card-body">
+                        <div class="card-body">
                             {% if user.profile_photo %}
                                 <img src="{{ user.profile_photo.url }}" alt="Foto de perfil" class="rounded-circle img-fluid mb-3" style="max-width: 150px;">
                             {% else %}
                                 <img src="{% static 'imagenes/default-profile.png' %}" alt="Foto de perfil por defecto" class="rounded-circle img-fluid" style="max-width: 150px;">
                             {% endif %}
-                        <form method="post" enctype="multipart/form-data" action="{% url 'actualizar_foto' %}">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="profile_photo" class="form-label">Cambiar foto de perfil</label>
-                            <input type="file" class="form-control" id="profile_photo" name="profile_photo" accept="image/*">
+                            <form method="post" enctype="multipart/form-data" action="{% url 'actualizar_foto' %}">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="profile_photo" class="form-label">Cambiar foto de perfil</label>
+                                        <input type="file" class="form-control" id="profile_photo" name="profile_photo" accept="image/*">
+                                    </div>
+                                <button type="submit" class="btn btn-primary">Actualizar foto</button>
+                             </form>
                         </div>
-                        <button type="submit" class="btn btn-primary">Actualizar foto</button>
-                    </form>
+                        <div class="d-flex justify-content-end mt-4">
+                            <form method="post" action="{% url 'confirmar_eliminacion_cta_usuario' %}" 
+                                onsubmit="return confirm('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.');">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Eliminar cuenta</button>
+                            </form>
+                        </div>
                 </div>
-            </div>
            
-           <div class="card">
-           <div class="card-header bg-success text-white">
-                <h3 class="mb-0">Historial de compras</h3>
-             </div>
-                 <div class="card-body">
-                        {% if user.ventas.all %}
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Fecha</th>
-                                            <th>Juegos</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for venta in user.ventas.all %}
-                                            <tr>
-                                                <td>{{ venta.fecha }}</td>
-                                                <td>
-                                                    {% for detalle in venta.detalles.all %}
-                                                        {{ detalle.juego.nombre_juego }} (x{{ detalle.cantidad }})<br>
-                                                    {% endfor %}
-                                                </td>
-                                                <td>${{ venta.total }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        {% else %}
-                            <p class="text-center">No tienes compras realizadas aún.</p>
-                        {% endif %}
-                    </div>
-                    <<div class="text-center mt-4">
-                        <a href="{% url 'confirmar_eliminacion_cta_usuario' %}" class="btn btn-danger">Eliminar cuenta</a>
-                    </div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

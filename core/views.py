@@ -13,6 +13,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
 from django.contrib.auth import logout
+from django.http import JsonResponse
 
 # Create your views here.
 
@@ -99,35 +100,9 @@ def panel_admin(request):
 def panel_usuario(request):
     return render(request, 'panel-usuario.html')
 
-@login_required
+
 def pago(request):
-    if request.method == 'POST':
-        juego_id = request.POST.get('juego_id')
-        cantidad = int(request.POST.get('cantidad', 1))
-        
-        try:
-            juego = Juego.objects.get(id=juego_id)
-            
-            venta = Venta.objects.create(
-                cliente=request.user,
-                total=juego.precio * cantidad
-            )
-            
-            DetalleVenta.objects.create(
-                venta=venta,
-                juego=juego,
-                cantidad=cantidad,
-                subtotal=juego.precio * cantidad
-            )
-            
-            messages.success(request, '¡Pago realizado con éxito!')
-            return redirect('historial_pagos')
-            
-        except Juego.DoesNotExist:
-            messages.error(request, 'El juego seleccionado no existe')
-            return redirect('sevengamer')
-            
-    return render(request, 'pago.html')
+     return render(request, 'pago.html')
 
 def recuperar_password(request):
     if request.method == 'POST':
@@ -146,14 +121,6 @@ def recuperar_password(request):
     
     return render(request, 'recuperar_password.html')
 
-@login_required
-def historial_pagos(request):
-    try:
-        ventas = Venta.objects.filter(cliente=request.user).order_by('-fecha')
-        return render(request, 'historial_pagos.html', {'ventas': ventas})
-    except Exception as e:
-        messages.error(request, 'Error al cargar el historial de pagos')
-        return redirect('sevengamer')
 
 @login_required(login_url='login')
 def logout(request):
