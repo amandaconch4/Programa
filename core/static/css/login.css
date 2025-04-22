@@ -149,13 +149,21 @@
     animation: shake 0.5s;
 }
 
-#username-error, 
+#username-error,
 #password-error {
-    display: none !important;
-    visibility: hidden;
-    height: 0;
+    display: none;
+    visibility: visible;
+    height: auto;
     margin: 0;
     padding: 0;
+}
+
+#username-error.mostrar,
+#password-error.mostrar {
+    display: block;
+    visibility: visible;
+    margin-top: 5px;
+    padding: 6px 10px;
 }
 
 @keyframes shake {
@@ -506,4 +514,19 @@
 .messages {
     width: 100%;
     margin-bottom: 15px;
+}
+
+.error-campo {
+    color: #dc3545;         /* rojo */
+    background: none;
+    border: none;
+    font-weight: normal;
+    font-size: 0.9em;
+    margin: 2px 0 0 0;
+    padding: 0;
+    text-align: left;
+    box-shadow: none;
+    border-radius: 0;
+    animation: none;
+    display: none;
 }
