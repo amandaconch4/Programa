@@ -108,13 +108,11 @@ def pago(request):
         try:
             juego = Juego.objects.get(id=juego_id)
             
-            # Crear la venta
             venta = Venta.objects.create(
                 cliente=request.user,
                 total=juego.precio * cantidad
             )
             
-            # Crear el detalle de venta
             DetalleVenta.objects.create(
                 venta=venta,
                 juego=juego,
@@ -133,7 +131,7 @@ def pago(request):
 
 def recuperar_password(request):
     if request.method == 'POST':
-        email = request.POST.get('email')  # Obtén el correo ingresado
+        email = request.POST.get('email') 
         try:
            # Verifica si el correo pertenece a un usuario registrado
             email = email.strip()
@@ -209,7 +207,7 @@ def registro(request):
             messages.success(request, "¡Registro exitoso! Ya puedes iniciar sesión.")
             return redirect('login')
         else:
-            # Limpiar mensajes previos y añadir solo el mensaje de error
+            # Limpia mensajes anteriores de error
             storage = messages.get_messages(request)
             storage.used = True
             messages.error(request, "Error en el formulario. Por favor, revisa los datos.")
@@ -234,20 +232,16 @@ def login(request):
             messages.error(request, 'El usuario no existe')
             return render(request, 'login.html')
         
-        # Use Django's authentication system
         user = authenticate(request, username=username, password=password)
         
         if user is not None:
-            # User is authenticated, log them in
             auth_login(request, user)
             
-            # Set remember me
             if request.POST.get('remember-me'):
-                request.session.set_expiry(1209600)  # 2 weeks
+                request.session.set_expiry(1209600)  # 2 semanas
             else:
-                request.session.set_expiry(0)  # Until browser closes
+                request.session.set_expiry(0) 
             
-            # Redirect to sevengamer page
             return redirect('sevengamer')
         else:
             # Verificar si la contraseña es incorrecta
@@ -285,7 +279,7 @@ def panel_admin(request):
     # Verificar si el usuario es un administrador
     if not request.user.is_staff or not request.user.is_superuser:
         messages.error(request, 'No tienes permiso para acceder al panel de administración.')
-        return redirect('admin')  # Redirigir al login de admin
+        return redirect('admin') 
     
     # Obtener usuarios con perfil de administrador (perfil_id = 2) O superusuarios
     usuarios = Usuario.objects.filter(
@@ -298,7 +292,7 @@ def panel_admin(request):
 
 @login_required
 def agregar_admin(request):
-    # Verificar si el usuario es un administrador
+    # Verifica si el usuario es un administrador
     if not request.user.is_staff or not request.user.is_superuser:
         messages.error(request, 'No tienes permiso para agregar administradores.')
         return redirect('admin')
@@ -332,7 +326,7 @@ def eliminar_admin(request, user_id):
     
     try:
         usuario = Usuario.objects.get(id=user_id)
-        # Opcional: Verificar si el usuario es un administrador antes de eliminar
+
         if usuario.perfil.rol == 'admin':
             usuario.delete()
             messages.success(request, f'Administrador {usuario.username} eliminado exitosamente.')
@@ -366,8 +360,27 @@ def eliminar_cuenta(request):
         user = request.user
         logout(request)
         user.delete()
-
-        
+   
         return render(request, 'eliminar_cuenta.html')
 
     return redirect('mi_cuenta')
+
+@login_required
+def editar_cliente(request, user_id):
+    cliente = get_object_or_404(Usuario, id=user_id, perfil_id=1)
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST, instance=cliente)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Cliente actualizado correctamente.')
+            return redirect('panel_admin')
+    else:
+        form = UsuarioForm(instance=cliente)
+    return render(request, 'editar-cliente.html', {'form': form, 'cliente': cliente})
+
+@login_required
+def eliminar_cliente(request, user_id):
+    cliente = get_object_or_404(Usuario, id=user_id, perfil_id=1)
+    cliente.delete()
+    messages.success(request, 'Cliente eliminado correctamente.')
+    return redirect('panel_admin')
