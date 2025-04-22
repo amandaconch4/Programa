@@ -419,7 +419,7 @@ body {
 }
 
 .admin-form .form-row .form-group {
-    width: 48%; /* Slight gap between form groups */
+    width: 48%; 
 }
 
 .admin-form .form-group {
@@ -449,7 +449,7 @@ body {
 
 .admin-form .password-input-container input {
     width: 100%;
-    padding-right: 40px; /* Make space for the toggle button */
+    padding-right: 40px; 
 }
 
 .admin-form .password-input-container .password-toggle {
@@ -518,7 +518,7 @@ body {
 #usuarios-section .data-table,
 #clientes-section .data-table {
     width: 100%;
-    min-width: 600px;   /* antes 1000px */
+    min-width: 600px; 
     table-layout: auto;
 }
 

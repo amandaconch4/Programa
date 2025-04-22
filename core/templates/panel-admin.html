@@ -18,6 +18,15 @@
 </head>
 
 <body>
+    {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
     <div class="admin-container">
         <div class="sidebar">
             <div class="sidebar-header">
@@ -609,7 +618,8 @@
                                     <button class="action-btn" onclick="window.location.href='{% url 'editar_admin' usuario.id %}'">
                                         <i class="fas fa-edit"></i> Editar
                                     </button>
-                                    <button class="action-btn" onclick="window.location.href='{% url 'eliminar_admin' usuario.id %}'" onclick="return confirm('¿Está seguro de eliminar este administrador?')">
+                                    <button class="action-btn"
+                                        onclick="if(confirm('¿Está seguro de eliminar este administrador?')){window.location.href='{% url 'eliminar_admin' usuario.id %}'}">
                                         <i class="fas fa-trash"></i> Eliminar
                                     </button>
                                 </td>
@@ -693,8 +703,8 @@
 
         // Función de logout
         function logout() {
-            if (confirm('¿Está seguro que desea cerrar sesión?')) {
-                window.location.href = "{% url 'admin' %}";
+            if (confirm('¿Está seguro que desea salir del panel de administración?')) {
+                window.location.href = "{% url 'sevengamer' %}";
             }
         }
 

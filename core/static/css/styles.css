@@ -6,9 +6,9 @@
 
 .submit-btn,
 .reset-btn {
-    width: 220px;                   /* MISMO ancho fijo */
+    width: 220px;                   
     padding: 0.75rem;
-    background-color: #4a90e2;      /* color de submit (se sobrescribe abajo para reset) */
+    background-color: #4a90e2;      
     color: white;
     border: none;
     border-radius: 4px;
@@ -38,13 +38,12 @@
 }
 
 
-/* Active state (clic) */
 .submit-btn:active,
 .reset-btn:active {
     transform: scale(0.98);
 }
 
-/* Evita movimiento de los botones si aparece mensaje */
+
 .error-message {
     color: red;
     font-size: 0.9rem;

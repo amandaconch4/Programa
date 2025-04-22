@@ -88,13 +88,13 @@
         function togglePassword(inputId) {
             const input = document.getElementById(inputId);
             const icon = document.getElementById(`toggleIcon-${inputId}`);
-            const error = document.getElementById(`${inputId}-error`);  // Error correspondiente a la contraseña
+            const error = document.getElementById(`${inputId}-error`); 
 
             if (input.type === 'password') {
                 input.type = 'text';
                 icon.classList.remove('fa-eye');
                 icon.classList.add('fa-eye-slash');
-                error.style.display = 'none';  // Ocultar el mensaje de error cuando la contraseña sea visible
+                error.style.display = 'none'; 
             } else {
                 input.type = 'password';
                 icon.classList.remove('fa-eye-slash');
