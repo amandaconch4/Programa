@@ -279,15 +279,19 @@ def panel_admin(request):
     # Verificar si el usuario es un administrador
     if not request.user.is_staff or not request.user.is_superuser:
         messages.error(request, 'No tienes permiso para acceder al panel de administración.')
-        return redirect('admin') 
-    
-    # Obtener usuarios con perfil de administrador (perfil_id = 2) O superusuarios
+        return redirect('admin')  # Redirigir al login de admin
+
+    # Usuarios admin y superusuarios (como ya tienes)
     usuarios = Usuario.objects.filter(
         Q(perfil__rol='admin') | Q(is_superuser=True)
     ).distinct()
-    
+
+    # SOLO clientes (perfil_id = 1)
+    clientes = Usuario.objects.filter(perfil_id=1)
+
     return render(request, 'panel-admin.html', {
-        'usuarios': usuarios
+        'usuarios': usuarios,
+        'clientes': clientes,
     })
 
 @login_required
