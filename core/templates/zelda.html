@@ -1,4 +1,4 @@
-<!--Para cargar los archivos estáticos-->
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/detalles.css' %}">
 </head>
 
-<!-- ENCABEZADO -->
+
 <body>
     <header>
         <div class="container">
@@ -43,7 +43,7 @@
     </header>
 
     <div class="content-container">
-        <!-- MENÚ LATERAL DE CATEGORÍAS -->
+        
         <aside class="sidebar">
             <h2>Categorías</h2>
             <ul class="categoria-lista">
@@ -57,7 +57,7 @@
             </ul>
         </aside>
 
-        <!-- CONTENIDO PRINCIPAL DEL JUEGO -->
+      
         <main class="main-content">
             <div class="detalle-juego">
                 <img src="{% static 'imagenes/zelda.avif' %}" alt="The Legend of Zelda: Breath of the Wild" class="imagen-principal">
@@ -75,14 +75,14 @@
         </main>
     </div>
 
-    <!-- Modal del Carrito -->
+    
     <div class="carrito-modal" id="carritoModal">
         <div class="carrito-header">
             <h2>Carrito de Compras</h2>
             <button class="cerrar-carrito" onclick="cerrarCarrito()">&times;</button>
         </div>
         <div class="carrito-items" id="carritoItems">
-            <!-- Los items del carrito se agregarán aquí dinámicamente -->
+            
         </div>
         <div class="carrito-total">
             <div class="total-row">
@@ -99,7 +99,7 @@
             </div>
             <button class="checkout-btn" onclick="procederPago()">Proceder al Pago</button>
         </div>
-        <!-- Define la URL de pago -->
+        
         <script>
             const pagoUrl = "{% url 'pago' %}";
         </script>

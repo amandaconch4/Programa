@@ -3,10 +3,10 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from .models import PerfilUsuario, Usuario, Venta, Juego, DetalleVenta
-from django.contrib.auth.hashers import check_password #verificar las contraseñas
-from django.core.mail import send_mail  # Para enviar correos electrónicos
-from django.conf import settings  # Configuración del correo
-from django.contrib.auth.models import User  # Modelo de usuario predeterminado de Django
+from django.contrib.auth.hashers import check_password 
+from django.core.mail import send_mail  
+from django.conf import settings 
+from django.contrib.auth.models import User  
 from core.models import Usuario
 from .forms import UsuarioForm, PerfilUsuarioForm
 from django.contrib.auth import get_user_model
@@ -108,15 +108,15 @@ def recuperar_password(request):
     if request.method == 'POST':
         email = request.POST.get('email') 
         try:
-           # Verifica si el correo pertenece a un usuario registrado
+           
             email = email.strip()
             User = get_user_model()
             usuario = User.objects.get(email__iexact=email)
             
-            # Si el correo existe, muestra un mensaje de éxito
+           
             messages.success(request, 'Se ha enviado un enlace de recuperación a tu correo electrónico.')
         except User.DoesNotExist:
-            # Si el correo no está registrado, muestra un mensaje de error
+            
             messages.error(request, 'El correo ingresado no está registrado.')
     
     return render(request, 'recuperar_password.html')

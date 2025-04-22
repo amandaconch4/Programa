@@ -1,4 +1,4 @@
-<!--Para cargar los archivos estáticos-->
+
 {% load static %}
 
 <!DOCTYPE html>
@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
 </head>
 
-<!-- ENCABEZADO -->
+
 <body class="categorias-page">
     <header>
         <div class="container">
@@ -41,14 +41,14 @@
         </div>
     </header>
 
-    <!-- Modal del Carrito -->
+    
     <div class="carrito-modal" id="carritoModal">
         <div class="carrito-header">
             <h2>Carrito de Compras</h2>
             <button class="cerrar-carrito" onclick="cerrarCarrito()">&times;</button>
         </div>
         <div class="carrito-items" id="carritoItems">
-            <!-- Los items del carrito se agregarán aquí dinámicamente -->
+            
         </div>
         <div class="carrito-total">
             <div class="total-row">
@@ -65,14 +65,14 @@
             </div>
             <button class="checkout-btn" onclick="procederPago()">Proceder al Pago</button>
         </div>
-        <!-- Define la URL de pago -->
+        
         <script>
             const pagoUrl = "{% url 'pago' %}";
         </script>
     </div>
 
     <div class="content-container">
-        <!-- Menú lateral de categorías -->
+        
         <aside class="sidebar">
             <h2>Categorías</h2>
             <ul class="categoria-lista">
@@ -86,7 +86,7 @@
             </ul>
         </aside>
 
-        <!-- Contenido principal -->
+        
         <main class="main-content">
             <h1>Terror</h1>
             
