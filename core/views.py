@@ -356,3 +356,29 @@ def eliminar_cliente(request, user_id):
     cliente.delete()
     messages.success(request, 'Cliente eliminado correctamente.')
     return redirect('panel_admin')
+
+@login_required
+def agregar_cliente(request):
+    if not request.user.is_staff:
+        messages.error(request, 'No tienes permiso para agregar clientes.')
+        return redirect('panel_admin')
+
+    if request.method == 'POST':
+        usuario_form = UsuarioForm(request.POST)
+        if usuario_form.is_valid():
+            usuario = usuario_form.save(commit=False)
+            perfil_cliente = PerfilUsuario.objects.get(rol='usuario')
+            usuario.perfil = perfil_cliente
+            usuario.is_staff = False
+            usuario.is_superuser = False
+            usuario.save()
+            messages.success(request, f"Cliente {usuario.username} creado exitosamente.")
+            return redirect('panel_admin')
+        else:
+            messages.error(request, "Error en el formulario. Por favor, revisa los datos.")
+    else:
+        usuario_form = UsuarioForm()
+
+    return render(request, 'agregar_cliente.html', {
+        'usuario_form': usuario_form
+    })

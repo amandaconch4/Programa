@@ -89,6 +89,7 @@ urlpatterns = [
     path('sevengamer/panel-admin/editar-admin/<int:user_id>/', views.editar_admin, name='editar_admin'),
     path('sevengamer/panel-admin/editar-cliente/<int:user_id>/', views.editar_cliente, name='editar_cliente'),
     path('sevengamer/panel-admin/eliminar-cliente/<int:user_id>/', views.eliminar_cliente, name='eliminar_cliente'),
+    path('sevengamer/panel-admin/agregar-cliente/', views.agregar_cliente, name='agregar_cliente'),
 
 ]
 

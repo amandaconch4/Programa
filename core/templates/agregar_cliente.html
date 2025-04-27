@@ -1,0 +1,176 @@
+<!--Para cargar los archivos estáticos-->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Cliente - SEVENGAMER</title>
+    <link rel="icon" href="{% static 'imagenes/control4.png' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/panel-admin.css' %}">
+    <link rel="stylesheet" href="{% static 'css/agregar-admin.css' %}">
+</head>
+
+<body>
+    <div class="admin-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Panel Clientes</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="{% url 'panel_admin' %}" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#" data-section="productos"><i class="fas fa-box"></i> Productos</a></li>
+                <li><a href="#" data-section="inventario"><i class="fas fa-warehouse"></i> Inventario</a></li>
+                <li><a href="#" data-section="ventas"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
+                <li><a href="#" class="active" data-section="clientes"><i class="fas fa-users"></i> Clientes</a></li>
+            </ul>
+        </div>
+
+        <div class="main-panel">
+            <div class="content-header">
+                <h1 class="content-title">Agregar Nuevo Cliente</h1>
+                <button class="logout-btn" onclick="window.location.href='{% url 'panel_admin' %}'">Cancelar</button>
+            </div>
+
+            <div class="main-content">
+                <div class="content-section" id="agregar-cliente-section">
+                    <div class="section-container">
+                        <div class="section-header">
+                            <h2>Agregar Nuevo Cliente</h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <form method="post" id="registroForm" class="admin-form" novalidate>
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        {{ usuario_form.nombre_completo.label_tag }}
+                                        {{ usuario_form.nombre_completo }}
+                                        <span class="error-message" id="nombre_completo-error"></span>
+                                        <div class="email-requisitos" id="nombre-requisitos">
+                                            <ul>
+                                                <li id="req-nombre-length">Al menos 8 caracteres</li>
+                                            </ul>
+                                        </div>
+                                        {% for error in usuario_form.nombre_completo.errors %}
+                                            <span class="error-message">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ usuario_form.username.label_tag }}
+                                        {{ usuario_form.username }}
+                                        <span class="error-message" id="nombre_usuario-error"></span>
+                                        <div class="password-requisitos" id="username-requisitos">
+                                            <ul>
+                                                <li id="req-username-length" class="invalid">Entre 5 y 18 caracteres</li>
+                                                <li id="req-username-sin-espacios" class="invalid">Sin espacios</li>
+                                            </ul>
+                                        </div>
+                                        {% for error in usuario_form.username.errors %}
+                                            <span class="error-message">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        {{ usuario_form.email.label_tag }}
+                                        {{ usuario_form.email }}
+                                        <span class="error-message" id="correo-error"></span>
+                                        <div class="email-requisitos" id="email-requisitos">
+                                            <ul>
+                                                <li id="req-email-formato">Debe tener formato usuario@dominio.com</li>
+                                                <li id="req-email-sin-espacios">No debe contener espacios</li>
+                                                <li id="req-email-dominio">Debe tener un dominio válido</li>
+                                            </ul>
+                                        </div>
+                                        {% for error in usuario_form.email.errors %}
+                                            <span class="error-message">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ usuario_form.password1.label_tag }}
+                                        <div class="password-wrapper">
+                                            {{ usuario_form.password1 }}
+                                            <button type="button" class="password-toggle" onclick="togglePassword('id_password1')">
+                                                <i class="fas fa-eye" id="toggleIcon-id_password1"></i>
+                                            </button>
+                                        </div>
+                                        <span class="error-message" id="password1-error"></span>
+                                        <div class="password-requisitos" id="password-requirements">
+                                            <ul>
+                                                <li id="req-length" class="invalid">Entre 6 y 18 caracteres</li>
+                                                <li id="req-uppercase" class="invalid">Una letra mayúscula</li>
+                                                <li id="req-number" class="invalid">Un número</li>
+                                                <li id="req-special" class="invalid">Un carácter especial (.,!@#$%^&*)</li>
+                                            </ul>
+                                        </div>
+                                        {% for error in usuario_form.password1.errors %}
+                                            <span class="error-message">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        {{ usuario_form.fecha_nacimiento.label_tag }}
+                                        {{ usuario_form.fecha_nacimiento }}
+                                        <span class="error-message" id="fecha_nacimiento-error"></span>
+                                        {% for error in usuario_form.fecha_nacimiento.errors %}
+                                            <span class="error-message">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="form-group">
+                                        {{ usuario_form.direccion.label_tag }}
+                                        {{ usuario_form.direccion }}
+                                        <span class="error-message" id="direccion-error"></span>
+                                        {% for error in usuario_form.direccion.errors %}
+                                            <span class="error-message">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% if messages %}
+                                    <div class="messages">
+                                        {% for message in messages %}
+                                            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                                <div class="button-container">
+                                    <button type="submit" class="submit-btn">Crear Cliente</button>
+                                    <button type="reset" class="reset-btn">Limpiar</button>
+                                </div>
+                            </form>
+
+                            <!-- Script para el toggle del ojo -->
+                            <script>
+                            function togglePassword(inputId) {
+                                const input = document.getElementById(inputId);
+                                const icon = document.getElementById(`toggleIcon-${inputId}`);
+                                if (input.type === 'password') {
+                                    input.type = 'text';
+                                    icon.classList.remove('fa-eye');
+                                    icon.classList.add('fa-eye-slash');
+                                } else {
+                                    input.type = 'password';
+                                    icon.classList.remove('fa-eye-slash');
+                                    icon.classList.add('fa-eye');
+                                }
+                            }
+                            </script>
+                            <script src="{% static 'js/validaciones_registro.js' %}"></script>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
