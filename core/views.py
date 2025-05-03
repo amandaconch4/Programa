@@ -2,27 +2,25 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .models import PerfilUsuario, Usuario, Venta, Juego, DetalleVenta,Carrito, CarritoItem
+from .models import PerfilUsuario, Usuario, Venta, Juego, DetalleVenta,Carrito, CarritoItem, Categoria
 from django.contrib.auth.hashers import check_password 
 from django.core.mail import send_mail  
 from django.conf import settings 
 from django.contrib.auth.models import User  
-from core.models import Usuario
-from .forms import UsuarioForm, PerfilUsuarioForm
-from django.contrib.auth import get_user_model
+from .forms import UsuarioForm, PerfilUsuarioForm, CategoriaForm
+from django.contrib.auth import get_user_model, logout
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
-from django.contrib.auth import logout
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import VentaSerializer
-from .serializers import DetalleVentaSerializer
+from .serializers import VentaSerializer, DetalleVentaSerializer
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse 
+from django.db.models.deletion import ProtectedError
 
 
 # Create your views here.
@@ -560,3 +558,90 @@ def detalles_venta_api(request, venta_id):
         return Response(serializer.data)
     except Venta.DoesNotExist:
         return Response({'error': 'Venta no encontrada'}, status=status.HTTP_404_NOT_FOUND)
+
+
+# CRUD de Categorías
+@login_required
+def listar_categorias(request):
+    if not request.user.is_staff:
+        messages.error(request, 'No tienes permiso para acceder a esta página.')
+        return redirect('sevengamer')
+    
+    categorias = Categoria.objects.all()
+    return render(request, 'panel-admin.html', {'categorias': categorias})
+
+@login_required
+def agregar_categoria(request):
+    if not request.user.is_staff:
+        messages.error(request, 'No tienes permiso para acceder a esta página.')
+        return redirect('sevengamer')
+    
+    if request.method == 'POST':
+        form = CategoriaForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Categoría agregada exitosamente.')
+            return redirect('listar_categorias')
+    else:
+        form = CategoriaForm()
+    
+    return render(request, 'agregar_categoria.html', {'form': form})
+
+@login_required
+def editar_categoria(request, categoria_id):
+    if not request.user.is_staff:
+        messages.error(request, 'No tienes permiso para acceder a esta página.')
+        return redirect('sevengamer')
+    
+    categoria = get_object_or_404(Categoria, id=categoria_id)
+    
+    if request.method == 'POST':
+        form = CategoriaForm(request.POST, instance=categoria)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Categoría editada exitosamente.')
+            return redirect('listar_categorias')
+    else:
+        form = CategoriaForm(instance=categoria)
+    
+    return render(request, 'editar_categoria.html', {'form': form, 'categoria': categoria})
+
+@login_required
+def eliminar_categoria(request, categoria_id):
+    # Verificar si el usuario tiene permisos de administrador
+    if not request.user.is_staff:
+        messages.error(request, 'No tienes permiso para realizar esta acción.')
+        return redirect('sevengamer')
+    
+    categoria = get_object_or_404(Categoria, id=categoria_id)
+    
+    if request.method == 'POST':
+        try:
+            # Verificar si hay juegos asociados
+            juegos_asociados = categoria.juegos.count()
+            if juegos_asociados > 0:
+                messages.error(request, f'No se puede eliminar la categoría. Hay {juegos_asociados} juego(s) asociados.')
+                return redirect('listar_categorias')
+            
+            # Eliminar la categoría
+            categoria.delete()
+            messages.success(request, f'La categoría "{categoria.nombre_categoria}" ha sido eliminada exitosamente.')
+        except ProtectedError:
+            messages.error(request, 'No se puede eliminar la categoría debido a restricciones de integridad.')
+        except Exception as e:
+            messages.error(request, f'No se pudo eliminar la categoría: {str(e)}')
+        
+        return redirect('listar_categorias')
+    
+    # Si no es POST, redirigir al panel de admin
+    return redirect('listar_categorias')
+
+@login_required
+def verificar_categoria(request):
+    nombre = request.GET.get('nombre', '').strip().title()
+    
+    if not nombre:
+        return JsonResponse({'existe': False})
+    
+    existe = Categoria.objects.filter(nombre_categoria=nombre).exists()
+    return JsonResponse({'existe': existe})

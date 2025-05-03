@@ -1,0 +1,103 @@
+<!--Para cargar los archivos estáticos-->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar Categoría - SEVENGAMER</title>
+    <link rel="icon" href="{% static 'imagenes/control4.png' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="{% static 'css/panel-admin.css' %}">
+    <link rel="stylesheet" href="{% static 'css/agregar-admin.css' %}">
+</head>
+
+<body>
+    <div class="admin-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>Panel Admin</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="{% url 'panel_admin' %}" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#" class="active" data-section="categorias"><i class="fas fa-tags"></i> Categorías</a></li>
+                <li><a href="#" data-section="productos"><i class="fas fa-box"></i> Productos</a></li>
+                <li><a href="#" data-section="inventario"><i class="fas fa-warehouse"></i> Inventario</a></li>
+                <li><a href="#" data-section="ventas"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
+                <li><a href="#" data-section="clientes"><i class="fas fa-users"></i> Clientes</a></li>
+                <li><a href="#" data-section="usuarios"><i class="fas fa-user-shield"></i> Usuarios admin</a></li>  
+            </ul>
+        </div>
+
+        <div class="main-panel">
+            <div class="content-header">
+                <h1 class="content-title">Agregar Nueva Categoría</h1>
+                <button class="logout-btn" onclick="window.location.href='{% url 'listar_categorias' %}'">Cancelar</button>
+            </div>
+
+            <div class="main-content">
+                <div class="content-section" id="agregar-categoria-section">
+                    <div class="section-container">
+                        <div class="section-header">
+                            <h2>Agregar Nueva Categoría</h2>
+                        </div>
+                        
+                        <div class="section-content">
+                            <form method="post" id="categoriaForm" class="admin-form" novalidate>
+                                {% csrf_token %}
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        {{ form.nombre_categoria.label_tag }}
+                                        {{ form.nombre_categoria }}
+                                        <span class="error-message" id="nombre_categoria-error">
+                                            {% for error in form.nombre_categoria.errors %}
+                                                <span>{{ error }}</span>
+                                            {% endfor %}
+                                        </span>
+                                        <div class="email-requisitos" id="nombre-requisitos">
+                                            <ul>
+                                                <li id="req-nombre-length">Al menos 3 caracteres</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        {{ form.juegos.label_tag }}
+                                        {{ form.juegos }}
+                                        <span class="error-message" id="juegos-error"></span>
+                                        {% for error in form.juegos.errors %}
+                                            <span class="error-message">{{ error }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+
+                                {% if messages %}
+                                    <div class="messages">
+                                        {% for message in messages %}
+                                            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                                                {{ message }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+
+                                <div class="button-container">
+                                    <button type="submit" class="submit-btn">Crear Categoría</button>
+                                    <button type="reset" class="reset-btn">Limpiar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/validaciones_categoria.js' %}"></script>
+</body>
+</html>

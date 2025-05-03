@@ -1,5 +1,5 @@
 from django import forms
-from .models import Usuario, PerfilUsuario, Venta, DetalleVenta
+from .models import Usuario, PerfilUsuario, Venta, DetalleVenta, Categoria
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth import get_user_model
@@ -133,5 +133,51 @@ class CustomPasswordResetForm(PasswordResetForm):
         )
         return (u for u in active_users if u.has_usable_password())
     
+# Formulario para crear y editar Categorías
+class CategoriaForm(forms.ModelForm):
+    class Meta:
+        model = Categoria
+        fields = ['nombre_categoria', 'juegos']
+        widgets = {
+            'nombre_categoria': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nombre de la categoría', 'minlength': 3}),
+            'juegos': forms.SelectMultiple(attrs={'class': 'form-control'})
+        }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['juegos'].required = False
+
+    def clean_nombre_categoria(self):
+        nombre_categoria = self.cleaned_data.get('nombre_categoria')
+        if not nombre_categoria:
+            raise forms.ValidationError("El nombre de la categoría no puede estar vacío")
+        
+        # Eliminar espacios al inicio y al final
+        nombre_categoria = nombre_categoria.strip()
+        
+        if len(nombre_categoria) < 3:
+            raise forms.ValidationError("El nombre de la categoría debe tener al menos 3 caracteres")
+        
+        # Verificar que solo contenga letras y espacios
+        if not all(char.isalpha() or char.isspace() for char in nombre_categoria):
+            raise forms.ValidationError("El nombre de la categoría solo puede contener letras")
+        
+        # Verificar que no sean solo espacios
+        if nombre_categoria.isspace():
+            raise forms.ValidationError("El nombre de la categoría no puede ser solo espacios")
+        
+        # Convertir a título para mantener consistencia
+        nombre_categoria = nombre_categoria.title()
+        
+        # Verificar si ya existe la categoría, excluyendo la categoría actual en caso de edición
+        categoria_existente = Categoria.objects.filter(nombre_categoria=nombre_categoria)
+        
+        # Si estamos editando, excluir la categoría actual
+        if self.instance and self.instance.pk:
+            categoria_existente = categoria_existente.exclude(pk=self.instance.pk)
+        
+        if categoria_existente.exists():
+            raise forms.ValidationError("Ya existe una categoría con este nombre")
+        
+        return nombre_categoria
 

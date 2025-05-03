@@ -45,7 +45,7 @@ class Juego (models.Model):
 
 class Categoria(models.Model):
     nombre_categoria = models.CharField(max_length=100, unique=True)
-    juegos = models.ManyToManyField(Juego, related_name='categorias')
+    juegos = models.ManyToManyField(Juego, related_name='categorias', blank=True)
 
     def __str__(self):
         return self.nombre

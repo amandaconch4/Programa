@@ -108,6 +108,11 @@ urlpatterns = [
     path('sevengamer/panel-admin/editar-cliente/<int:user_id>/', views.editar_cliente, name='editar_cliente'),
     path('sevengamer/panel-admin/eliminar-cliente/<int:user_id>/', views.eliminar_cliente, name='eliminar_cliente'),
     path('sevengamer/panel-admin/agregar-cliente/', views.agregar_cliente, name='agregar_cliente'),
+    path('sevengamer/panel-admin/listar-categorias/', views.listar_categorias, name='listar_categorias'),
+    path('sevengamer/panel-admin/agregar-categoria/', views.agregar_categoria, name='agregar_categoria'),
+    path('sevengamer/panel-admin/editar-categoria/<int:categoria_id>/', views.editar_categoria, name='editar_categoria'),
+    path('sevengamer/panel-admin/eliminar-categoria/<int:categoria_id>/', views.eliminar_categoria, name='eliminar_categoria'),
+    path('verificar-categoria/', views.verificar_categoria, name='verificar_categoria'),
 
 ]
 

@@ -34,6 +34,7 @@
             </div>
             <ul class="sidebar-menu">
                 <li><a href="#" class="active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#" data-section="categorias"><i class="fas fa-list"></i> Categorías</a></li>
                 <li><a href="#" data-section="productos"><i class="fas fa-box"></i> Productos</a></li>
                 <li><a href="#" data-section="inventario"><i class="fas fa-warehouse"></i> Inventario</a></li>
                 <li><a href="#" data-section="ventas"><i class="fas fa-shopping-cart"></i> Ventas</a></li>
@@ -70,6 +71,54 @@
                             <p>12</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- Sección Categorías -->
+                <div class="content-section" id="categorias-section" style="display: none;">
+                    <h2>Gestión de Categorías</h2>
+                    <button class="action-btn" onclick="window.location.href='{% url 'agregar_categoria' %}'">Agregar Categoría</button>
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Juegos Asociados</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for categoria in categorias %}
+                            <tr>
+                                <td>{{ categoria.id }}</td>
+                                <td>{{ categoria.nombre_categoria }}</td>
+                                <td>{{ categoria.juegos.count }}</td>
+                                <td>
+                                <div class="btn-group">
+                                    {% if categoria.id %}
+                                    <button class="action-btn" onclick="window.location.href='{% url 'editar_categoria' categoria.id %}'">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </button>
+                                    <form method="post" action="{% url 'eliminar_categoria' categoria.id %}" style="display:inline;" onsubmit="return confirm('¿Está seguro de eliminar esta categoría?');">
+                                        {% csrf_token %}
+                                        <button type="submit" class="action-btn">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
+                                    </form>
+                                    {% else %}
+                                    <button class="action-btn" disabled>
+                                        <i class="fas fa-exclamation-circle"></i> Sin ID
+                                    </button>
+                                    {% endif %}
+                                </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4">No hay categorías registradas</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
 
                 <!-- Sección Productos -->
