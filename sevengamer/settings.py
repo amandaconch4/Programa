@@ -150,3 +150,5 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'sevengamer'
 LOGOUT_REDIRECT_URL = 'sevengamer'
 
+
+

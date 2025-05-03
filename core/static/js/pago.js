@@ -209,6 +209,8 @@ function configurarFormularioPago() {
             modal.classList.add('show');
 
         }
+
+    form.submit();
     });
 }
 
@@ -216,3 +218,49 @@ function configurarFormularioPago() {
 function volverAlInicio() {
     window.location.href = indexUrl;
 }
+
+document.getElementById("paymentForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const cardType = document.getElementById("cardType").value;
+    const cardName = document.getElementById("cardName").value;
+    const cardNumber = document.getElementById("cardNumber").value;
+    const expiryDate = document.getElementById("expiryDate").value;
+    const cvv = document.getElementById("cvv").value;
+
+    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
+    if (!cardType || !cardName || !cardNumber || !expiryDate || !cvv) {
+        alert("Por favor completa todos los campos del formulario.");
+        return;
+    }
+
+    fetch("/procesar_pago/", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+        },
+        body: JSON.stringify({
+            cardType,
+            cardName,
+            cardNumber,
+            expiryDate,
+            cvv,
+            carrito  // ahora también se envía el contenido del carrito
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            localStorage.removeItem("carrito");  // Limpia el carrito en localStorage
+            window.location.href = data.redirect_url;
+        } else {
+            alert("Error: " + (data.error || "No se pudo procesar el pago."));
+        }
+    })
+    .catch(error => {
+        console.error("Error en fetch:", error);
+        alert("Ocurrió un error inesperado.");
+    });
+});

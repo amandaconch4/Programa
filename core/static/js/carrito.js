@@ -41,8 +41,38 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
     // Actualizar el contador del carrito
     actualizarContadorCarrito();
     
+  
     // Mostrar mensaje de éxito
     mostrarMensajeExito();
+
+    // Obtener el token CSRF desde el formulario oculto
+    const csrftoken = document.querySelector('#csrf-form input[name=csrfmiddlewaretoken]').value;
+
+    // Enviar el carrito al backend para ser guardado en la base de datos
+    fetch('/carrito/agregar/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken  // Usa la variable que ya definiste
+        },
+        body: JSON.stringify({
+            carrito: carrito  // Enviar todo el carrito al backend
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+           // Si el pago fue exitoso, redirigir a la página de compra exitosa
+        window.location.href = data.redirect_url;  // Redirige al usuario a la página de éxito
+    } else {
+        console.error('Error al procesar el pago');
+        alert('Error al procesar el pago');
+    }
+})
+.catch(error => {
+    console.error('Error:', error);
+    alert('Hubo un problema procesando el pago');
+});
     
     // Actualizar el contenido del carrito si está abierto
     const modal = document.getElementById('carritoModal');
@@ -179,7 +209,35 @@ function eliminarDelCarrito(id) {
 
 // Proceder al pago
 function procederPago() {
-    window.location.href = pagoUrl;
+    const carrito = obtenerCarrito();
+    const cliente = obtenerDatosCliente(); // Obtiene los datos del cliente
+
+    const carritoEjemplo = [
+        { id: 1, cantidad: 2 },
+        { id: 3, cantidad: 1 }
+    ];
+
+    
+     // Enviar el carrito al backend
+     fetch('/procesar_pago/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify(carrito)
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data); // Verifica la respuesta del servidor
+        if (data.message) {
+            alert(data.message); // Muestra el mensaje de éxito
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al procesar el carrito.');
+    });
 }
 
 // Inicializar el contador del carrito cuando se carga la página
@@ -194,4 +252,4 @@ document.addEventListener('DOMContentLoaded', () => {
             abrirCarrito();
         });
     }
-}); 
+});
