@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 
 
@@ -49,18 +50,36 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nombre
 
+class Carrito(models.Model):
+    usuario = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    creado = models.DateTimeField(auto_now_add=True)
+    estado = models.CharField(max_length=20, default='activo') 
+
+    def total(self):
+        return sum(item.subtotal() for item in self.items.all())
+
+class CarritoItem(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE, related_name='items')
+    juego = models.ForeignKey(Juego, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
+
+    def subtotal(self):
+        return self.juego.precio * self.cantidad
+
 
 class Venta(models.Model):
-    cliente = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='ventas')
-    fecha = models.DateField(auto_now_add=True)
-    total = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-
-    def __str__(self):
-        return f"Venta #{self.id} - {self.cliente.nombre_usuario}"
+    cliente = models.ForeignKey( settings.AUTH_USER_MODEL,  # <- esta es la forma correcta
+        on_delete=models.CASCADE,
+        related_name='ventas',
+        null=True,
+        blank=True
+    )
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE, related_name='ventas', null=True, blank=True)  # Agregamos la relación con Carrito
+    fecha = models.DateTimeField(auto_now_add=True)
+    total = models.DecimalField(max_digits=10, decimal_places=2, default=0)
 
     def actualizar_total(self):
-        total = sum(detalle.subtotal for detalle in self.detalles.all())
-        self.total = total
+        self.total = sum(detalle.subtotal for detalle in self.detalles.all())
         self.save()
 
 
@@ -78,5 +97,3 @@ class DetalleVenta(models.Model):
         self.subtotal = self.juego.precio * self.cantidad
         super().save(*args, **kwargs)
     
-
-

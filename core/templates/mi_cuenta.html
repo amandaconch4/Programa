@@ -90,6 +90,9 @@
                                 <button type="submit" class="btn btn-primary">Actualizar foto</button>
                              </form>
                         </div>
+                        <div class="text-center mt-2">
+                            <a href="{% url 'historial_compras' %}" class="btn btn-success">Ver historial de compras</a>
+                        </div>
                         <div class="d-flex justify-content-end mt-4">
                             <form method="post" action="{% url 'confirmar_eliminacion_cta_usuario' %}" 
                                 onsubmit="return confirm('¿Estás seguro de que quieres eliminar tu cuenta? Esta acción no se puede deshacer.');">

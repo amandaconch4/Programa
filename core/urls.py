@@ -34,11 +34,15 @@ from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 from .forms import CustomPasswordResetForm
 from django.urls import reverse_lazy
+from .views import historial_compras
+from .views import detalle_venta
+from .views import procesar_pago
 
 urlpatterns = [
     # Auth URLs
     path('', sevengamer, name="home"),
     path('', views.sevengamer, name='sevengamer'),
+    path('index/', views.index, name='index'), 
     path('login/', views.login, name='login'),
     path('logout/', views.logout, name='logout'),
     path('registro/', views.registro, name='registro'),
@@ -54,6 +58,20 @@ urlpatterns = [
     path('mi-cuenta/', views.mi_cuenta, name='mi_cuenta'),
     path('confirmar-eliminacion/', views.confirmar_eliminacion, name='confirmar_eliminacion_cta_usuario'),
     path('eliminar-cuenta/', views.eliminar_cuenta, name='eliminar_cuenta'),
+    #path('api/procesar_pago/', views.procesar_pago_api, name='procesar_pago_api'),
+    #path('api/historial_compras/', views.historial_compras_api, name='historial_compras_api'),
+    #path('api/detalles_venta/', views.detalles_venta_api, name='detalles_venta_api'),
+    path('historial_compras/', views.historial_compras, name='historial_compras'),
+    path('carrito/', views.ver_carrito, name='ver_carrito'),
+    path('carrito/agregar/<int:juego_id>/', views.agregar_al_carrito, name='agregar_al_carrito'),
+    path('carrito/confirmar/', views.compra_exitosa, name='pago'),
+    path('pago/', views.pago, name='pago'),
+    path('procesar_pago/', views.procesar_pago, name='procesar_pago'),
+    path('compra-exitosa/<int:venta_id>/', views.compra_exitosa, name='compra_exitosa'),
+    path('detalle_venta/<int:venta_id>/', views.detalle_venta, name='detalle_venta'),
+    path('pago/', views.pago, name='pago'),
+
+
 
     # Game URLs
     path('sevengamer', sevengamer, name="sevengamer"),

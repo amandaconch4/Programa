@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .models import PerfilUsuario, Usuario, Venta, Juego, DetalleVenta
+from .models import PerfilUsuario, Usuario, Venta, Juego, DetalleVenta,Carrito, CarritoItem
 from django.contrib.auth.hashers import check_password 
 from django.core.mail import send_mail  
 from django.conf import settings 
@@ -14,12 +14,25 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q 
 from django.contrib.auth import logout
 from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import VentaSerializer
+from .serializers import DetalleVentaSerializer
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse 
+
 
 # Create your views here.
 
 def sevengamer(request):
     if request.user.is_authenticated:
         messages.success(request, f'¡Bienvenid@ {request.user.username}!')
+    return render(request, 'index.html')
+
+def index(request):
     return render(request, 'index.html')
 
 def terror(request):
@@ -101,8 +114,9 @@ def panel_usuario(request):
     return render(request, 'panel-usuario.html')
 
 
+@login_required
 def pago(request):
-     return render(request, 'pago.html')
+    return render(request, 'pago.html')
 
 def recuperar_password(request):
     if request.method == 'POST':
@@ -382,3 +396,167 @@ def agregar_cliente(request):
     return render(request, 'agregar_cliente.html', {
         'usuario_form': usuario_form
     })
+
+
+
+# Vistas para el carrito de compras  ********
+
+
+# Obtener o crear el carrito del usuario
+def get_carrito(usuario):
+    carrito, creado = Carrito.objects.get_or_create(
+        usuario=usuario,
+        estado='activo'  # Especificamos explícitamente el estado
+    )
+    return carrito
+# Agregar juego al carrito
+@login_required
+def agregar_al_carrito(request, juego_id):
+    juego = get_object_or_404(Juego, id=juego_id)
+    carrito = get_carrito(request.user)
+
+    item, creado = CarritoItem.objects.get_or_create(carrito=carrito, juego=juego)
+    if not creado:
+        item.cantidad += 1
+        item.save()
+
+    return redirect('ver_carrito')
+
+# Ver el contenido del carrito
+@login_required
+def ver_carrito(request):
+    carrito = get_carrito(request.user)
+    items = carrito.items.all()
+    total = carrito.total()
+    return render(request, 'ver_carrito.html', {
+        'items': items,
+        'total': total
+    })
+
+# Vistas para realizar la compra  ********  
+
+from django.http import HttpResponseBadRequest
+
+@csrf_exempt
+@login_required
+def procesar_pago(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+        except json.JSONDecodeError:
+            return HttpResponseBadRequest("Datos JSON inválidos.")
+
+        # Capturar los datos del cuerpo JSON
+        card_type = data.get('cardType')
+        card_name = data.get('cardName')
+        card_number = data.get('cardNumber')
+        expiry_date = data.get('expiryDate')
+        cvv = data.get('cvv')
+
+        # Validar los datos del formulario
+        if not all([card_type, card_name, card_number, expiry_date, cvv]):
+            return HttpResponseBadRequest("Faltan algunos campos obligatorios.")
+
+        # Buscar el carrito activo del usuario
+        carrito = Carrito.objects.filter(usuario=request.user, estado='activo').first()
+        if not carrito:
+            # Si no hay carrito, redirigir igual (por ejemplo, por segunda compra)
+            return JsonResponse({
+                'success': True,
+                'redirect_url': reverse('index')  # Cambia 'index' si tu vista principal tiene otro nombre
+            })
+
+        # Crear la venta
+        venta = Venta.objects.create(cliente=request.user, carrito=carrito)
+
+        # Crear los detalles de la venta
+        for item in carrito.items.all():
+            DetalleVenta.objects.create(
+                venta=venta,
+                juego=item.juego,
+                cantidad=item.cantidad,
+                subtotal=item.subtotal()
+            )
+
+        # Actualizar el total
+        venta.actualizar_total()
+
+        # Finalizar el carrito y vaciarlo
+        carrito.estado = 'finalizado'
+        carrito.save()
+        carrito.items.all().delete()
+
+        return JsonResponse({
+            'success': True,
+            'redirect_url': reverse('index')  # Reemplaza 'index' si es necesario
+        })
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
+#**************
+
+@login_required
+def compra_exitosa(request, venta_id):
+    venta = get_object_or_404(Venta, id=venta_id, cliente=request.user)
+    return render(request, 'compra_exitosa', {'venta': venta})
+
+#-----------------------------------
+
+@login_required
+def historial_compras(request):
+     ventas = Venta.objects.filter(cliente=request.user).order_by('-fecha')
+     return render(request, 'historial_compras.html', {'ventas': ventas})
+
+@login_required
+def detalle_venta(request, venta_id):
+    venta = get_object_or_404(Venta, id=venta_id, cliente=request.user)
+    return render(request, 'detalle_venta.html', {'venta': venta})
+
+
+
+
+
+
+# API rest ------------------------------------------
+@api_view(['POST'])
+@login_required
+def procesar_pago_api(request):
+    if request.method == 'POST':
+        # Validar los datos recibidos en la API
+        serializer = VentaSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            # Crear la venta
+            venta = serializer.save(cliente=request.user)
+            
+            # Actualizar el total de la venta
+            venta.actualizar_total()
+
+            # Limpiar el carrito después de la compra
+            request.session['carrito'] = []
+
+            return Response({
+                'message': 'Pago procesado con éxito',
+                'venta_id': venta.id,
+                'total': venta.total
+            }, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+@api_view(['GET'])
+@login_required
+def historial_compras_api(request):
+    ventas = Venta.objects.filter(cliente=request.user).order_by('-fecha')
+    serializer = VentaSerializer(ventas, many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@login_required
+def detalles_venta_api(request, venta_id):
+    try:
+        venta = Venta.objects.get(id=venta_id, cliente=request.user)
+        detalles = DetalleVenta.objects.filter(venta=venta)
+        serializer = DetalleVentaSerializer(detalles, many=True)
+        return Response(serializer.data)
+    except Venta.DoesNotExist:
+        return Response({'error': 'Venta no encontrada'}, status=status.HTTP_404_NOT_FOUND)
