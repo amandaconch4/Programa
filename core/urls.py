@@ -61,15 +61,16 @@ urlpatterns = [
     #path('api/procesar_pago/', views.procesar_pago_api, name='procesar_pago_api'),
     #path('api/historial_compras/', views.historial_compras_api, name='historial_compras_api'),
     #path('api/detalles_venta/', views.detalles_venta_api, name='detalles_venta_api'),
-    path('historial_compras/', views.historial_compras, name='historial_compras'),
+    path('carrito/agregar/', views.carrito_agregar, name='carrito_agregar'),
     path('carrito/', views.ver_carrito, name='ver_carrito'),
-    path('carrito/agregar/<int:juego_id>/', views.agregar_al_carrito, name='agregar_al_carrito'),
+    path('carrito/agregar/', views.guardar_carrito_items, name='guardar_carrito_items'),
     path('carrito/confirmar/', views.compra_exitosa, name='pago'),
     path('pago/', views.pago, name='pago'),
     path('procesar_pago/', views.procesar_pago, name='procesar_pago'),
     path('compra-exitosa/<int:venta_id>/', views.compra_exitosa, name='compra_exitosa'),
     path('detalle_venta/<int:venta_id>/', views.detalle_venta, name='detalle_venta'),
     path('pago/', views.pago, name='pago'),
+    path('historial_compras/', views.historial_compras, name='historial_compras'),
 
 
 
