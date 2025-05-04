@@ -103,6 +103,17 @@
                 <li><a href="{% url 'carreras' %}"><span>Carreras</span></a></li>
                 <li><a href="{% url 'deportes' %}"><span>Deportes</span></a></li>
                 <li><a href="{% url 'rol' %}"><span>Rol</span></a></li>
+
+                <!-- Categorías Dinámicas -->
+                {% if categorias_dinamicas %}
+                    {% for categoria in categorias_dinamicas %}
+                    <li>
+                        <a href="{% url 'categoria_dinamica' categoria.id %}">
+                            <span>{{ categoria.nombre_categoria }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                {% endif %}
             </ul>
         </aside>
 
@@ -198,6 +209,7 @@
             </div>
         </main>
     </div>
+
     <script src="{% static 'js/search.js' %}"></script>
     <script src="{% static 'js/carrito.js' %}"></script>
 </body>

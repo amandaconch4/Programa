@@ -28,28 +28,47 @@ from django.db.models.deletion import ProtectedError
 def sevengamer(request):
     if request.user.is_authenticated:
         messages.success(request, f'¡Bienvenid@ {request.user.username}!')
-    return render(request, 'index.html')
+    
+    # Muestra las categorías creadas en la base de datos
+    categorias_dinamicas = Categoria.objects.all()
+    
+    return render(request, 'index.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def index(request):
-    return render(request, 'index.html')
+    # Muestra las categorías creadas en la base de datos
+    categorias_dinamicas = Categoria.objects.all()
+    
+    return render(request, 'index.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def terror(request):
-    return render(request, 'terror.html')
+    # Muestra las categorías creadas en la base de datos
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'terror.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def mundoabierto(request):
-    return render(request, 'mundo-abierto.html')
+    # Muestra las categorías creadas en la base de datos
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'mundo-abierto.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def accion(request):
-    return render(request, 'accion.html')
+    # Muestra las categorías creadas en la base de datos
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'accion.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def carreras(request):
-    return render(request, 'carreras.html')
+    # Muestra las categorías creadas en la base de datos
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'carreras.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def deportes(request):
-    return render(request, 'deportes.html')
+    # Muestra las categorías creadas en la base de datos
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'deportes.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def rol(request):
-    return render(request, 'rol.html')
+    # Muestra las categorías creadas en la base de datos
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'rol.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def residentevil(request):
     return render(request, 'resident-evil-village.html')
@@ -645,3 +664,16 @@ def verificar_categoria(request):
     
     existe = Categoria.objects.filter(nombre_categoria=nombre).exists()
     return JsonResponse({'existe': existe})
+
+def categoria_dinamica(request, categoria_id):
+    categoria = get_object_or_404(Categoria, id=categoria_id)
+    juegos = categoria.juegos.all()
+    categorias_dinamicas = Categoria.objects.all()
+    
+    context = {
+        'categoria': categoria,
+        'juegos': juegos,
+        'categorias_dinamicas': categorias_dinamicas
+    }
+    
+    return render(request, 'categoria_dinamica.html', context)

@@ -113,6 +113,7 @@ urlpatterns = [
     path('sevengamer/panel-admin/editar-categoria/<int:categoria_id>/', views.editar_categoria, name='editar_categoria'),
     path('sevengamer/panel-admin/eliminar-categoria/<int:categoria_id>/', views.eliminar_categoria, name='eliminar_categoria'),
     path('verificar-categoria/', views.verificar_categoria, name='verificar_categoria'),
+    path('categoria-dinamica/<int:categoria_id>/', views.categoria_dinamica, name='categoria_dinamica'),
 
 ]
 

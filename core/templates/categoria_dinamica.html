@@ -1,0 +1,108 @@
+<!--Para cargar los archivos estáticos-->
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ categoria.nombre_categoria }} - SEVENGAMER</title>
+    <link rel="icon" href="{% static 'imagenes/control4.png' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+
+<body>
+    <header>
+        <div class="container">
+            <div class="logo-container">
+                <a href="{% url 'sevengamer' %}" class="logo-link">
+                    <p class="logo">SEVENGAMER</p>
+                </a>
+                <p class="slogan">Juegos de un verdadero gamer</p>
+            </div>
+            <nav>
+                {% if user.is_authenticated %}
+                    <a href="{% url 'mi_cuenta' %}" class="nav-link">Mi Cuenta</a>
+                    {% if user.is_superuser or user.is_staff %}
+                        <a href="{% url 'panel_admin' %}" class="nav-link">Panel admin</a>
+                    {% endif %}
+                    <a href="{% url 'logout' %}" class="nav-link">Cerrar Sesión</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="nav-link">Iniciar Sesión</a>
+                {% endif %}
+                <a href="#" class="carrito-icon" id="carritoBtn">
+                    <img src="{% static 'imagenes/carrito-compras.png' %}" alt="Carrito de compras" class="carrito-img">
+                    <span id="contador-carrito">0</span>
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="content-container">
+        <!-- MENÚ LATERAL DE CATEGORÍAS -->
+        <aside class="sidebar">
+            <h2>Categorías</h2>
+            <ul class="categoria-lista">
+                <li><a href="{% url 'sevengamer' %}"><span>Todos</span></a></li>
+                <li><a href="{% url 'terror' %}"><span>Terror</span></a></li>
+                <li><a href="{% url 'mundoabierto' %}"><span>Mundo abierto</span></a></li>
+                <li><a href="{% url 'accion' %}"><span>Acción</span></a></li>
+                <li><a href="{% url 'carreras' %}"><span>Carreras</span></a></li>
+                <li><a href="{% url 'deportes' %}"><span>Deportes</span></a></li>
+                <li><a href="{% url 'rol' %}"><span>Rol</span></a></li>
+                
+                <!-- Categorías Dinámicas -->
+                {% for categoria_sidebar in categorias_dinamicas %}
+                <li>
+                    <a href="{% url 'categoria_dinamica' categoria_sidebar.id %}" 
+                       {% if categoria_sidebar.id == categoria.id %}class="active"{% endif %}>
+                        <span>{{ categoria_sidebar.nombre_categoria }}</span>
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+            <div class="categoria-dinamica-container">
+                <h1>{{ categoria.nombre_categoria }}</h1>
+     
+                <!-- Barra de búsqueda -->
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar juegos de {{ categoria.nombre_categoria }}...">
+                    <button type="button" onclick="buscarJuegos()">🔍</button>
+                </div>
+
+                {% if juegos %}
+                    <div class="juegos-lista">
+                        {% for juego in juegos %}
+                        <div class="juego-card">
+                            <img src="{{ juego.imagen.url }}" alt="{{ juego.nombre }}">
+                            <div class="juego-info">
+                                <h3>{{ juego.nombre }}</h3>
+                                <p class="precio">CLP$ {{ juego.precio }}</p>
+                                <div class="detalles-container">
+                                    <a href="#" class="ver-detalles">Ver Detalles</a>
+                                    <button class="agregar-carrito" onclick="agregarAlCarrito('{{ juego.id }}', '{{ juego.nombre }}', {{ juego.precio }}, '{{ juego.imagen.url }}')">Agregar al carrito</button>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="sin-juegos">
+                        <p>Esta categoría no tiene juegos asociados por el momento.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </main>
+    </div>
+
+    <script src="{% static 'js/search.js' %}"></script>
+    <script src="{% static 'js/carrito.js' %}"></script>
+</body>
+</html>
