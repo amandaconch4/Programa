@@ -21,7 +21,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse 
 from django.db.models.deletion import ProtectedError
-
+import requests
 
 # Create your views here.
 
@@ -677,3 +677,36 @@ def categoria_dinamica(request, categoria_id):
     }
     
     return render(request, 'categoria_dinamica.html', context)
+
+def sevengamer(request):
+    juegos = []
+    noticias = []
+
+    # --- API RAWG ---
+    try:
+        url_juegos = f"https://api.rawg.io/api/games?key={settings.RAWG_API_KEY}&page_size=5"
+        response_juegos = requests.get(url_juegos)
+        if response_juegos.ok:
+            juegos = response_juegos.json().get("results", [])
+            print("✅ Juegos RAWG cargados:", len(juegos))
+        else:
+            print("⚠️ Error RAWG status:", response_juegos.status_code)
+    except Exception as e:
+        print("❌ Error al obtener juegos RAWG:", e)
+
+    # --- API GNEWS ---
+    try:
+        url_noticias = f"https://gnews.io/api/v4/search?q=videojuegos&lang=es&token={settings.GNEWS_API_KEY}"
+        response_noticias = requests.get(url_noticias)
+        if response_noticias.ok:
+            noticias = response_noticias.json().get("articles", [])
+            print("✅ Noticias GNews cargadas:", len(noticias))
+        else:
+            print("⚠️ Error GNews status:", response_noticias.status_code)
+    except Exception as e:
+        print("❌ Error al obtener noticias GNews:", e)
+
+    return render(request, 'index.html', {
+        'juegos': juegos,
+        'noticias': noticias,
+    })
