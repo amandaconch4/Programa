@@ -21,7 +21,7 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse 
 from django.db.models.deletion import ProtectedError
-import requests
+
 
 # Create your views here.
 
@@ -427,17 +427,40 @@ def get_carrito(usuario):
     )
     return carrito
 # Agregar juego al carrito
+
+@csrf_exempt
 @login_required
-def agregar_al_carrito(request, juego_id):
-    juego = get_object_or_404(Juego, id=juego_id)
-    carrito = get_carrito(request.user)
+def carrito_agregar(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            carrito_items = data.get('carrito', [])
 
-    item, creado = CarritoItem.objects.get_or_create(carrito=carrito, juego=juego)
-    if not creado:
-        item.cantidad += 1
-        item.save()
+            if not carrito_items:
+                return JsonResponse({'success': False, 'error': 'Carrito vacío'})
 
-    return redirect('ver_carrito')
+            carrito, _ = Carrito.objects.get_or_create(usuario=request.user, estado='activo')
+            carrito.items.all().delete()  # Limpiar carrito anterior
+
+            for item in carrito_items:
+                juego_id = item.get('id')
+                cantidad = item.get('cantidad', 1)
+
+                try:
+                    juego = Juego.objects.get(id=juego_id)
+                    CarritoItem.objects.create(
+                        carrito=carrito,
+                        juego=juego,
+                        cantidad=cantidad
+                    )
+                except Juego.DoesNotExist:
+                    continue
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+    return JsonResponse({'success': False, 'error': 'Método no permitido'}, status=405)
 
 # Ver el contenido del carrito
 @login_required
@@ -449,6 +472,47 @@ def ver_carrito(request):
         'items': items,
         'total': total
     })
+
+@csrf_exempt
+@login_required
+def guardar_carrito_items(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            print("📦 Datos recibidos:", data)
+
+            carrito_data = data.get('carrito', [])
+            if not carrito_data:
+                return JsonResponse({'error': 'Carrito vacío'}, status=400)
+
+            carrito = get_carrito(request.user)
+
+            for item in carrito_data:
+                print("🎮 Procesando item:", item)
+                juego_id = item.get('id')
+                cantidad = item.get('cantidad', 1)
+
+                juego = Juego.objects.get(id=juego_id)
+                carrito_item, creado = CarritoItem.objects.get_or_create(
+                    carrito=carrito,
+                    juego=juego,
+                    defaults={'cantidad': cantidad}
+                )
+                if not creado:
+                    carrito_item.cantidad += cantidad
+                    carrito_item.save()
+
+            return JsonResponse({'success': True})
+
+        except Exception as e:
+            import traceback
+            print("⛔ ERROR DETECTADO:")
+            traceback.print_exc()
+            print("🔧 Error:", str(e))
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 
 # Vistas para realizar la compra  ********  
 
@@ -677,36 +741,3 @@ def categoria_dinamica(request, categoria_id):
     }
     
     return render(request, 'categoria_dinamica.html', context)
-
-def sevengamer(request):
-    juegos = []
-    noticias = []
-
-    # --- API RAWG ---
-    try:
-        url_juegos = f"https://api.rawg.io/api/games?key={settings.RAWG_API_KEY}&page_size=5"
-        response_juegos = requests.get(url_juegos)
-        if response_juegos.ok:
-            juegos = response_juegos.json().get("results", [])
-            print("✅ Juegos RAWG cargados:", len(juegos))
-        else:
-            print("⚠️ Error RAWG status:", response_juegos.status_code)
-    except Exception as e:
-        print("❌ Error al obtener juegos RAWG:", e)
-
-    # --- API GNEWS ---
-    try:
-        url_noticias = f"https://gnews.io/api/v4/search?q=videojuegos&lang=es&token={settings.GNEWS_API_KEY}"
-        response_noticias = requests.get(url_noticias)
-        if response_noticias.ok:
-            noticias = response_noticias.json().get("articles", [])
-            print("✅ Noticias GNews cargadas:", len(noticias))
-        else:
-            print("⚠️ Error GNews status:", response_noticias.status_code)
-    except Exception as e:
-        print("❌ Error al obtener noticias GNews:", e)
-
-    return render(request, 'index.html', {
-        'juegos': juegos,
-        'noticias': noticias,
-    })

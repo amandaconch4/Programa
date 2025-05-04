@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'sevengamer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'localhost:1521/XEPDB1',
+        'NAME': 'localhost:1521/orcl',
         'USER': 'C##sevengamer',
         'PASSWORD': 'sevengamer1234',
         'TEST': { 
@@ -150,6 +150,5 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'sevengamer'
 LOGOUT_REDIRECT_URL = 'sevengamer'
 
-RAWG_API_KEY = 'cc71d9eb721b4b28893457ef51469b2d'
-GNEWS_API_KEY = '1ef3e5d608a94a439468dab393e9e651'
+
 

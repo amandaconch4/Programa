@@ -48,6 +48,7 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
     // Obtener el token CSRF desde el formulario oculto
     const csrftoken = document.querySelector('#csrf-form input[name=csrfmiddlewaretoken]').value;
 
+    console.log("Enviando carrito al backend:", carrito);
     // Enviar el carrito al backend para ser guardado en la base de datos
     fetch('/carrito/agregar/', {
         method: 'POST',
