@@ -87,13 +87,17 @@
     </div>
 
     
+    <!-- Modal del Carrito -->
+    <form id="csrf-form" style="display: none;">
+        {% csrf_token %}
+    </form>
     <div class="carrito-modal" id="carritoModal">
         <div class="carrito-header">
             <h2>Carrito de Compras</h2>
             <button class="cerrar-carrito" onclick="cerrarCarrito()">&times;</button>
         </div>
         <div class="carrito-items" id="carritoItems">
-           
+            <!-- Los items del carrito se agregarán aquí dinámicamente -->
         </div>
         <div class="carrito-total">
             <div class="total-row">
@@ -108,9 +112,9 @@
                 <span>Total:</span>
                 <span id="total">CLP$ 0</span>
             </div>
-            <button class="checkout-btn" onclick="procederPago()">Proceder al Pago</button>
+            <button class="checkout-btn" onclick="window.location.href='{% url 'pago' %}'">Proceder al Pago</button>
         </div>
-        
+        <!-- Define la URL de pago -->
         <script>
             const pagoUrl = "{% url 'pago' %}";
         </script>

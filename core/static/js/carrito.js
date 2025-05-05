@@ -24,7 +24,7 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
     if (juegoExistente) {
         // Si el juego existe, incrementar la cantidad
         juegoExistente.cantidad += 1;
-        } else {
+    } else {
         // Si el juego no existe, agregarlo al carrito
         carrito.push({
             id: id,
@@ -32,8 +32,8 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
             precio: precio,
             imagen: imagen,
             cantidad: 1
-    });
-}
+        });
+    }
     
     // Guardar el carrito actualizado en localStorage
     localStorage.setItem('carrito', JSON.stringify(carrito));
@@ -43,20 +43,27 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
     // Actualizar el contador del carrito
     actualizarContadorCarrito();
     
-  
     // Mostrar mensaje de éxito
     mostrarMensajeExito();
 
     // Obtener el token CSRF desde el formulario oculto
     const csrftoken = document.querySelector('#csrf-form input[name=csrfmiddlewaretoken]').value;
 
-    console.log("Enviando carrito al backend:", carrito);
+    // Mapear el carrito para enviar solo los datos necesarios
+    const carritoData = carrito.map(item => ({
+        id: item.id,
+        nombre: item.nombre,
+        precio: item.precio,
+        cantidad: item.cantidad
+    }));
+
+    console.log("Enviando carrito al backend:", carritoData);
     // Enviar el carrito al backend para ser guardado en la base de datos
     fetch('/carrito/agregar/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
-            'X-CSRFToken': csrftoken  // Usa la variable que ya definiste
+            'X-CSRFToken': csrftoken
         },
         body: JSON.stringify({ carrito: carritoData }) // Enviar todo el carrito al backend
     })
@@ -68,16 +75,14 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
     })
     .then(data => {
         if (data.success) {
-            alert('Producto agregado');
+            console.log('Producto agregado correctamente');
         } else {
-            alert('Error al agregar al carrito');
+            console.error('Error al agregar al carrito');
         }
     })
-    
-.catch(error => {
-    console.error('Error:', error);
-    alert('Hubo un problema procesando el pago');
-});
+    .catch(error => {
+        console.error('Error:', error);
+    });
     
     // Actualizar el contenido del carrito si está abierto
     const modal = document.getElementById('carritoModal');
@@ -104,7 +109,6 @@ function actualizarContadorCarrito() {
 
 // Mostrar mensaje de éxito
 function mostrarMensajeExito() {
-    
     // Crear el elemento del mensaje
     const mensaje = document.createElement('div');
     mensaje.className = 'mensaje-exito';
@@ -224,6 +228,8 @@ function procederPago() {
 
     console.log("🚀 Enviando a procesar pago:", carrito);
 
+    // Obtener el token CSRF
+    const csrftoken = document.querySelector('#csrf-form input[name=csrfmiddlewaretoken]').value;
 
      // Enviar el carrito al backend
      fetch('/procesar_pago/', {

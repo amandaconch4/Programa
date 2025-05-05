@@ -43,6 +43,9 @@
     </header>
 
     <!-- Modal del Carrito -->
+    <form id="csrf-form" style="display: none;">
+        {% csrf_token %}
+    </form>
     <div class="carrito-modal" id="carritoModal">
         <div class="carrito-header">
             <h2>Carrito de Compras</h2>
@@ -64,7 +67,7 @@
                 <span>Total:</span>
                 <span id="total">CLP$ 0</span>
             </div>
-            <button class="checkout-btn" onclick="procederPago()">Proceder al Pago</button>
+            <button class="checkout-btn" onclick="window.location.href='{% url 'pago' %}'">Proceder al Pago</button>
         </div>
         <!-- Define la URL de pago -->
         <script>
