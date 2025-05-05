@@ -475,6 +475,40 @@ def ver_carrito(request):
 
 @csrf_exempt
 @login_required
+def carrito_agregar(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            carrito_items = data.get('carrito', [])
+
+            if not carrito_items:
+                return JsonResponse({'success': False, 'error': 'Carrito vacío'})
+
+            carrito, _ = Carrito.objects.get_or_create(usuario=request.user, estado='activo')
+            carrito.items.all().delete()  # Limpiar carrito anterior
+
+            for item in carrito_items:
+                juego_id = item.get('id')
+                cantidad = item.get('cantidad', 1)
+
+                try:
+                    juego = Juego.objects.get(id=juego_id)
+                    CarritoItem.objects.create(
+                        carrito=carrito,
+                        juego=juego,
+                        cantidad=cantidad
+                    )
+                except Juego.DoesNotExist:
+                    continue
+
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+    return JsonResponse({'success': False, 'error': 'Método no permitido'}, status=405)
+
+@csrf_exempt
+@login_required
 def guardar_carrito_items(request):
     if request.method == 'POST':
         try:
@@ -512,6 +546,7 @@ def guardar_carrito_items(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 
 
 # Vistas para realizar la compra  ********  

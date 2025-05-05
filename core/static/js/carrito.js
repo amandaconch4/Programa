@@ -24,7 +24,7 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
     if (juegoExistente) {
         // Si el juego existe, incrementar la cantidad
         juegoExistente.cantidad += 1;
-    } else {
+        } else {
         // Si el juego no existe, agregarlo al carrito
         carrito.push({
             id: id,
@@ -32,8 +32,8 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
             precio: precio,
             imagen: imagen,
             cantidad: 1
-        });
-    }
+    });
+}
     
     // Guardar el carrito actualizado en localStorage
     localStorage.setItem('carrito', JSON.stringify(carrito));
