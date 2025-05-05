@@ -58,14 +58,18 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken  // Usa la variable que ya definiste
         },
-        body: JSON.stringify({
-            carrito: carrito  // Enviar todo el carrito al backend
-        })
+        body: JSON.stringify({ carrito: carritoData }) // Enviar todo el carrito al backend
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error HTTP');
+        }
+        return response.json();
+    })
     .then(data => {
-        if (!data.success) {
-            console.error('Error al agregar al carrito:', data.error || data.message);
+        if (data.success) {
+            alert('Producto agregado');
+        } else {
             alert('Error al agregar al carrito');
         }
     })

@@ -93,7 +93,7 @@
                 <h2>¡Pago Exitoso!</h2>
             </div>
             <p>Tu pago ha sido procesado correctamente.</p>
-             <button class="confirm-btn" onclick="volverAlInicio()">Volver al inicio</button>
+            <button style="cursor: pointer;" onclick="volverAlInicio()" class="btn">Volver al inicio</button>
         </div>
                 <!-- Define la URL de index -->
         <script>
@@ -102,5 +102,10 @@
     </div>
 
     <script src="{% static 'js/pago.js' %}"></script>
+    <script>
+        function volverAlInicio() {
+            window.location.href = "/";
+        }
+    </script>
 </body>
 </html>

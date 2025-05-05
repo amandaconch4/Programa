@@ -78,12 +78,23 @@
             <h2>Categorías</h2>
             <ul class="categoria-lista">
                 <li><a href="{% url 'sevengamer' %}"><span>Todos</span></a></li>
-                <li><a href="{% url 'terror' %}" class="active"><span>Terror</span></a></li>
+                <li><a href="{% url 'terror' %}"><span>Terror</span></a></li>
                 <li><a href="{% url 'mundoabierto' %}"><span>Mundo abierto</span></a></li>
-                <li><a href="{% url 'accion' %}"><span>Acción</span></a></li>
+                <li><a href="{% url 'accion' %}" class="active"><span>Acción</span></a></li>
                 <li><a href="{% url 'carreras' %}"><span>Carreras</span></a></li>
                 <li><a href="{% url 'deportes' %}"><span>Deportes</span></a></li>
                 <li><a href="{% url 'rol' %}"><span>Rol</span></a></li>
+
+                <!-- Categorías Dinámicas -->
+                {% if categorias_dinamicas %}
+                    {% for categoria in categorias_dinamicas %}
+                    <li>
+                        <a href="{% url 'categoria_dinamica' categoria.id %}">
+                            <span>{{ categoria.nombre_categoria }}</span>
+                        </a>
+                    </li>
+                    {% endfor %}
+                {% endif %}
             </ul>
         </aside>
 

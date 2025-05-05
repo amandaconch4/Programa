@@ -3,7 +3,6 @@ document.addEventListener('DOMContentLoaded', () => {
     configurarFormularioPago();
 });
 
-// Función para mostrar números en formato de pesos chilenos
 function formatearPrecio(precio) {
     return precio.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 }
@@ -34,12 +33,10 @@ function cargarResumenCarrito() {
         cartSummaryElement.appendChild(itemElement);
     });
 
-
     totalAmountElement.textContent = `Total a pagar: $${formatearPrecio(total)}`;
 }
 
-// Función para crear y manejar mensajes de error
-function crearMensajeError(input, mensaje) {
+function crearMensajeError(input) {
     let errorDiv = input.parentNode.querySelector('.error-message');
     if (!errorDiv) {
         errorDiv = document.createElement('div');
@@ -52,215 +49,126 @@ function crearMensajeError(input, mensaje) {
 function configurarFormularioPago() {
     const form = document.getElementById('paymentForm');
     
-    // Validación tipo de tarjeta
     const cardTypeSelect = document.getElementById('cardType');
     const cardTypeError = crearMensajeError(cardTypeSelect);
-    
-    cardTypeSelect.addEventListener('change', () => {
-        if (cardTypeSelect.value) {
-            cardTypeError.textContent = '';
-        }
-    });
-
-    // Validación nombre en la tarjeta
     const cardNameInput = document.getElementById('cardName');
     const cardNameError = crearMensajeError(cardNameInput);
-    
-    cardNameInput.addEventListener('input', () => {
-        if (cardNameInput.value.trim()) {
-            cardNameError.textContent = '';
-        }
-    });
-
-    // Formato y validación número de tarjeta
     const cardNumberInput = document.getElementById('cardNumber');
     const cardNumberError = crearMensajeError(cardNumberInput);
-
-    cardNumberInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        value = value.slice(0, 16);
-        
-        let formattedValue = '';
-        for (let i = 0; i < value.length; i++) {
-            if (i > 0 && i % 4 === 0) {
-                formattedValue += ' ';
-            }
-            formattedValue += value[i];
-        }
-        
-        e.target.value = formattedValue;
-
-        if (value.length > 0 && value.length < 16) {
-            cardNumberError.textContent = 'El número de tarjeta debe tener 16 dígitos';
-        } else {
-            cardNumberError.textContent = '';
-        }
-    });
-
-    // Formato y validación fecha de vencimiento
     const expiryDateInput = document.getElementById('expiryDate');
     const expiryError = crearMensajeError(expiryDateInput);
-
-    expiryDateInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length >= 2) {
-            value = value.slice(0, 2) + '/' + value.slice(2, 4);
-        }
-        e.target.value = value;
-
-        if (value.length === 5) {
-            const [month, year] = value.split('/');
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear() % 100;
-            const currentMonth = currentDate.getMonth() + 1;
-            const maxYear = (currentDate.getFullYear() + 10) % 100;
-
-            const inputMonth = parseInt(month);
-            const inputYear = parseInt(year);
-
-            if (inputMonth < 1 || inputMonth > 12) {
-                expiryError.textContent = 'Mes inválido';
-            } else if (inputYear < currentYear || (inputYear === currentYear && inputMonth < currentMonth)) {
-                expiryError.textContent = 'La tarjeta está vencida';
-            } else if (inputYear > maxYear) {
-                expiryError.textContent = 'La fecha no puede exceder 10 años';
-            } else {
-                expiryError.textContent = '';
-            }
-        }
-    });
-
-    // Formato y validación CVV
     const cvvInput = document.getElementById('cvv');
     const cvvError = crearMensajeError(cvvInput);
 
-    cvvInput.addEventListener('input', (e) => {
-        let value = e.target.value.replace(/\D/g, '').slice(0, 3);
+    cardTypeSelect.addEventListener('change', () => {
+        if (cardTypeSelect.value) cardTypeError.textContent = '';
+    });
+
+    cardNameInput.addEventListener('input', () => {
+        if (cardNameInput.value.trim()) cardNameError.textContent = '';
+    });
+
+    cardNumberInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '').slice(0, 16);
+        e.target.value = value.replace(/(.{4})/g, '$1 ').trim();
+        cardNumberError.textContent = value.length === 16 ? '' : 'Debe tener 16 dígitos';
+    });
+
+    expiryDateInput.addEventListener('input', (e) => {
+        let value = e.target.value.replace(/\D/g, '').slice(0, 4);
+        if (value.length >= 2) value = value.slice(0, 2) + '/' + value.slice(2);
         e.target.value = value;
-        
-        if (value.length > 0 && value.length < 3) {
-            cvvError.textContent = 'El CVV debe tener 3 dígitos';
-        } else {
-            cvvError.textContent = '';
+
+        expiryError.textContent = '';
+        if (value.length === 5) {
+            const [m, y] = value.split('/');
+            const month = parseInt(m), year = parseInt(y);
+            const date = new Date();
+            const nowYear = date.getFullYear() % 100, nowMonth = date.getMonth() + 1;
+
+            if (month < 1 || month > 12) expiryError.textContent = 'Mes inválido';
+            else if (year < nowYear || (year === nowYear && month < nowMonth)) expiryError.textContent = 'Tarjeta vencida';
         }
     });
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
+    cvvInput.addEventListener('input', (e) => {
+        const value = e.target.value.replace(/\D/g, '').slice(0, 3);
+        e.target.value = value;
+        cvvError.textContent = value.length === 3 ? '' : 'Debe tener 3 dígitos';
+    });
+
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        const cardType = cardTypeSelect.value;
+        const cardName = cardNameInput.value.trim();
+        const cardNumber = cardNumberInput.value.replace(/\s/g, '');
+        const expiryDate = expiryDateInput.value;
+        const cvv = cvvInput.value;
+        const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
+
         let hasErrors = false;
 
-        // Validar tipo de tarjeta
-        if (!cardTypeSelect.value) {
-            cardTypeError.textContent = 'Por favor seleccione un tipo de tarjeta';
+        if (!cardType) {
+            cardTypeError.textContent = 'Selecciona tipo de tarjeta';
             hasErrors = true;
         }
-
-        // Validar nombre en la tarjeta
-        if (!cardNameInput.value.trim()) {
-            cardNameError.textContent = 'Por favor ingrese el nombre en la tarjeta';
+        if (!cardName) {
+            cardNameError.textContent = 'Nombre obligatorio';
             hasErrors = true;
         }
-
-        // Validar número de tarjeta
-        const cardNumber = cardNumberInput.value.replace(/\s/g, '');
         if (cardNumber.length !== 16) {
-            cardNumberError.textContent = 'Por favor ingrese un número de tarjeta';
+            cardNumberError.textContent = 'Número inválido';
+            hasErrors = true;
+        }
+        if (expiryDate.length !== 5 || !expiryDate.includes('/')) {
+            expiryError.textContent = 'Fecha inválida';
+            hasErrors = true;
+        }
+        if (cvv.length !== 3) {
+            cvvError.textContent = 'CVV inválido';
             hasErrors = true;
         }
 
-        // Validar fecha de vencimiento
-        if (!expiryDateInput.value || expiryDateInput.value.length !== 5) {
-            expiryError.textContent = 'Por favor ingrese una fecha de vencimiento';
-            hasErrors = true;
-        } else {
-            const [month, year] = expiryDateInput.value.split('/');
-            const currentDate = new Date();
-            const currentYear = currentDate.getFullYear() % 100;
-            const currentMonth = currentDate.getMonth() + 1;
-            const maxYear = (currentDate.getFullYear() + 10) % 100;
+        if (hasErrors) return;
 
-            const inputMonth = parseInt(month);
-            const inputYear = parseInt(year);
-
-            if (inputMonth < 1 || inputMonth > 12) {
-                expiryError.textContent = 'Mes inválido';
-                hasErrors = true;
-            } else if (inputYear < currentYear || (inputYear === currentYear && inputMonth < currentMonth)) {
-                expiryError.textContent = 'La tarjeta está vencida';
-                hasErrors = true;
-            } else if (inputYear > maxYear) {
-                expiryError.textContent = 'La fecha no puede exceder 10 años';
-                hasErrors = true;
-            }
-        }
-
-        // Validar CVV
-        if (!cvvInput.value || cvvInput.value.length !== 3) {
-            cvvError.textContent = 'Por favor ingrese un CVV';
-            hasErrors = true;
-        }
-
-        if (!hasErrors) {
-             // Limpiar el carrito
-            localStorage.setItem('carrito', JSON.stringify([]));
-            
-            // Mostrar el modal de éxito
-            const modal = document.getElementById('successModal');
-            modal.classList.add('show');
-
-        }
-
-    form.submit();
-    });
-}
-
-// Función para volver al inicio
-function volverAlInicio() {
-    window.location.href = indexUrl;
-}
-
-document.getElementById("paymentForm").addEventListener("submit", function (event) {
-    event.preventDefault();
-
-    const cardType = document.getElementById("cardType").value;
-    const cardName = document.getElementById("cardName").value;
-    const cardNumber = document.getElementById("cardNumber").value;
-    const expiryDate = document.getElementById("expiryDate").value;
-    const cvv = document.getElementById("cvv").value;
-
-    const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-
-    if (!cardType || !cardName || !cardNumber || !expiryDate || !cvv) {
-        alert("Por favor completa todos los campos del formulario.");
-        return;
-    }
-
-    fetch("/procesar_pago/", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
-        },
-        body: JSON.stringify({
-            cardType,
-            cardName,
-            cardNumber,
-            expiryDate,
-            cvv,
-            carrito  // ahora también se envía el contenido del carrito
+        fetch("/procesar_pago/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": document.querySelector('[name=csrfmiddlewaretoken]').value
+            },
+            body: JSON.stringify({
+                cardType,
+                cardName,
+                cardNumber,
+                expiryDate,
+                cvv,
+                carrito
+            })
         })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            localStorage.removeItem("carrito");  // Limpia el carrito en localStorage
-            window.location.href = data.redirect_url;
-        } else {
-            alert("Error: " + (data.error || "No se pudo procesar el pago."));
-        }
-    })
-    .catch(error => {
-        console.error("Error en fetch:", error);
-        alert("Ocurrió un error inesperado.");
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                localStorage.removeItem("carrito");
+            
+                // Mostrar modal si existe
+                const modal = document.getElementById('successModal');
+                if (modal) {
+                    modal.classList.add('show');
+                } else {
+                    // O redirigir si no hay modal
+                    window.location.href = data.redirect_url;
+                }
+            }            
+        })
+        .catch(error => {
+            console.error("Error en fetch:", error);
+            alert("Ocurrió un error inesperado.");
+        });
     });
-});
+}
+
+function volverAlInicio() {
+    window.location.href = "/";
+}

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .models import PerfilUsuario, Usuario, Venta, Juego, DetalleVenta,Carrito, CarritoItem, Categoria
+from .models import PerfilUsuario, Usuario, Venta, Juego, DetalleVenta, Carrito, CarritoItem, Categoria
 from django.contrib.auth.hashers import check_password 
 from django.core.mail import send_mail  
 from django.conf import settings 
@@ -22,6 +22,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse 
 from django.db.models.deletion import ProtectedError
 import requests
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -53,13 +54,29 @@ def sevengamer(request):
     try:
         url_noticias = f"https://gnews.io/api/v4/search?q=videojuegos&lang=es&token={settings.GNEWS_API_KEY}"
         response_noticias = requests.get(url_noticias)
-        if response_noticias.ok:
-            noticias = response_noticias.json().get("articles", [])
-            print("✅ Noticias GNews cargadas:", len(noticias))
+
+        if response_noticias.status_code == 403:
+            print("⚠️ Has alcanzado el límite diario gratuito de GNews.")
+            noticias_api = [{
+                'title': 'Límite alcanzado',
+                'description': 'Has usado todas las consultas gratuitas del día para las noticias. Intenta mañana.',
+                'url': '#',
+                'image': '',
+                'publishedAt': ''
+            }]
+        elif response_noticias.ok:
+            noticias_api = response_noticias.json().get("articles", [])
         else:
             print("⚠️ Error GNews status:", response_noticias.status_code)
     except Exception as e:
         print("❌ Error al obtener noticias GNews:", e)
+        noticias_api = [{
+            'title': 'Error de conexión',
+            'description': 'No se pudo conectar con la API de noticias.',
+            'url': '#',
+            'image': '',
+            'publishedAt': ''
+        }]
 
     return render(request, 'index.html', {
         'categorias_dinamicas': categorias_dinamicas,
@@ -68,91 +85,101 @@ def sevengamer(request):
     })
 
 def index(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     
     return render(request, 'index.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def terror(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'terror.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def mundoabierto(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'mundo-abierto.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def accion(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'accion.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def carreras(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'carreras.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def deportes(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'deportes.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def rol(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'rol.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def residentevil(request):
-    return render(request, 'resident-evil-village.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'resident-evil-village.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def outlast(request):
-    return render(request, 'outlast.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'outlast.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def deadspace(request):
-    return render(request, 'dead-space.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'dead-space.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def witcher3(request):
-    return render(request, 'witcher3.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'witcher3.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def gta5(request):
-    return render(request, 'gta5.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'gta5.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def zelda(request):
-    return render(request, 'zelda.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'zelda.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def assassinscreed(request):
-    return render(request, 'assassins-creed.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'assassins-creed.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def payday3(request):
-    return render(request, 'payday3.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'payday3.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def forzahorizon5(request):
-    return render(request, 'forza-horizon5.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'forza-horizon5.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def needforspeed(request):
-    return render(request, 'nfs-heat.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'nfs-heat.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def granturismo7(request):
-    return render(request, 'gran-turismo7.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'gran-turismo7.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def fifa24(request):
-    return render(request, 'fifa24.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'fifa24.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def nba2k24(request):
-    return render(request, 'nba2k24.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'nba2k24.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def efootball(request):
-    return render(request, 'efootball2024.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'efootball2024.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def finalfantasy(request):
-    return render(request, 'final-fantasy.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'final-fantasy.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def baldursgate3(request):
-    return render(request, 'baldurs-gate3.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'baldurs-gate3.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def persona5(request):
-    return render(request, 'persona5.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'persona5.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def admin(request):
     return render(request, 'admin.html')
@@ -486,7 +513,7 @@ def carrito_agregar(request):
                 cantidad = item.get('cantidad', 1)
 
                 try:
-                    juego = Juego.objects.get(id=juego_id)
+                    juego = Juego.objects.get(codigo=item['id'])
                     CarritoItem.objects.create(
                         carrito=carrito,
                         juego=juego,
@@ -496,6 +523,7 @@ def carrito_agregar(request):
                     continue
 
             return JsonResponse({'success': True})
+        
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
@@ -531,7 +559,7 @@ def carrito_agregar(request):
                 cantidad = item.get('cantidad', 1)
 
                 try:
-                    juego = Juego.objects.get(id=juego_id)
+                    juego = Juego.objects.get(codigo=item['id'])
                     CarritoItem.objects.create(
                         carrito=carrito,
                         juego=juego,
@@ -565,7 +593,7 @@ def guardar_carrito_items(request):
                 juego_id = item.get('id')
                 cantidad = item.get('cantidad', 1)
 
-                juego = Juego.objects.get(id=juego_id)
+                juego = Juego.objects.get(codigo=item['id'])
                 carrito_item, creado = CarritoItem.objects.get_or_create(
                     carrito=carrito,
                     juego=juego,
@@ -593,61 +621,67 @@ def guardar_carrito_items(request):
 from django.http import HttpResponseBadRequest
 
 @csrf_exempt
+@login_required
 def procesar_pago(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             data = json.loads(request.body)
-        except json.JSONDecodeError:
-            return HttpResponseBadRequest("Datos JSON inválidos.")
+            carrito = data.get("carrito", [])
+            if not carrito:
+                return JsonResponse({"success": False, "error": "El carrito está vacío."})
 
-        # Capturar los datos del cuerpo JSON
-        card_type = data.get('cardType')
-        card_name = data.get('cardName')
-        card_number = data.get('cardNumber')
-        expiry_date = data.get('expiryDate')
-        cvv = data.get('cvv')
-
-        # Validar los datos del formulario
-        if not all([card_type, card_name, card_number, expiry_date, cvv]):
-            return HttpResponseBadRequest("Faltan algunos campos obligatorios.")
-
-        # Buscar el carrito activo del usuario
-        carrito = Carrito.objects.filter(usuario=request.user, estado='activo').first()
-        if not carrito:
-            # Si no hay carrito, redirigir igual (por ejemplo, por segunda compra)
-            return JsonResponse({
-                'success': True,
-                'redirect_url': reverse('index')  # Cambia 'index' si tu vista principal tiene otro nombre
-            })
-
-        # Crear la venta
-        venta = Venta.objects.create(cliente=request.user, carrito=carrito)
-
-        # Crear los detalles de la venta
-        for item in carrito.items.all():
-            DetalleVenta.objects.create(
-                venta=venta,
-                juego=item.juego,
-                cantidad=item.cantidad,
-                subtotal=item.subtotal()
+            # Crear el carrito
+            carrito_obj = Carrito.objects.create(
+                usuario=request.user, 
+                estado='finalizado'
             )
 
-        # Actualizar el total
-        venta.actualizar_total()
+            # Agregar los items al carrito
+            for item in carrito:
+                juego = Juego.objects.get(nombre_juego=item.get("nombre"))
+                cantidad = item.get("cantidad", 1)
+                CarritoItem.objects.create(
+                    carrito=carrito_obj,
+                    juego=juego,
+                    cantidad=cantidad
+                )
 
-        # Finalizar el carrito y vaciarlo
-        carrito.items.all().delete()
-        carrito.estado = 'finalizado'
-        carrito.save()
-        
-        Carrito.objects.create(usuario=request.user, estado='activo')
+            # Crear la venta y asociar el carrito
+            venta = Venta.objects.create(
+                cliente=request.user,
+                carrito=carrito_obj,
+                total=0  # Se actualizará después
+            )
 
-        return JsonResponse({
-            'success': True,
-            'redirect_url': reverse('index')  # Reemplaza 'index' si es necesario
-        })
+            # Crear los detalles de la venta y calcular el total
+            total = 0
+            for item in carrito:
+                juego = Juego.objects.get(nombre_juego=item.get("nombre"))
+                cantidad = item.get("cantidad", 1)
+                precio = item.get("precio", 0)
+                subtotal = precio * cantidad
+                total += subtotal
 
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
+                DetalleVenta.objects.create(
+                    venta=venta,
+                    juego=juego,
+                    cantidad=cantidad,
+                    subtotal=subtotal
+                )
+
+            venta.total = total
+            venta.save()
+
+            return JsonResponse({
+                "success": True,
+                "venta_id": venta.id,
+                "redirect_url": f"/compra-exitosa/{venta.id}/"
+            })
+
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
+
+    return JsonResponse({"success": False, "error": "Método no permitido."})
 
 #**************
 
