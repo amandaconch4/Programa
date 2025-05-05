@@ -199,7 +199,10 @@ def registro(request):
         if usuario_form.is_valid():
             usuario = usuario_form.save(commit=False)
             # Asigna el perfil de usuario normal (rol='usuario')
-            perfil_usuario = PerfilUsuario.objects.get(rol='usuario')
+            perfil_usuario = PerfilUsuario.objects.filter(rol='usuario').first()
+            if perfil_usuario is None:
+                perfil_usuario = PerfilUsuario.objects.create(rol='usuario')
+
             usuario.perfil = perfil_usuario
             usuario.save()
             messages.success(request, "¡Registro exitoso! Ya puedes iniciar sesión.")
