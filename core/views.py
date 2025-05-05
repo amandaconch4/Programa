@@ -287,9 +287,13 @@ def panel_admin(request):
     # SOLO clientes (perfil_id = 1)
     clientes = Usuario.objects.filter(perfil_id=1)
 
+    # Categorias
+    categorias = Categoria.objects.all()
+
     return render(request, 'panel-admin.html', {
         'usuarios': usuarios,
         'clientes': clientes,
+        'categorias': categorias
     })
 
 @login_required
