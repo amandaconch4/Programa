@@ -114,13 +114,13 @@
                     <div class="juegos-lista">
                         {% for juego in juegos %}
                         <div class="juego-card">
-                            <img src="{{ juego.imagen.url }}" alt="{{ juego.nombre }}">
+                            <img src="{{ juego.imagen_url }}" alt="{{ juego.nombre_juego }}">
                             <div class="juego-info">
-                                <h3>{{ juego.nombre }}</h3>
+                                <h3>{{ juego.nombre_juego }}</h3>
                                 <p class="precio">CLP$ {{ juego.precio }}</p>
                                 <div class="detalles-container">
                                     <a href="#" class="ver-detalles">Ver Detalles</a>
-                                    <button class="agregar-carrito" onclick="agregarAlCarrito('{{ juego.id }}', '{{ juego.nombre }}', {{ juego.precio }}, '{{ juego.imagen.url }}')">Agregar al carrito</button>
+                                    <button class="agregar-carrito" onclick="agregarAlCarrito('{{ juego.id }}', '{{ juego.nombre_juego }}', {{ juego.precio }}, '{{ juego.imagen_url }}')">Agregar al carrito</button>
                                 </div>
                             </div>
                         </div>
