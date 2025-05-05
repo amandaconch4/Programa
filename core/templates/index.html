@@ -208,6 +208,42 @@
                 </div>               
 
             </div>
+
+            <h2>🎮 Juegos Populares desde RAWG</h2>
+            <div class="juegos-api">
+                <div class="juegos-api">
+                    {% for j in juegos %}
+                      <div class="juego-card">
+                          <img src="{{ j.background_image }}" alt="{{ j.name }}">
+                          <div class="juego-info">
+                              <h3>{{ j.name }}</h3>
+                              <p class="precio">⭐ Rating: {{ j.rating }}</p>
+                              <div class="detalles-container">
+                                  <a href="{{ j.website|default:'#' }}" class="ver-detalles" target="_blank">Ver Detalles</a>
+                              </div>
+                          </div>
+                      </div>
+                    {% empty %}
+                      <p>No se pudieron cargar juegos desde RAWG 😢</p>
+                    {% endfor %}
+                  </div>
+
+        <h2>📰 Noticias recientes de videojuegos</h2>
+            <div class="noticias-api">
+                {% for n in noticias|slice:":3" %}
+                    <div class="noticia-card">
+                        <h4><a href="{{ n.url }}" target="_blank">{{ n.title }}</a></h4>
+
+                        {% if n.image %}
+                            <img src="{{ n.image }}" alt="Imagen de {{ n.title }}" class="noticia-img">
+                        {% endif %}
+
+                        <p>{{ n.description }}</p>
+                        <small>{{ n.publishedAt|slice:":10" }}</small>
+                    </div>
+                {% endfor %}
+            </div>
+
         </main>
     </div>
 

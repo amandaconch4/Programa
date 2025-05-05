@@ -38,6 +38,8 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
     // Guardar el carrito actualizado en localStorage
     localStorage.setItem('carrito', JSON.stringify(carrito));
     
+    console.log("🛒 Carrito actualizado:", carrito);
+
     // Actualizar el contador del carrito
     actualizarContadorCarrito();
     
@@ -62,14 +64,12 @@ function agregarAlCarrito(id, nombre, precio, imagen) {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.success) {
-           // Si el pago fue exitoso, redirigir a la página de compra exitosa
-        window.location.href = data.redirect_url;  // Redirige al usuario a la página de éxito
-    } else {
-        console.error('Error al procesar el pago');
-        alert('Error al procesar el pago');
-    }
-})
+        if (!data.success) {
+            console.error('Error al agregar al carrito:', data.error || data.message);
+            alert('Error al agregar al carrito');
+        }
+    })
+    
 .catch(error => {
     console.error('Error:', error);
     alert('Hubo un problema procesando el pago');
@@ -218,7 +218,9 @@ function procederPago() {
         { id: 3, cantidad: 1 }
     ];
 
-    
+    console.log("🚀 Enviando a procesar pago:", carrito);
+
+
      // Enviar el carrito al backend
      fetch('/procesar_pago/', {
         method: 'POST',
@@ -226,20 +228,24 @@ function procederPago() {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken
         },
-        body: JSON.stringify(carrito)
+        body: JSON.stringify({ carrito })
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data); // Verifica la respuesta del servidor
-        if (data.message) {
-            alert(data.message); // Muestra el mensaje de éxito
+    .then(response => response.text())
+    .then(text => {
+        console.log("Respuesta cruda del backend:", text);
+        try {
+            const data = JSON.parse(text);
+            if (data.success) {
+                window.location.href = data.redirect_url;
+            } else {
+                alert('Error al procesar el pago: ' + data.message);
+            }
+        } catch (e) {
+            console.error('No se pudo parsear JSON:', e);
+            alert('Respuesta inválida del servidor.');
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al procesar el carrito.');
     });
-}
+}  
 
 // Inicializar el contador del carrito cuando se carga la página
 document.addEventListener('DOMContentLoaded', () => {
