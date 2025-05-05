@@ -84,91 +84,101 @@ def sevengamer(request):
     })
 
 def index(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     
     return render(request, 'index.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def terror(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'terror.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def mundoabierto(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'mundo-abierto.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def accion(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'accion.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def carreras(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'carreras.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def deportes(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'deportes.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def rol(request):
-    # Muestra las categorías creadas en la base de datos
     categorias_dinamicas = Categoria.objects.all()
     return render(request, 'rol.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def residentevil(request):
-    return render(request, 'resident-evil-village.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'resident-evil-village.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def outlast(request):
-    return render(request, 'outlast.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'outlast.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def deadspace(request):
-    return render(request, 'dead-space.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'dead-space.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def witcher3(request):
-    return render(request, 'witcher3.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'witcher3.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def gta5(request):
-    return render(request, 'gta5.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'gta5.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def zelda(request):
-    return render(request, 'zelda.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'zelda.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def assassinscreed(request):
-    return render(request, 'assassins-creed.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'assassins-creed.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def payday3(request):
-    return render(request, 'payday3.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'payday3.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def forzahorizon5(request):
-    return render(request, 'forza-horizon5.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'forza-horizon5.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def needforspeed(request):
-    return render(request, 'nfs-heat.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'nfs-heat.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def granturismo7(request):
-    return render(request, 'gran-turismo7.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'gran-turismo7.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def fifa24(request):
-    return render(request, 'fifa24.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'fifa24.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def nba2k24(request):
-    return render(request, 'nba2k24.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'nba2k24.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def efootball(request):
-    return render(request, 'efootball2024.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'efootball2024.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def finalfantasy(request):
-    return render(request, 'final-fantasy.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'final-fantasy.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def baldursgate3(request):
-    return render(request, 'baldurs-gate3.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'baldurs-gate3.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def persona5(request):
-    return render(request, 'persona5.html')
+    categorias_dinamicas = Categoria.objects.all()
+    return render(request, 'persona5.html', {'categorias_dinamicas': categorias_dinamicas})
 
 def admin(request):
     return render(request, 'admin.html')
