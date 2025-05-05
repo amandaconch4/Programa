@@ -593,7 +593,6 @@ def guardar_carrito_items(request):
 from django.http import HttpResponseBadRequest
 
 @csrf_exempt
-@login_required
 def procesar_pago(request):
     if request.method == 'POST':
         try:
@@ -637,9 +636,11 @@ def procesar_pago(request):
         venta.actualizar_total()
 
         # Finalizar el carrito y vaciarlo
+        carrito.items.all().delete()
         carrito.estado = 'finalizado'
         carrito.save()
-        carrito.items.all().delete()
+        
+        Carrito.objects.create(usuario=request.user, estado='activo')
 
         return JsonResponse({
             'success': True,
