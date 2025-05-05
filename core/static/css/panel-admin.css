@@ -495,11 +495,6 @@ body {
     margin-top: 5px;
 }
 
-
-#usuarios-section .data-table td {
-    white-space: nowrap;
-}
-
 #usuarios-section,
 #clientes-section {
     width: 98vw;
@@ -515,6 +510,7 @@ body {
     height: auto;
     overflow-x: auto;
 }
+
 #usuarios-section .data-table,
 #clientes-section .data-table {
     width: 100%;
@@ -532,6 +528,36 @@ body {
 #clientes-section .data-table th,
 #clientes-section .data-table td {
     padding: 10px 8px;
+}
+
+#categorias-section {
+    width: 650px;
+    height: auto;
+    min-height: 400px;
+    padding: 20px;
+}
+
+#categorias-section .data-table {
+    margin-top: 20px;
+    width: 100%;
+}
+
+#categorias-section .data-table th,
+#categorias-section .data-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+#categorias-section .data-table th {
+    white-space: nowrap;
+    background-color: var(--admin-primary);
+    color: white;
+    font-weight: bold;
+}
+
+#categorias-section .data-table tr:hover {
+    background-color: #444;
 }
 
 .action-btn {
