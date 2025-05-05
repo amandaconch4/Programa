@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'sevengamer.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.oracle',
-        'NAME': 'localhost:1521/XEPDB1',
+        'NAME': 'localhost:1521/orcl',
         'USER': 'C##sevengamer',
         'PASSWORD': 'sevengamer1234',
         'TEST': { 

@@ -1,56 +1,67 @@
-<!--Para cargar los archivos estáticos-->
 {% load static %}
 
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pago - SEVENGAMER</title>
+    <title>Mi Cuenta - SEVENGAMER</title>
     <link rel="icon" href="{% static 'imagenes/control4.png' %}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
-    <link rel="stylesheet" href="{% static 'css/pago.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mi_cuenta.css' %}">
 </head>
 <body>
-<div class="container mt-5">
-    <h2 class="mb-4">Historial de Compras</h2>
 
-    {% if ventas %}
+            <header class="bg-dark text-white py-3">
+                <div class="container d-flex justify-content-between align-items-center">
+                    <div class="logo-container">
+                        <a href="{% url 'sevengamer' %}" class="text-white text-decoration-none">
+                            <h1 class="logo mb-0">SEVENGAMER</h1>
+                        </a>
+                        <p class="slogan mb-0">Juegos de un verdadero gamer</p>
+                    </div>
+                    <nav class="d-flex align-items-center">
+                        <a href="{% url 'sevengamer' %}" class="btn btn-outline-light me-2">Inicio</a>
+                        <a href="{% url 'mi_cuenta' %}" class="btn btn-outline-light me-2">Mi cuenta</a>
+                        <a href="{% url 'logout' %}" class="btn btn-outline-light">Cerrar Sesión</a>
+                    </nav>
+                </div>
+            </header>
+     
+        
+
+<body>
+    <h1>Historial de Compras</h1>
+    
+    <!-- Tabla de historial de compras -->
+    <table>
+        <tr>
+            <th>Fecha</th>
+            <th>Cliente</th>
+        </tr>
         {% for venta in ventas %}
-            <div class="card mb-4">
-                <div class="card-header bg-primary text-white">
-                    <strong>Venta #{{ venta.id }}</strong> - {{ venta.fecha }}
-                </div>
-                <div class="card-body">
-                    <ul class="list-group">
-                        {% for detalle in venta.detalles.all %}
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                {{ detalle.juego.nombre_juego }} (x{{ detalle.cantidad }})
-                                <span>${{ detalle.subtotal }}</span>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    <div class="mt-3 text-end">
-                        <strong>Total:</strong> ${{ venta.total }}
-                    </div>
-                     <!-- Enlace a detalles de la venta -->
-                    <div class="mt-2 text-end">
-                        <a href="{% url 'detalle_venta' venta.id %}" class="btn btn-outline-primary btn-sm">Ver Detalles</a>
-                    </div>
-                </div>
-            </div>
+        <tr>
+            <td>{{ venta.fecha }}</td>
+            <td>{{ venta.cliente.username }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="2">No hay compras registradas.</td>
+        </tr>
         {% endfor %}
-    {% else %}
-        <div class="alert alert-info">
-            No has realizado ninguna compra aún.
-        </div>
-    {% endif %}
-</div>
+    </table>
+    
+    <!-- Botones de acción -->
+    <div class="button-wrapper">
+        <a href="{% url 'home' %}" class="submit-btn">Volver a mi cuenta</a>
+        <button class="submit-btn">Realizar nueva compra</button>
+        <button class="reset-btn">Limpiar filtros</button>
+    </div>
 
     <script src="{% static 'js/pago.js' %}"></script>
 </body>
+
 </html>

@@ -51,3 +51,113 @@
     margin-top: 0.25rem;
     text-align: center;
 }
+
+/* Estilos generales para la página */
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background-color: #f4f7fa;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* Contenedor principal */
+h1 {
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Estilo para la tabla */
+table {
+    width: 80%;
+    max-width: 900px;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+}
+
+table th,
+table td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #4a90e2;
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+table td {
+    font-size: 16px;
+    color: #555;
+}
+
+/* Alternancia de filas */
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Estilo para los botones */
+.button-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+/* Estilos de los botones */
+.submit-btn,
+.reset-btn {
+    width: 220px;
+    padding: 0.75rem;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    text-align: center;
+    box-sizing: border-box;
+    margin: 0 10px; /* espacio entre botones */
+}
+
+.submit-btn:hover {
+    background-color: #357abd;
+}
+
+.reset-btn:hover {
+    background-color: #c82333;
+}
+
+.submit-btn:active,
+.reset-btn:active {
+    transform: scale(0.98);
+}
+
+/* Estilos para mensajes de error */
+.error-message {
+    color: red;
+    font-size: 0.9rem;
+    min-height: 1.2em;
+    margin-top: 0.25rem;
+    text-align: center;
+}
+
+/* Estilo para la tabla vacía */
+.empty-message {
+    text-align: center;
+    font-size: 16px;
+    color: #888;
+    margin-top: 20px;
+}
