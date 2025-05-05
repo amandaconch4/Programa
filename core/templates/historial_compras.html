@@ -12,6 +12,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/index.css' %}">
     <link rel="stylesheet" href="{% static 'css/mi_cuenta.css' %}">
+  
+
 </head>
 <body>
 
@@ -34,32 +36,37 @@
         
 
 <body>
-    <h1>Historial de Compras</h1>
-    
-    <!-- Tabla de historial de compras -->
-    <table>
-        <tr>
-            <th>Fecha</th>
-            <th>Cliente</th>
-        </tr>
-        {% for venta in ventas %}
-        <tr>
-            <td>{{ venta.fecha }}</td>
-            <td>{{ venta.cliente.username }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="2">No hay compras registradas.</td>
-        </tr>
-        {% endfor %}
-    </table>
-    
-    <!-- Botones de acción -->
-    <div class="button-wrapper">
-        <a href="{% url 'home' %}" class="submit-btn">Volver a mi cuenta</a>
-        <button class="submit-btn">Realizar nueva compra</button>
-        <button class="reset-btn">Limpiar filtros</button>
+   <main class="contenido-principal"  style="display: flex; justify-content: center;">>
+    <div class="container" style="max-width: 500px; width: 100%;">>
+        <div class="card">
+            <div class="card-header">
+                <h3>Historial de Compras</h3>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                        </tr>
+                    </thead>
+                        <tbody>
+                            {% for venta in ventas %}
+                            <tr>
+                                <td>{{ venta.fecha }}</td>
+                                <td>{{ venta.cliente.username }}</td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2">No hay compras registradas.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                </table>
+            </div>
+        </div>
     </div>
+</main>
 
     <script src="{% static 'js/pago.js' %}"></script>
 </body>
