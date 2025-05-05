@@ -54,13 +54,29 @@ def sevengamer(request):
     try:
         url_noticias = f"https://gnews.io/api/v4/search?q=videojuegos&lang=es&token={settings.GNEWS_API_KEY}"
         response_noticias = requests.get(url_noticias)
-        if response_noticias.ok:
-            noticias = response_noticias.json().get("articles", [])
-            print("✅ Noticias GNews cargadas:", len(noticias))
+
+        if response_noticias.status_code == 403:
+            print("⚠️ Has alcanzado el límite diario gratuito de GNews.")
+            noticias_api = [{
+                'title': 'Límite alcanzado',
+                'description': 'Has usado todas las consultas gratuitas del día para las noticias. Intenta mañana.',
+                'url': '#',
+                'image': '',
+                'publishedAt': ''
+            }]
+        elif response_noticias.ok:
+            noticias_api = response_noticias.json().get("articles", [])
         else:
             print("⚠️ Error GNews status:", response_noticias.status_code)
     except Exception as e:
         print("❌ Error al obtener noticias GNews:", e)
+        noticias_api = [{
+            'title': 'Error de conexión',
+            'description': 'No se pudo conectar con la API de noticias.',
+            'url': '#',
+            'image': '',
+            'publishedAt': ''
+        }]
 
     return render(request, 'index.html', {
         'categorias_dinamicas': categorias_dinamicas,
