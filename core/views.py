@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
-from .models import PerfilUsuario, Usuario, Venta, Juego, DetalleVenta,Carrito, CarritoItem, Categoria
+from .models import PerfilUsuario, Usuario, Venta, Juego, DetalleVenta, Carrito, CarritoItem, Categoria
 from django.contrib.auth.hashers import check_password 
 from django.core.mail import send_mail  
 from django.conf import settings 
@@ -22,6 +22,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse 
 from django.db.models.deletion import ProtectedError
 import requests
+from django.http import HttpResponse
 
 
 # Create your views here.
@@ -606,71 +607,65 @@ from django.http import HttpResponseBadRequest
 @csrf_exempt
 @login_required
 def procesar_pago(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
             data = json.loads(request.body)
-        except json.JSONDecodeError:
-            return HttpResponseBadRequest("Datos JSON inválidos.")
+            carrito = data.get("carrito", [])
+            if not carrito:
+                return JsonResponse({"success": False, "error": "El carrito está vacío."})
 
-        # Capturar los datos del cuerpo JSON
-        card_type = data.get('cardType')
-        card_name = data.get('cardName')
-        card_number = data.get('cardNumber')
-        expiry_date = data.get('expiryDate')
-        cvv = data.get('cvv')
-        carrito_data = data.get('carrito', [])
+            # Crear el carrito
+            carrito_obj = Carrito.objects.create(
+                usuario=request.user, 
+                estado='finalizado'
+            )
 
-        # Validar los datos del formulario
-        if not all([card_type, card_name, card_number, expiry_date, cvv]):
-            return HttpResponseBadRequest("Faltan algunos campos obligatorios.")
+            # Agregar los items al carrito
+            for item in carrito:
+                juego = Juego.objects.get(nombre_juego=item.get("nombre"))
+                cantidad = item.get("cantidad", 1)
+                CarritoItem.objects.create(
+                    carrito=carrito_obj,
+                    juego=juego,
+                    cantidad=cantidad
+                )
 
-        if not carrito_data:
-            return HttpResponseBadRequest("El carrito está vacío.")
+            # Crear la venta y asociar el carrito
+            venta = Venta.objects.create(
+                cliente=request.user,
+                carrito=carrito_obj,
+                total=0  # Se actualizará después
+            )
 
-        # Buscar el carrito activo del usuario
-        carrito = Carrito.objects.filter(usuario=request.user, estado='activo').first()
-        if not carrito:
-            return JsonResponse({
-                'success': True,
-                'redirect_url': reverse('index')
-            })
+            # Crear los detalles de la venta y calcular el total
+            total = 0
+            for item in carrito:
+                juego = Juego.objects.get(nombre_juego=item.get("nombre"))
+                cantidad = item.get("cantidad", 1)
+                precio = item.get("precio", 0)
+                subtotal = precio * cantidad
+                total += subtotal
 
-        # Crear la venta
-        venta = Venta.objects.create(cliente=request.user, carrito=carrito)
-
-        # Crear los detalles de la venta desde los datos del JSON
-        for item in carrito_data:
-            try:
-                juego = Juego.objects.get(codigo=item['id'])
-                detalle = DetalleVenta.objects.create(
+                DetalleVenta.objects.create(
                     venta=venta,
                     juego=juego,
-                    cantidad=item['cantidad'],
-                    subtotal=juego.precio * item['cantidad']
+                    cantidad=cantidad,
+                    subtotal=subtotal
                 )
-            except Juego.DoesNotExist:
-                continue
 
-        # Actualizar el total
-        venta.actualizar_total()
+            venta.total = total
+            venta.save()
 
-        # Finalizar el carrito
-        carrito.estado = 'finalizado'
-        carrito.save()
+            return JsonResponse({
+                "success": True,
+                "venta_id": venta.id,
+                "redirect_url": f"/compra-exitosa/{venta.id}/"
+            })
 
-        # Limpiar el carrito anterior
-        carrito.items.all().delete()
+        except Exception as e:
+            return JsonResponse({"success": False, "error": str(e)})
 
-        # Crear un nuevo carrito vacío
-        Carrito.objects.create(usuario=request.user, estado='activo')
-
-        return JsonResponse({
-            'success': True,
-            'redirect_url': reverse('index')
-        })
-
-    return JsonResponse({'error': 'Método no permitido'}, status=405)
-
+    return JsonResponse({"success": False, "error": "Método no permitido."})
 
 #**************
 
