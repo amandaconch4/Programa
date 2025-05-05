@@ -82,7 +82,7 @@
                 <span>Total:</span>
                 <span id="total">CLP$ 0</span>
             </div>
-            <a href="{% url 'pago' %}" class="checkout-btn">Proceder al Pago</a>
+            <button class="checkout-btn" onclick="window.location.href='{% url 'pago' %}'">Proceder al Pago</button>
         </div>
         <!-- Define la URL de pago -->
         <script>
