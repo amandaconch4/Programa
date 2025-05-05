@@ -36,6 +36,7 @@ class Usuario(AbstractUser):
     
 
 class Juego (models.Model):
+    codigo = models.CharField(max_length=50, unique=True, default='') 
     nombre_juego = models.CharField(max_length=200, unique=True)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
@@ -65,7 +66,6 @@ class CarritoItem(models.Model):
 
     def subtotal(self):
         return self.juego.precio * self.cantidad
-
 
 class Venta(models.Model):
     cliente = models.ForeignKey( settings.AUTH_USER_MODEL,  # <- esta es la forma correcta

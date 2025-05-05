@@ -486,7 +486,7 @@ def carrito_agregar(request):
                 cantidad = item.get('cantidad', 1)
 
                 try:
-                    juego = Juego.objects.get(id=juego_id)
+                    juego = Juego.objects.get(codigo=item['id'])
                     CarritoItem.objects.create(
                         carrito=carrito,
                         juego=juego,
@@ -496,6 +496,7 @@ def carrito_agregar(request):
                     continue
 
             return JsonResponse({'success': True})
+        
         except Exception as e:
             return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
@@ -531,7 +532,7 @@ def carrito_agregar(request):
                 cantidad = item.get('cantidad', 1)
 
                 try:
-                    juego = Juego.objects.get(id=juego_id)
+                    juego = Juego.objects.get(codigo=item['id'])
                     CarritoItem.objects.create(
                         carrito=carrito,
                         juego=juego,
@@ -565,7 +566,7 @@ def guardar_carrito_items(request):
                 juego_id = item.get('id')
                 cantidad = item.get('cantidad', 1)
 
-                juego = Juego.objects.get(id=juego_id)
+                juego = Juego.objects.get(codigo=item['id'])
                 carrito_item, creado = CarritoItem.objects.get_or_create(
                     carrito=carrito,
                     juego=juego,
@@ -593,6 +594,7 @@ def guardar_carrito_items(request):
 from django.http import HttpResponseBadRequest
 
 @csrf_exempt
+@login_required
 def procesar_pago(request):
     if request.method == 'POST':
         try:
@@ -606,48 +608,59 @@ def procesar_pago(request):
         card_number = data.get('cardNumber')
         expiry_date = data.get('expiryDate')
         cvv = data.get('cvv')
+        carrito_data = data.get('carrito', [])
 
         # Validar los datos del formulario
         if not all([card_type, card_name, card_number, expiry_date, cvv]):
             return HttpResponseBadRequest("Faltan algunos campos obligatorios.")
 
+        if not carrito_data:
+            return HttpResponseBadRequest("El carrito está vacío.")
+
         # Buscar el carrito activo del usuario
         carrito = Carrito.objects.filter(usuario=request.user, estado='activo').first()
         if not carrito:
-            # Si no hay carrito, redirigir igual (por ejemplo, por segunda compra)
             return JsonResponse({
                 'success': True,
-                'redirect_url': reverse('index')  # Cambia 'index' si tu vista principal tiene otro nombre
+                'redirect_url': reverse('index')
             })
 
         # Crear la venta
         venta = Venta.objects.create(cliente=request.user, carrito=carrito)
 
-        # Crear los detalles de la venta
-        for item in carrito.items.all():
-            DetalleVenta.objects.create(
-                venta=venta,
-                juego=item.juego,
-                cantidad=item.cantidad,
-                subtotal=item.subtotal()
-            )
+        # Crear los detalles de la venta desde los datos del JSON
+        for item in carrito_data:
+            try:
+                juego = Juego.objects.get(codigo=item['id'])
+                detalle = DetalleVenta.objects.create(
+                    venta=venta,
+                    juego=juego,
+                    cantidad=item['cantidad'],
+                    subtotal=juego.precio * item['cantidad']
+                )
+            except Juego.DoesNotExist:
+                continue
 
         # Actualizar el total
         venta.actualizar_total()
 
-        # Finalizar el carrito y vaciarlo
-        carrito.items.all().delete()
+        # Finalizar el carrito
         carrito.estado = 'finalizado'
         carrito.save()
-        
+
+        # Limpiar el carrito anterior
+        carrito.items.all().delete()
+
+        # Crear un nuevo carrito vacío
         Carrito.objects.create(usuario=request.user, estado='activo')
 
         return JsonResponse({
             'success': True,
-            'redirect_url': reverse('index')  # Reemplaza 'index' si es necesario
+            'redirect_url': reverse('index')
         })
 
     return JsonResponse({'error': 'Método no permitido'}, status=405)
+
 
 #**************
 
