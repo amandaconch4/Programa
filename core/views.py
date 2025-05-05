@@ -755,12 +755,13 @@ def detalles_venta_api(request, venta_id):
 # CRUD de Categorías
 @login_required
 def listar_categorias(request):
+    # Verificar permisos de administrador
     if not request.user.is_staff:
         messages.error(request, 'No tienes permiso para acceder a esta página.')
         return redirect('sevengamer')
     
-    categorias = Categoria.objects.all()
-    return render(request, 'panel-admin.html', {'categorias': categorias})
+    # Redirigir al panel admin
+    return redirect('panel_admin')
 
 @login_required
 def agregar_categoria(request):
