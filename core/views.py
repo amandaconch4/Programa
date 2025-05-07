@@ -23,6 +23,11 @@ from django.urls import reverse
 from django.db.models.deletion import ProtectedError
 import requests
 from django.http import HttpResponse
+# api_view y API REST
+from rest_framework import viewsets
+from .serializers import JuegoSerializer, DetalleVentaSerializer, VentaSerializer
+from rest_framework.permissions import IsAuthenticated
+
 
 
 # Create your views here.
@@ -706,52 +711,6 @@ def detalle_venta(request, venta_id):
 
 
 
-
-# API rest ------------------------------------------
-@api_view(['POST'])
-@login_required
-def procesar_pago_api(request):
-    if request.method == 'POST':
-        # Validar los datos recibidos en la API
-        serializer = VentaSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            # Crear la venta
-            venta = serializer.save(cliente=request.user)
-            
-            # Actualizar el total de la venta
-            venta.actualizar_total()
-
-            # Limpiar el carrito después de la compra
-            request.session['carrito'] = []
-
-            return Response({
-                'message': 'Pago procesado con éxito',
-                'venta_id': venta.id,
-                'total': venta.total
-            }, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-@api_view(['GET'])
-@login_required
-def historial_compras_api(request):
-    ventas = Venta.objects.filter(cliente=request.user).order_by('-fecha')
-    serializer = VentaSerializer(ventas, many=True)
-    return Response(serializer.data)
-
-@api_view(['GET'])
-@login_required
-def detalles_venta_api(request, venta_id):
-    try:
-        venta = Venta.objects.get(id=venta_id, cliente=request.user)
-        detalles = DetalleVenta.objects.filter(venta=venta)
-        serializer = DetalleVentaSerializer(detalles, many=True)
-        return Response(serializer.data)
-    except Venta.DoesNotExist:
-        return Response({'error': 'Venta no encontrada'}, status=status.HTTP_404_NOT_FOUND)
-
-
 # CRUD de Categorías
 @login_required
 def listar_categorias(request):
@@ -852,3 +811,31 @@ def categoria_dinamica(request, categoria_id):
     
     return render(request, 'categoria_dinamica.html', context)
 
+# api_view
+
+from rest_framework import viewsets
+from .serializers import JuegoSerializer, DetalleVentaSerializer, VentaSerializer
+from rest_framework.permissions import IsAuthenticated
+
+class JuegoViewSet(viewsets.ModelViewSet):
+    queryset = Juego.objects.all()
+    serializer_class = JuegoSerializer
+    permission_classes = [IsAuthenticated]
+
+    
+
+class DetalleVentaViewSet(viewsets.ModelViewSet):
+    queryset = DetalleVenta.objects.all()
+    serializer_class = DetalleVentaSerializer
+    permission_classes = [IsAuthenticated]
+
+
+class VentaViewSet(viewsets.ModelViewSet):
+    queryset = Venta.objects.all()
+    serializer_class = VentaSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # Filtrar las ventas por el usuario autenticado
+        return self.queryset.filter(cliente=self.request.user)  
+    

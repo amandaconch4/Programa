@@ -37,6 +37,11 @@ from django.urls import reverse_lazy
 from .views import historial_compras
 from .views import detalle_venta
 from .views import procesar_pago
+from django.urls import path, include
+from rest_framework.authtoken.views import obtain_auth_token
+from .viewsLogin import api_token_auth
+
+
 
 urlpatterns = [
     # Auth URLs
@@ -58,9 +63,6 @@ urlpatterns = [
     path('mi-cuenta/', views.mi_cuenta, name='mi_cuenta'),
     path('confirmar-eliminacion/', views.confirmar_eliminacion, name='confirmar_eliminacion_cta_usuario'),
     path('eliminar-cuenta/', views.eliminar_cuenta, name='eliminar_cuenta'),
-    #path('api/procesar_pago/', views.procesar_pago_api, name='procesar_pago_api'),
-    #path('api/historial_compras/', views.historial_compras_api, name='historial_compras_api'),
-    #path('api/detalles_venta/', views.detalles_venta_api, name='detalles_venta_api'),
     path('carrito/agregar/', views.carrito_agregar, name='carrito_agregar'),
     path('carrito/', views.ver_carrito, name='ver_carrito'),
     path('carrito/agregar/', views.guardar_carrito_items, name='guardar_carrito_items'),
@@ -71,7 +73,9 @@ urlpatterns = [
     path('detalle_venta/<int:venta_id>/', views.detalle_venta, name='detalle_venta'),
     path('pago/', views.pago, name='pago'),
     path('historial_compras/', views.historial_compras, name='historial_compras'),
-
+    path('api/v1/', include('core.api_urls')),  # Incluye las rutas de la API
+     # Ruta para obtener el token
+    path('api-token-auth/', api_token_auth, name='api_token_auth'),
 
 
     # Game URLs

@@ -57,24 +57,96 @@
     box-shadow: 0 0 5px rgba(0, 255, 136, 0.3);
 }
 
+/* Estilos para el encabezado de la tarjeta */
+.card-header.bg-primary {
+    background-color: #2a2a2a !important;
+    border-bottom: 1px solid #333;
+}
+
+.card-header h3 {
+    color: #00ff88;
+    font-family: 'Orbitron', sans-serif;
+    margin: 0;
+}
+
+/* Estilos para los botones del header */
+.btn-outline-light {
+    border: 1px solid #fff;
+    color: #fff;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
 /* Estilos para botones */
 .btn {
-    padding: 10px 20px;
+    padding: 0.4rem 1rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-weight: 500;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin: 0.25rem 0;
 }
 
+.btn i {
+    margin-right: 6px;
+    font-size: 0.9em;
+}
+
+/* Estilo para botones principales (verde) */
 .btn-primary {
-    background: #7ace67;
-    color: #1a1a1a;
+    background: #7fd06d;
+    color: #0e0e0e;
+    border: 1px solid #5fb34e;
 }
 
-.btn-primary:hover {
+.btn-primary:hover, .btn-primary:focus {
     background: #2da71d;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
 }
+
+/* Estilo para botón de peligro (rojo) */
+.btn-danger {
+    background: #dc3545;
+    color: #1a1a1a;
+    border: 1px solid #c82333;
+}
+
+.btn-danger:hover, .btn-danger:focus {
+    background: #c82333;
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Ajustes de espaciado para los botones */
+.card-body .btn,
+.card-body form {
+    margin: 0.5rem 0;
+}
+
+/* Asegurar que los botones ocupen todo el ancho en móviles */
+@media (max-width: 768px) {
+    .btn {
+        width: 100%;
+        margin: 0.5rem 0;
+    }
+}
+
 
 /* Estilos para la foto de perfil */
 .profile-photo {
