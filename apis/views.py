@@ -1,6 +1,6 @@
 from rest_framework import viewsets
 from .serializers import JuegoSerializer, DetalleVentaSerializer, VentaSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAdminUser
 from core.models import Juego, DetalleVenta, Venta
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
@@ -13,23 +13,48 @@ from rest_framework.authtoken.models import Token
 class JuegoViewSet(viewsets.ModelViewSet):
     queryset = Juego.objects.all()
     serializer_class = JuegoSerializer
-    permission_classes = [IsAuthenticated]
-   
+    
+       # Establecer permisos según la acción
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'destroy']:  # Crear, actualizar o eliminar
+            permission_classes = [IsAdminUser]  # Solo admin puede crear, actualizar o eliminar
+        else:  # Listar o ver un detalle
+            permission_classes = [IsAuthenticated]  # Cualquier usuario autenticado puede ver
+        return [permission() for permission in permission_classes]
 
 class DetalleVentaViewSet(viewsets.ModelViewSet):
     queryset = DetalleVenta.objects.all()
     serializer_class = DetalleVentaSerializer
-    permission_classes = [IsAuthenticated]
+    
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'partial_update', 'destroy']:
+            return [IsAdminUser()]
+        return [IsAuthenticated()]
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            return DetalleVenta.objects.all()
+        # Solo mostrar detalles de ventas propias
+        return DetalleVenta.objects.filter(venta__cliente=self.request.user)
 
 
 class VentaViewSet(viewsets.ModelViewSet):
     queryset = Venta.objects.all()
     serializer_class = VentaSerializer
-    permission_classes = [IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action in ['create', 'update', 'destroy']:
+            permission_classes = [IsAdminUser]
+        else:
+            permission_classes = [IsAuthenticated]
+        return [permission() for permission in permission_classes]
 
     def get_queryset(self):
-        # Filtrar las ventas por el usuario autenticado
-        return self.queryset.filter(cliente=self.request.user)  
+        # Si es admin, puede ver todas las ventas
+        if self.request.user.is_staff:
+            return Venta.objects.all()
+        # Si es usuario normal, solo sus ventas
+        return Venta.objects.filter(cliente=self.request.user) 
 
 
 @api_view(['POST'])

@@ -36,7 +36,7 @@ class Usuario(AbstractUser):
     
 
 class Juego (models.Model):
-    codigo = models.CharField(max_length=50, unique=True, default='') 
+    codigo = models.CharField(max_length=50, unique=True) 
     nombre_juego = models.CharField(max_length=200, unique=True)
     descripcion = models.TextField()
     precio = models.DecimalField(max_digits=10, decimal_places=2)
