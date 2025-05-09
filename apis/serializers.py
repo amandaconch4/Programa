@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Venta, DetalleVenta, Juego
+from core.models import Venta, DetalleVenta, Juego
 
 
 class JuegoSerializer(serializers.ModelSerializer):

@@ -15,7 +15,6 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import VentaSerializer, DetalleVentaSerializer
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.contrib.auth.decorators import login_required
@@ -23,11 +22,6 @@ from django.urls import reverse
 from django.db.models.deletion import ProtectedError
 import requests
 from django.http import HttpResponse
-# api_view y API REST
-from rest_framework import viewsets
-from .serializers import JuegoSerializer, DetalleVentaSerializer, VentaSerializer
-from rest_framework.permissions import IsAuthenticated
-
 
 
 # Create your views here.
@@ -810,32 +804,3 @@ def categoria_dinamica(request, categoria_id):
     }
     
     return render(request, 'categoria_dinamica.html', context)
-
-# api_view
-
-from rest_framework import viewsets
-from .serializers import JuegoSerializer, DetalleVentaSerializer, VentaSerializer
-from rest_framework.permissions import IsAuthenticated
-
-class JuegoViewSet(viewsets.ModelViewSet):
-    queryset = Juego.objects.all()
-    serializer_class = JuegoSerializer
-    permission_classes = [IsAuthenticated]
-
-    
-
-class DetalleVentaViewSet(viewsets.ModelViewSet):
-    queryset = DetalleVenta.objects.all()
-    serializer_class = DetalleVentaSerializer
-    permission_classes = [IsAuthenticated]
-
-
-class VentaViewSet(viewsets.ModelViewSet):
-    queryset = Venta.objects.all()
-    serializer_class = VentaSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        # Filtrar las ventas por el usuario autenticado
-        return self.queryset.filter(cliente=self.request.user)  
-    

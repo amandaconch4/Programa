@@ -37,9 +37,6 @@ from django.urls import reverse_lazy
 from .views import historial_compras
 from .views import detalle_venta
 from .views import procesar_pago
-from django.urls import path, include
-from rest_framework.authtoken.views import obtain_auth_token
-from .viewsLogin import api_token_auth
 
 
 
@@ -73,9 +70,6 @@ urlpatterns = [
     path('detalle_venta/<int:venta_id>/', views.detalle_venta, name='detalle_venta'),
     path('pago/', views.pago, name='pago'),
     path('historial_compras/', views.historial_compras, name='historial_compras'),
-    path('api/v1/', include('core.api_urls')),  # Incluye las rutas de la API
-     # Ruta para obtener el token
-    path('api-token-auth/', api_token_auth, name='api_token_auth'),
 
 
     # Game URLs

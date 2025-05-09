@@ -16,7 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from core.viewsLogin import api_token_auth
+from apis.views import api_token_auth
 from rest_framework.authtoken.views import obtain_auth_token
 
 urlpatterns = [
@@ -25,9 +25,9 @@ urlpatterns = [
     # Login por formulario (HTML)
     #path('login/', login, name='login'),
 
-
     path('', include('core.urls')),
 
-    path('api/v1/', include('core.api_urls')),
+    # Usar la ruta de APIs directamente
+    path('api/v1/', include('apis.urls')),
     path('api-token-auth/', obtain_auth_token, name='obtain_auth_token'),
 ]
