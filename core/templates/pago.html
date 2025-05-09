@@ -44,7 +44,7 @@
             </div>
 
             <div class="payment-section">
-                <form class="payment-form" id="paymentForm" method="POST" action="{% url 'procesar_pago' %}">
+                <form class="payment-form" id="paymentForm" method="POST" action="{% url 'procesar_pago' %}" novalidate>
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="cardType">Tipo de tarjeta</label>

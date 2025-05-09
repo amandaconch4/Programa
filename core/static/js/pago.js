@@ -110,23 +110,23 @@ function configurarFormularioPago() {
         let hasErrors = false;
 
         if (!cardType) {
-            cardTypeError.textContent = 'Selecciona tipo de tarjeta';
+            cardTypeError.textContent = 'Seleccione el tipo de tarjeta';
             hasErrors = true;
         }
         if (!cardName) {
-            cardNameError.textContent = 'Nombre obligatorio';
+            cardNameError.textContent = 'Ingrese el nombre del titular';
             hasErrors = true;
         }
         if (cardNumber.length !== 16) {
-            cardNumberError.textContent = 'Número inválido';
+            cardNumberError.textContent = 'Ingrese un número válido';
             hasErrors = true;
         }
         if (expiryDate.length !== 5 || !expiryDate.includes('/')) {
-            expiryError.textContent = 'Fecha inválida';
+            expiryError.textContent = 'Ingrese una fecha válida';
             hasErrors = true;
         }
         if (cvv.length !== 3) {
-            cvvError.textContent = 'CVV inválido';
+            cvvError.textContent = 'Ingrese un CVV válido';
             hasErrors = true;
         }
 
