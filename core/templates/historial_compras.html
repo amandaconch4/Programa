@@ -37,36 +37,42 @@
 
 <body>
    <main class="contenido-principal"  style="display: flex; justify-content: center;">>
-    <div class="container" style="max-width: 500px; width: 100%;">>
-        <div class="card">
-            <div class="card-header">
-                <h3>Historial de Compras</h3>
-            </div>
-            <div class="card-body">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Cliente</th>
-                        </tr>
-                    </thead>
-                        <tbody>
+      <div class="container" style="max-width: 500px; width: 100%;">>
+            <div class="card">
+                <div class="card-header">
+                    <h3>Historial de Compras</h3>
+                </div>
+                    <div class="card-body">
+                        {% if ventas %}
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Código del Producto</th>
+                                <th>Cantidad</th>
+                                <th>Total de la Venta</th>
+                            </tr>
+                            </thead>
+                            <tbody>
                             {% for venta in ventas %}
-                            <tr>
-                                <td>{{ venta.fecha }}</td>
-                                <td>{{ venta.cliente.username }}</td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="2">No hay compras registradas.</td>
-                            </tr>
+                                {% for detalle in venta.detalles.all %}
+                                <tr>
+                                    <td>{{ venta.fecha|date:"Y-m-d H:i" }}</td>
+                                    <td>{{ detalle.juego.codigo }}</td>
+                                    <td>{{ detalle.cantidad }}</td>
+                                    <td>${{ venta.total }}</td>
+                                </tr>
+                                {% endfor %}
                             {% endfor %}
-                        </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</main>
+                            </tbody>
+                        </table>
+                        {% else %}
+                        <p>No hay compras registradas.</p>
+                        {% endif %}
+                </div>
+           </div>
+       </div>
+    </main>
 
     <script src="{% static 'js/pago.js' %}"></script>
 </body>
