@@ -65,6 +65,7 @@ def sevengamer(request):
             }]
         elif response_noticias.ok:
             noticias_api = response_noticias.json().get("articles", [])
+            print("✅ Noticias GNEWS cargadas:", len(noticias_api))
         else:
             print("⚠️ Error GNews status:", response_noticias.status_code)
     except Exception as e:
@@ -80,7 +81,7 @@ def sevengamer(request):
     return render(request, 'index.html', {
         'categorias_dinamicas': categorias_dinamicas,
         'juegos': juegos,
-        'noticias': noticias,
+        'noticias': noticias_api,
     })
 
 def index(request):

@@ -230,8 +230,8 @@
 
             <h2>📰 Noticias recientes de videojuegos</h2>
                 <div class="noticias-api">
-                      {% if noticias_api %}
-                          {% for n in noticias_api|slice:":3" %}
+                      {% if noticias %}
+                          {% for n in noticias|slice:":3" %}
                               <div class="noticia-card">
                                   <h4><a href="{{ n.url }}" target="_blank">{{ n.title }}</a></h4>
                   
